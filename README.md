@@ -32,6 +32,10 @@
 
 ## 使用 `dorycli` 安装 `Dory-Engine`
 
+- dorycli 命令行工具
+  - [Github](https://github.com/dory-engine/dorycli)
+  - [Gitee](https://gitee.com/dory-engine/dorycli)
+
 [🚀🚀🚀 使用dorycli快速安装Dory-Engine (https://www.bilibili.com/video/BV1aG411D7Sj/)](https://www.bilibili.com/video/BV1aG411D7Sj/)
 
 ## Dory-Engine的使用演示
