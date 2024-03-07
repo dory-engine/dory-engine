@@ -1,0 +1,99 @@
+{
+  "_from": "vue-pipeline",
+  "_id": "vue-pipeline@1.0.12",
+  "_inBundle": false,
+  "_integrity": "sha1-0LzcNS82UzbxjBX1SP7hNG4Mi7w=",
+  "_location": "/vue-pipeline",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "vue-pipeline",
+    "name": "vue-pipeline",
+    "escapedName": "vue-pipeline",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/vue-pipeline/download/vue-pipeline-1.0.12.tgz",
+  "_shasum": "d0bcdc352f365336f18c15f548fee1346e0c8bbc",
+  "_spec": "vue-pipeline",
+  "_where": "/extra-data/2workspace/idea/dory-console",
+  "author": {
+    "name": "Zuo Jinfang",
+    "email": "jinfang134@sina.com"
+  },
+  "ava": {
+    "require": [
+      "@babel/register"
+    ],
+    "babel": {
+      "testOptions": {
+        "babelrc": false,
+        "configFile": false
+      }
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
+  "bugs": {
+    "url": "https://github.com/jinfang134/vue-pipeline/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "string-width": "^4.2.0"
+  },
+  "deprecated": false,
+  "description": "One easy-to-use component to show beautiful responsive timeline like jenkins blue ocean plugin.",
+  "devDependencies": {
+    "@babel/register": "^7.7.4",
+    "@vue/babel-preset-app": "^4.1.1",
+    "@vue/cli-plugin-eslint": "^3.0.1",
+    "ava": "^2.4.0",
+    "babel-eslint": "^10.0.1",
+    "core-js": "^3.4.5",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^6.0.1",
+    "husky": "^3.1.0"
+  },
+  "homepage": "https://github.com/jinfang134/vue-pipeline#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint && yarn test",
+      "pre-push": "yarn lint"
+    }
+  },
+  "keywords": [
+    "vue",
+    "components",
+    "timeline"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "vue-pipeline",
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jinfang134/vue-pipeline.git"
+  },
+  "scripts": {
+    "deploy:demo": "bash ./deploy-demo.sh",
+    "lint": "eslint --quiet --cache --ext .vue,.js, src/** ./demo/src/**/*.{js,vue}",
+    "postversion": "git push origin master && git push --tags && npm publish --registry=https://registry.npmjs.org/",
+    "preversion": "npm test && npm run lint",
+    "test": "ava test/*.test.js --verbose",
+    "version": "git add ."
+  },
+  "version": "1.0.12"
+}
