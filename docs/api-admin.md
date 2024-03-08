@@ -4000,7 +4000,6 @@ token: "xxx"
 				"istioNamespace": "xxx",
                 "ingressControllerNamespace": "traefik",
                 "timezone": "xxx",
-                "hostPathZoneInfo": false,
                 "nodePortRange": {
                     "nodePortRangeStart": 30100,
                     "nodePortRangeEnd": 32767,
@@ -4205,8 +4204,6 @@ istioNamespace: "istio-system"
 ingressControllerNamespace: "traefik"
 # 环境的时区设置
 timezone: "Asia/Shanghai"
-# 环境是否使用本地路径的/usr/share/zoneinfo
-hostPathZoneInfo: false
 # kubernetes环境可以为项目分配的nodePort可用端口范围
 nodePortRange:
   # 可用nodePort开始端口
@@ -4362,7 +4359,6 @@ quotaConfig:
 			"istioNamespace": "istio-system",
             "ingressControllerNamespace": "traefik",
             "timezone": "xxx",
-            "hostPathZoneInfo": false,
             "nodePortRange": {
                 "nodePortRangeStart": 30100,
                 "nodePortRangeEnd": 32767,

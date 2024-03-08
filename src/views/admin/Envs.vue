@@ -306,7 +306,7 @@
                   </div>
                 </div>
                 <div class="d-flex justify-space-between mt-4">
-                  <div class="form-item d-flex align-center">
+                  <div class="form-item-45 d-flex align-center">
                     <v-text-field
                       :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_istio_namespace')"
                       required
@@ -317,7 +317,7 @@
                       ]"
                     />
                   </div>
-                  <div class="form-item d-flex align-center">
+                  <div class="form-item-45 d-flex align-center">
                     <v-text-field
                       :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_timezone')"
                       required
@@ -326,18 +326,6 @@
                       :rules="[
                         v => !!v || $vuetify.lang.t('$vuetify.lang_form_required'),
                       ]"
-                    />
-                  </div>
-                  <div class="form-item d-flex align-center">
-                    <v-select
-                      :items="[
-                        { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
-                        { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false },
-                      ]"
-                      :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_host_path_zone_info')"
-                      required
-                      dense
-                      v-model="formValue.envK8s.hostPathZoneInfo"
                     />
                   </div>
                 </div>
@@ -1124,7 +1112,7 @@
                   </div>
                 </div>
                 <div class="d-flex justify-space-between mt-4">
-                  <div class="form-item d-flex align-center">
+                  <div class="form-item-45 d-flex align-center">
                     <v-text-field
                       :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_istio_namespace')"
                       required
@@ -1135,7 +1123,7 @@
                       ]"
                     />
                   </div>
-                  <div class="form-item d-flex align-center">
+                  <div class="form-item-45 d-flex align-center">
                     <v-text-field
                       :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_timezone')"
                       required
@@ -1144,18 +1132,6 @@
                       :rules="[
                         v => !!v || $vuetify.lang.t('$vuetify.lang_form_required'),
                       ]"
-                    />
-                  </div>
-                  <div class="form-item d-flex align-center">
-                    <v-select
-                      :items="[
-                        { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
-                        { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false },
-                      ]"
-                      :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_host_path_zone_info')"
-                      required
-                      dense
-                      v-model="formValue.envK8s.hostPathZoneInfo"
                     />
                   </div>
                 </div>
