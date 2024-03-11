@@ -4404,7 +4404,7 @@
                       <v-text-field
                         :label="$vuetify.lang.t('$vuetify.lang_form_istio_def_port')"
                         dense
-                        v-model="item.port"
+                        v-model.number="item.port"
                         type="number"
                         :rules="[intRule]"
                       />
