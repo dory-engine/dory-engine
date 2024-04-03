@@ -626,7 +626,7 @@
                   </div>
                 </v-tooltip>
                 <v-icon color="success" class="ml-4" @click="addArchSetting()">mdi-table-plus</v-icon>
-                <div class="justify-space-between mt-4" v-for="(archSetting, i) in formValue.envK8s.archSettings" :key="i">
+                <div class="justify-space-between params-item mt-4" v-for="(archSetting, i) in formValue.envK8s.archSettings" :key="i">
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item-45">
                       <v-select
@@ -644,7 +644,7 @@
                       <v-icon color="error" @click="deleteArchSetting(i)">mdi-trash-can-outline</v-icon>
                     </div>
                   </div>
-                  <div class="params-item mt-4">
+                  <div class="mt-4">
                     <small>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_arch_settings_node_selector')}}</small>
                     <v-tooltip right max-width="300px">
                       <template v-slot:activator="{ on, attrs }">
@@ -725,19 +725,19 @@
               <div class="params-item mt-4">
                 <small>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config')}}</small>
                 <div class="params-item mt-4">
-                  <small>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota')}}</small>
+                  <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota')}}</small>
                   <v-tooltip right max-width="300px">
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                     </template>
                     <div style="font-size: 12px;">
-                      <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_tip_1')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_tip_1')}}</div>
                     </div>
                   </v-tooltip>
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item-45 d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_memory_request')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_request')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.defaultQuota.memoryRequest"
@@ -750,13 +750,13 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_memory_request')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_request')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
                     <div class="form-item-45 d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_cpu_request')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_request')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.defaultQuota.cpuRequest"
@@ -769,7 +769,7 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_cpu_request_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_request_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
@@ -777,7 +777,7 @@
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item-45 d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_memory_limit')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_limit')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.defaultQuota.memoryLimit"
@@ -790,13 +790,13 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_memory_limit_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_limit_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
                     <div class="form-item-45 d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_cpu_limit')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_limit')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.defaultQuota.cpuLimit"
@@ -809,26 +809,102 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_cpu_limit_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_limit_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
                   </div>
+                  <div class="params-item mt-4">
+                    <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request')}}</small>
+                    <v-tooltip right max-width="300px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request_tip_1')}}</div>
+                      </div>
+                    </v-tooltip>
+                    <v-icon color="success" class="ml-4" @click="addExtraRequest()">mdi-table-plus</v-icon>
+                    <div class="d-flex justify-space-between mt-4" v-for="(row, i) in formValue.envK8s.quotaConfig.defaultQuota.extraRequest" :key="i">
+                      <div class="form-item-45 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                          dense
+                          v-model="row.name"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-45 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                          dense
+                          v-model="row.value"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div>
+                        <v-icon color="success" class="mr-4" @click="copyExtraRequest(i)">mdi-content-copy</v-icon>
+                        <v-icon color="error" @click="deleteExtraRequest(i)">mdi-trash-can-outline</v-icon>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="params-item mt-4">
+                    <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit')}}</small>
+                    <v-tooltip right max-width="300px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit_tip_1')}}</div>
+                      </div>
+                    </v-tooltip>
+                    <v-icon color="success" class="ml-4" @click="addExtraLimit()">mdi-table-plus</v-icon>
+                    <div class="d-flex justify-space-between mt-4" v-for="(row, i) in formValue.envK8s.quotaConfig.defaultQuota.extraLimit" :key="i">
+                      <div class="form-item-45 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                          dense
+                          v-model="row.name"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-45 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                          dense
+                          v-model="row.value"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div>
+                        <v-icon color="success" class="mr-4" @click="copyExtraLimit(i)">mdi-content-copy</v-icon>
+                        <v-icon color="error" @click="deleteExtraLimit(i)">mdi-trash-can-outline</v-icon>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="params-item mt-4">
-                  <small>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota')}}</small>
+                  <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota')}}</small>
                   <v-tooltip right max-width="300px">
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                     </template>
                     <div style="font-size: 12px;">
-                      <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_tip_1')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_tip_1')}}</div>
                     </div>
                   </v-tooltip>
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item-45 d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_memory_request')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_request')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.namespaceQuota.memoryRequest"
@@ -841,13 +917,13 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_memory_request_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_request_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
                     <div class="form-item-45 d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_cpu_request')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_request')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.namespaceQuota.cpuRequest"
@@ -860,7 +936,7 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_cpu_request_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_request_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
@@ -868,7 +944,7 @@
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_memory_limit')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_limit')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.namespaceQuota.memoryLimit"
@@ -881,13 +957,13 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_memory_limit_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_limit_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
                     <div class="form-item d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_cpu_limit')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_limit')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.namespaceQuota.cpuLimit"
@@ -900,13 +976,13 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_cpu_limit_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_limit_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
                     <div class="form-item d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_pods_limit')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_pods_limit')"
                         required
                         dense
                         type="number"
@@ -918,9 +994,47 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_pods_limit_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_pods_limit_tip_1')}}</div>
                         </div>
                       </v-tooltip>
+                    </div>
+                  </div>
+                  <div class="params-item mt-4">
+                    <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_extra_quotas')}}</small>
+                    <v-tooltip right max-width="300px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_extra_quotas_tip_1')}}</div>
+                      </div>
+                    </v-tooltip>
+                    <v-icon color="success" class="ml-4" @click="addExtraQuotas()">mdi-table-plus</v-icon>
+                    <div class="d-flex justify-space-between mt-4" v-for="(row, i) in formValue.envK8s.quotaConfig.namespaceQuota.extraQuotas" :key="i">
+                      <div class="form-item-45 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                          dense
+                          v-model="row.name"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-45 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                          dense
+                          v-model="row.value"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div>
+                        <v-icon color="success" class="mr-4" @click="copyExtraQuotas(i)">mdi-content-copy</v-icon>
+                        <v-icon color="error" @click="deleteExtraQuotas(i)">mdi-trash-can-outline</v-icon>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1432,7 +1546,7 @@
                   </div>
                 </v-tooltip>
                 <v-icon color="success" class="ml-4" @click="addArchSetting()">mdi-table-plus</v-icon>
-                <div class="justify-space-between mt-4" v-for="(archSetting, i) in formValue.envK8s.archSettings" :key="i">
+                <div class="justify-space-between params-item mt-4" v-for="(archSetting, i) in formValue.envK8s.archSettings" :key="i">
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item-45">
                       <v-select
@@ -1450,7 +1564,7 @@
                       <v-icon color="error" @click="deleteArchSetting(i)">mdi-trash-can-outline</v-icon>
                     </div>
                   </div>
-                  <div class="params-item mt-4">
+                  <div class="mt-4">
                     <small>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_arch_settings_node_selector')}}</small>
                     <v-tooltip right max-width="300px">
                       <template v-slot:activator="{ on, attrs }">
@@ -1531,19 +1645,19 @@
               <div class="params-item mt-4">
                 <small>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config')}}</small>
                 <div class="params-item mt-4">
-                  <small>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota')}}</small>
+                  <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota')}}</small>
                   <v-tooltip right max-width="300px">
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                     </template>
                     <div style="font-size: 12px;">
-                      <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_tip_1')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_tip_1')}}</div>
                     </div>
                   </v-tooltip>
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item-45 d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_memory_request')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_request')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.defaultQuota.memoryRequest"
@@ -1556,13 +1670,13 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_memory_request')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_request')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
                     <div class="form-item-45 d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_cpu_request')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_request')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.defaultQuota.cpuRequest"
@@ -1575,7 +1689,7 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_cpu_request_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_request_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
@@ -1583,7 +1697,7 @@
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item-45 d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_memory_limit')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_limit')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.defaultQuota.memoryLimit"
@@ -1596,13 +1710,13 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_memory_limit_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_limit_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
                     <div class="form-item-45 d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_cpu_limit')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_limit')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.defaultQuota.cpuLimit"
@@ -1615,26 +1729,102 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_default_quota_cpu_limit_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_limit_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
                   </div>
+                  <div class="params-item mt-4">
+                    <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request')}}</small>
+                    <v-tooltip right max-width="300px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request_tip_1')}}</div>
+                      </div>
+                    </v-tooltip>
+                    <v-icon color="success" class="ml-4" @click="addExtraRequest()">mdi-table-plus</v-icon>
+                    <div class="d-flex justify-space-between mt-4" v-for="(row, i) in formValue.envK8s.quotaConfig.defaultQuota.extraRequest" :key="i">
+                      <div class="form-item-45 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                          dense
+                          v-model="row.name"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-45 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                          dense
+                          v-model="row.value"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div>
+                        <v-icon color="success" class="mr-4" @click="copyExtraRequest(i)">mdi-content-copy</v-icon>
+                        <v-icon color="error" @click="deleteExtraRequest(i)">mdi-trash-can-outline</v-icon>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="params-item mt-4">
+                    <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit')}}</small>
+                    <v-tooltip right max-width="300px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit_tip_1')}}</div>
+                      </div>
+                    </v-tooltip>
+                    <v-icon color="success" class="ml-4" @click="addExtraLimit()">mdi-table-plus</v-icon>
+                    <div class="d-flex justify-space-between mt-4" v-for="(row, i) in formValue.envK8s.quotaConfig.defaultQuota.extraLimit" :key="i">
+                      <div class="form-item-45 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                          dense
+                          v-model="row.name"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-45 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                          dense
+                          v-model="row.value"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div>
+                        <v-icon color="success" class="mr-4" @click="copyExtraLimit(i)">mdi-content-copy</v-icon>
+                        <v-icon color="error" @click="deleteExtraLimit(i)">mdi-trash-can-outline</v-icon>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="params-item mt-4">
-                  <small>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota')}}</small>
+                  <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota')}}</small>
                   <v-tooltip right max-width="300px">
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                     </template>
                     <div style="font-size: 12px;">
-                      <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_tip_1')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_tip_1')}}</div>
                     </div>
                   </v-tooltip>
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item-45 d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_memory_request')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_request')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.namespaceQuota.memoryRequest"
@@ -1647,13 +1837,13 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_memory_request_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_request_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
                     <div class="form-item-45 d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_cpu_request')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_request')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.namespaceQuota.cpuRequest"
@@ -1666,7 +1856,7 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_cpu_request_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_request_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
@@ -1674,7 +1864,7 @@
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_memory_limit')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_limit')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.namespaceQuota.memoryLimit"
@@ -1687,13 +1877,13 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_memory_limit_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_limit_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
                     <div class="form-item d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_cpu_limit')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_limit')"
                         required
                         dense
                         v-model="formValue.envK8s.quotaConfig.namespaceQuota.cpuLimit"
@@ -1706,13 +1896,13 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_cpu_limit_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_limit_tip_1')}}</div>
                         </div>
                       </v-tooltip>
                     </div>
                     <div class="form-item d-flex align-center">
                       <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_pods_limit')"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_pods_limit')"
                         required
                         dense
                         type="number"
@@ -1724,9 +1914,47 @@
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
                         <div style="font-size: 12px;">
-                          <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config_namespace_quota_pods_limit_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_pods_limit_tip_1')}}</div>
                         </div>
                       </v-tooltip>
+                    </div>
+                  </div>
+                  <div class="params-item mt-4">
+                    <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_extra_quotas')}}</small>
+                    <v-tooltip right max-width="300px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_extra_quotas_tip_1')}}</div>
+                      </div>
+                    </v-tooltip>
+                    <v-icon color="success" class="ml-4" @click="addExtraQuotas()">mdi-table-plus</v-icon>
+                    <div class="d-flex justify-space-between mt-4" v-for="(row, i) in formValue.envK8s.quotaConfig.namespaceQuota.extraQuotas" :key="i">
+                      <div class="form-item-45 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                          dense
+                          v-model="row.name"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-45 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                          dense
+                          v-model="row.value"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div>
+                        <v-icon color="success" class="mr-4" @click="copyExtraQuotas(i)">mdi-content-copy</v-icon>
+                        <v-icon color="error" @click="deleteExtraQuotas(i)">mdi-trash-can-outline</v-icon>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2316,6 +2544,84 @@ export default {
     deleteProjectNodeSelector(i) {
       const vm = this
       vm.formValue.envK8s.projectNodeSelector.splice(i, 1)
+    },
+    addExtraQuotas() {
+      const vm = this;
+      let addItem = {
+        name: '',
+        value: '',
+      };
+      if (vm.formValue.envK8s.quotaConfig.namespaceQuota.extraQuotas === null) {
+        vm.formValue.envK8s.quotaConfig.namespaceQuota.extraQuotas = [];
+        vm.formValue.envK8s.quotaConfig.namespaceQuota.extraQuotas.push(addItem);
+      } else {
+        vm.formValue.envK8s.quotaConfig.namespaceQuota.extraQuotas.push(addItem);
+      }
+    },
+    copyExtraQuotas(i) {
+      const vm = this;
+      let copyItem = JSON.parse(
+        JSON.stringify(
+          vm.formValue.envK8s.quotaConfig.namespaceQuota.extraQuotas[i]
+        )
+      );
+      vm.formValue.envK8s.quotaConfig.namespaceQuota.extraQuotas.push(copyItem);
+    },
+    deleteExtraQuotas(i) {
+      const vm = this;
+      vm.formValue.envK8s.quotaConfig.namespaceQuota.extraQuotas.splice(i,1);
+    },
+    addExtraRequest() {
+      const vm = this;
+      let addItem = {
+        name: '',
+        value: '',
+      };
+      if (vm.formValue.envK8s.quotaConfig.defaultQuota.extraRequest === null) {
+        vm.formValue.envK8s.quotaConfig.defaultQuota.extraRequest = [];
+        vm.formValue.envK8s.quotaConfig.defaultQuota.extraRequest.push(addItem);
+      } else {
+        vm.formValue.envK8s.quotaConfig.defaultQuota.extraRequest.push(addItem);
+      }
+    },
+    copyExtraRequest(i) {
+      const vm = this;
+      let copyItem = JSON.parse(
+        JSON.stringify(
+          vm.formValue.envK8s.quotaConfig.defaultQuota.extraRequest[i]
+        )
+      );
+      vm.formValue.envK8s.quotaConfig.defaultQuota.extraRequest.push(copyItem);
+    },
+    deleteExtraRequest(i) {
+      const vm = this;
+      vm.formValue.envK8s.quotaConfig.defaultQuota.extraRequest.splice(i,1);
+    },
+    addExtraLimit() {
+      const vm = this;
+      let addItem = {
+        name: '',
+        value: '',
+      };
+      if (vm.formValue.envK8s.quotaConfig.defaultQuota.extraLimit === null) {
+        vm.formValue.envK8s.quotaConfig.defaultQuota.extraLimit = [];
+        vm.formValue.envK8s.quotaConfig.defaultQuota.extraLimit.push(addItem);
+      } else {
+        vm.formValue.envK8s.quotaConfig.defaultQuota.extraLimit.push(addItem);
+      }
+    },
+    copyExtraLimit(i) {
+      const vm = this;
+      let copyItem = JSON.parse(
+        JSON.stringify(
+          vm.formValue.envK8s.quotaConfig.defaultQuota.extraLimit[i]
+        )
+      );
+      vm.formValue.envK8s.quotaConfig.defaultQuota.extraLimit.push(copyItem);
+    },
+    deleteExtraLimit(i) {
+      const vm = this;
+      vm.formValue.envK8s.quotaConfig.defaultQuota.extraLimit.splice(i,1);
     },
     chooseParams(e) {
       console.log(e)

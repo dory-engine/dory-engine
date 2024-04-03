@@ -201,6 +201,7 @@
                         :operations="[
                           { text: $vuetify.lang.t('$vuetify.lang_menu_refresh_all_token'), onClick: () => {updateSecretKeyDialog = true} },
                           { text: $vuetify.lang.t('$vuetify.lang_menu_re_apply_kubernetes'), onClick: () => {reApplyKubernetesDialog = true} },
+                          { text: $vuetify.lang.t('$vuetify.lang_menu_clean_temp_git_repos'), onClick: () => {cleanGitRepoDialog = true} },
                         ]"
                       />
                     </template>
@@ -494,8 +495,8 @@
                               <th class="text-center" colspan="5">
                                 {{$vuetify.lang.t('$vuetify.lang_view_project_namespace_quota')}}
                               </th>
-                              <th class="text-center" colspan="4">
-                                {{$vuetify.lang.t('$vuetify.lang_view_project_default_quota')}}
+                              <th class="text-center" v-if="item.quotaConfig.usedQuota.extraQuotas" :colspan="item.quotaConfig.usedQuota.extraQuotas.length">
+                                {{$vuetify.lang.t('$vuetify.lang_view_project_namespace_quota_extra_quotas')}}
                               </th>
                             </tr>
                           </thead>
@@ -506,21 +507,62 @@
                               <td>{{$vuetify.lang.t('$vuetify.lang_view_memory_limit')}}</td>
                               <td>{{$vuetify.lang.t('$vuetify.lang_view_cpu_limit')}}</td>
                               <td>{{$vuetify.lang.t('$vuetify.lang_view_pods_limit')}}</td>
+                              <td v-for="(item, i) in item.quotaConfig.usedQuota.extraQuotas" :key="i">
+                                {{ item.name }}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>{{ item.quotaConfig.usedQuota.memoryRequest }} / {{ item.quotaConfig.namespaceQuota.memoryRequest }} <br/> <v-chip small color="blue" text-color="white">{{ (item.quotaConfig.resourceRate.memoryRequestRate * 100).toFixed(2) }}%</v-chip></td>
+                              <td>{{ item.quotaConfig.usedQuota.cpuRequest }} / {{ item.quotaConfig.namespaceQuota.cpuRequest }} <br/> <v-chip small color="blue" text-color="white">{{ (item.quotaConfig.resourceRate.cpuRequestRate * 100).toFixed(2) }}%</v-chip></td>
+                              <td>{{ item.quotaConfig.usedQuota.memoryLimit }} / {{ item.quotaConfig.namespaceQuota.memoryLimit }} <br/> <v-chip small color="blue" text-color="white">{{ (item.quotaConfig.resourceRate.memoryLimitRate * 100).toFixed(2) }}%</v-chip></td>
+                              <td>{{ item.quotaConfig.usedQuota.cpuLimit }} / {{ item.quotaConfig.namespaceQuota.cpuLimit }} <br/> <v-chip small color="blue" text-color="white">{{ (item.quotaConfig.resourceRate.cpuLimitRate * 100).toFixed(2) }}%</v-chip></td>
+                              <td>{{ item.quotaConfig.usedQuota.podsLimit }} / {{ item.quotaConfig.namespaceQuota.podsLimit }} <br/> <v-chip small color="blue" text-color="white">{{ (item.quotaConfig.resourceRate.podsRate * 100).toFixed(2) }}%</v-chip></td>
+                              <td v-for="(item, i) in item.quotaConfig.usedQuota.extraQuotas" :key="i">
+                                {{ item.value }} / {{ item.hard }}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </template>
+                      </v-simple-table>
+                      <v-simple-table dense class="limit-config">
+                        <template v-slot:default>
+                          <thead>
+                            <tr>
+                              <th class="text-center" :colspan="4">
+                                {{$vuetify.lang.t('$vuetify.lang_view_project_default_quota')}}
+                              </th>
+                              <th class="text-center" v-if="item.quotaConfig.defaultQuota.extraRequest" :colspan="item.quotaConfig.defaultQuota.extraRequest.length">
+                                {{$vuetify.lang.t('$vuetify.lang_view_project_default_quota_extra_request')}}
+                              </th>
+                              <th class="text-center" v-if="item.quotaConfig.defaultQuota.extraLimit" :colspan="item.quotaConfig.defaultQuota.extraLimit.length">
+                                {{$vuetify.lang.t('$vuetify.lang_view_project_default_quota_extra_limit')}}
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
                               <td>{{$vuetify.lang.t('$vuetify.lang_view_memory_request')}}</td>
                               <td>{{$vuetify.lang.t('$vuetify.lang_view_cpu_request') }}</td>
                               <td>{{$vuetify.lang.t('$vuetify.lang_view_memory_limit')}}</td>
                               <td>{{$vuetify.lang.t('$vuetify.lang_view_cpu_limit')}}</td>
+                              <td v-for="(item, i) in item.quotaConfig.defaultQuota.extraRequest" :key="'extraRequest'+i">
+                                {{ item.name }}
+                              </td>
+                              <td v-for="(item, i) in item.quotaConfig.defaultQuota.extraLimit" :key="'extraLimit'+i">
+                                {{ item.name }}
+                              </td>
                             </tr>
                             <tr>
-                              <td>{{ item.quotaConfig.namespaceQuota.memoryRequest }} <br/> <v-chip small color="blue" text-color="white">{{ (item.quotaConfig.resourceRate.memoryRequestRate * 100).toFixed(2) }}%</v-chip> <br/> {{ item.quotaConfig.usedQuota.memoryRequest }}</td>
-                              <td>{{ item.quotaConfig.namespaceQuota.cpuRequest }} <br/> <v-chip small color="blue" text-color="white">{{ (item.quotaConfig.resourceRate.cpuRequestRate * 100).toFixed(2) }}%</v-chip> <br/> {{ item.quotaConfig.usedQuota.cpuRequest }}</td>
-                              <td>{{ item.quotaConfig.namespaceQuota.memoryLimit }} <br/> <v-chip small color="blue" text-color="white">{{ (item.quotaConfig.resourceRate.memoryLimitRate * 100).toFixed(2) }}%</v-chip> <br/> {{ item.quotaConfig.usedQuota.memoryLimit }}</td>
-                              <td>{{ item.quotaConfig.namespaceQuota.cpuLimit }} <br/> <v-chip small color="blue" text-color="white">{{ (item.quotaConfig.resourceRate.cpuLimitRate * 100).toFixed(2) }}%</v-chip> <br/> {{ item.quotaConfig.usedQuota.cpuLimit }}</td>
-                              <td>{{ item.quotaConfig.namespaceQuota.podsLimit }} <br/> <v-chip small color="blue" text-color="white">{{ (item.quotaConfig.resourceRate.podsRate * 100).toFixed(2) }}%</v-chip> <br/> {{ item.quotaConfig.usedQuota.podsLimit }}</td>
                               <td>{{ item.quotaConfig.defaultQuota.memoryRequest }}</td>
                               <td>{{ item.quotaConfig.defaultQuota.cpuRequest }}</td>
                               <td>{{ item.quotaConfig.defaultQuota.memoryLimit }}</td>
                               <td>{{ item.quotaConfig.defaultQuota.cpuLimit }}</td>
+                              <td v-for="(item, i) in item.quotaConfig.defaultQuota.extraRequest" :key="'extraRequest'+i">
+                                {{ item.value }}
+                              </td>
+                              <td v-for="(item, i) in item.quotaConfig.defaultQuota.extraLimit" :key="'extraLimit'+i">
+                                {{ item.value }}
+                              </td>
                             </tr>
                           </tbody>
                         </template>
@@ -1751,6 +1793,41 @@
               color="blue darken-1"
               text
               @click="reApplyKubernetes()"
+            >
+              {{ $vuetify.lang.t('$vuetify.lang_menu_confirm') }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog
+        v-model="cleanGitRepoDialog"
+        max-width="600px"
+      >
+        <v-card>
+          <v-card-title>
+            <span class="headline">{{$vuetify.lang.t('$vuetify.lang_form_clean_temp_git_repos')}}</span>
+          </v-card-title>
+          <v-card-text>
+            <v-alert icon="mdi-alert-circle" prominent text type="info">
+              <small>{{$vuetify.lang.t('$vuetify.lang_form_clean_temp_git_repos_prompt')}}</small>
+            </v-alert>
+            <div>
+              {{$vuetify.lang.t('$vuetify.lang_form_clean_temp_git_repos_tip_1', targetProjectName)}}
+            </div>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="cleanGitRepoDialog = false"
+            >
+              {{ $vuetify.lang.t('$vuetify.lang_menu_cancel') }}
+            </v-btn>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="cleanGitRepo()"
             >
               {{ $vuetify.lang.t('$vuetify.lang_menu_confirm') }}
             </v-btn>
@@ -3587,136 +3664,252 @@
             <v-alert icon="mdi-alert-circle" prominent text type="info">
               <small>{{$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_prompt', targetProjectName, quotaConfigForm.envName)}}</small>
             </v-alert>
-            <v-form ref="quotaConfigRef" class="d-flex justify-space-between">
-              <div style="width: 50%">
-                <div><strong>{{$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota')}}</strong></div>
-                <small>{{$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_tip_1')}}</small>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_memory_request')"
-                        dense
-                        v-model="quotaConfigForm.namespaceQuota.memoryRequest"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                        :hint="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_memory_request_tip_1')"
-                        persistent-hint
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_cpu_request')"
-                        dense
-                        v-model="quotaConfigForm.namespaceQuota.cpuRequest"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                        :hint="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_cpu_request_tip_1')"
-                        persistent-hint
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_memory_limit')"
-                        dense
-                        v-model="quotaConfigForm.namespaceQuota.memoryLimit"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                        :hint="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_memory_limit_tip_1')"
-                        persistent-hint
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_cpu_limit')"
-                        dense
-                        v-model="quotaConfigForm.namespaceQuota.cpuLimit"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                        :hint="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_cpu_limit_tip_1')"
-                        persistent-hint
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_pods_limit')"
-                        dense
-                        type="number"
-                        v-model.number="quotaConfigForm.namespaceQuota.podsLimit"
-                        :rules="[intRule]"
-                        :hint="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_pods_limit_tip_1')"
-                        persistent-hint
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
+            <v-form ref="quotaConfigRef">
+              <div class="d-flex justify-space-between">
+                <div class="form-item-45">
+                  <div><strong>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota')}}</strong></div>
+                  <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_tip_1')}}</small>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_request')"
+                          dense
+                          v-model="quotaConfigForm.namespaceQuota.memoryRequest"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_request_tip_1')"
+                          persistent-hint
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_request')"
+                          dense
+                          v-model="quotaConfigForm.namespaceQuota.cpuRequest"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_request_tip_1')"
+                          persistent-hint
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_limit')"
+                          dense
+                          v-model="quotaConfigForm.namespaceQuota.memoryLimit"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_limit_tip_1')"
+                          persistent-hint
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_limit')"
+                          dense
+                          v-model="quotaConfigForm.namespaceQuota.cpuLimit"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_limit_tip_1')"
+                          persistent-hint
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_pods_limit')"
+                          dense
+                          type="number"
+                          v-model.number="quotaConfigForm.namespaceQuota.podsLimit"
+                          :rules="[intRule]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_pods_limit_tip_1')"
+                          persistent-hint
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </div>
+                <div class="form-item-45">
+                  <div><strong>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota')}}</strong></div>
+                  <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_tip_1')}}</small>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_request')"
+                          dense
+                          v-model="quotaConfigForm.defaultQuota.memoryRequest"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_request_tip_1')"
+                          persistent-hint
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_request')"
+                          dense
+                          v-model="quotaConfigForm.defaultQuota.cpuRequest"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_request_tip_1')"
+                          persistent-hint
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_limit')"
+                          dense
+                          v-model="quotaConfigForm.defaultQuota.memoryLimit"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_limit_tip_1')"
+                          persistent-hint
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_limit')"
+                          dense
+                          v-model="quotaConfigForm.defaultQuota.cpuLimit"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_limit_tip_1')"
+                          persistent-hint
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </div>
               </div>
-              <div style="width: 50%">
-                <div><strong>{{$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_default_quota')}}</strong></div>
-                <small>{{$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_tip_1')}}</small>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_memory_request')"
-                        dense
-                        v-model="quotaConfigForm.defaultQuota.memoryRequest"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                        :hint="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_memory_request_tip_1')"
-                        persistent-hint
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_cpu_request')"
-                        dense
-                        v-model="quotaConfigForm.defaultQuota.cpuRequest"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                        :hint="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_cpu_request_tip_1')"
-                        persistent-hint
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_memory_limit')"
-                        dense
-                        v-model="quotaConfigForm.defaultQuota.memoryLimit"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                        :hint="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_memory_limit_tip_1')"
-                        persistent-hint
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_cpu_limit')"
-                        dense
-                        v-model="quotaConfigForm.defaultQuota.cpuLimit"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                        :hint="$vuetify.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_cpu_limit_tip_1')"
-                        persistent-hint
-                      >
-                      </v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
+              <div class="params-item mt-4">
+                <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_extra_quotas')}}</small>
+                <v-tooltip right max-width="300px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                  </template>
+                  <div style="font-size: 12px;">
+                    <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_namespace_quota_extra_quotas_tip_1')}}</div>
+                  </div>
+                </v-tooltip>
+                <v-icon color="success" class="ml-4" @click="addExtraQuotas()">mdi-table-plus</v-icon>
+                <div class="d-flex justify-space-between mt-4" v-for="(row, i) in quotaConfigForm.namespaceQuota.extraQuotas" :key="i">
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                      dense
+                      v-model="row.name"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_1')"
+                      persistent-hint
+                    />
+                  </div>
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                      dense
+                      v-model="row.value"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                      persistent-hint
+                    />
+                  </div>
+                  <div>
+                    <v-icon color="success" class="mr-4" @click="copyExtraQuotas(i)">mdi-content-copy</v-icon>
+                    <v-icon color="error" @click="deleteExtraQuotas(i)">mdi-trash-can-outline</v-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="params-item mt-4">
+                <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request')}}</small>
+                <v-tooltip right max-width="300px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                  </template>
+                  <div style="font-size: 12px;">
+                    <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request_tip_1')}}</div>
+                  </div>
+                </v-tooltip>
+                <v-icon color="success" class="ml-4" @click="addExtraRequest('quotaConfig')">mdi-table-plus</v-icon>
+                <div class="d-flex justify-space-between mt-4" v-for="(row, i) in quotaConfigForm.defaultQuota.extraRequest" :key="i">
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                      dense
+                      v-model="row.name"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                      persistent-hint
+                    />
+                  </div>
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                      dense
+                      v-model="row.value"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                      persistent-hint
+                    />
+                  </div>
+                  <div>
+                    <v-icon color="success" class="mr-4" @click="copyExtraRequest('quotaConfig', i)">mdi-content-copy</v-icon>
+                    <v-icon color="error" @click="deleteExtraRequest('quotaConfig', i)">mdi-trash-can-outline</v-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="params-item mt-4">
+                <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit')}}</small>
+                <v-tooltip right max-width="300px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                  </template>
+                  <div style="font-size: 12px;">
+                    <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit_tip_1')}}</div>
+                  </div>
+                </v-tooltip>
+                <v-icon color="success" class="ml-4" @click="addExtraLimit('quotaConfig')">mdi-table-plus</v-icon>
+                <div class="d-flex justify-space-between mt-4" v-for="(row, i) in quotaConfigForm.defaultQuota.extraLimit" :key="i">
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                      dense
+                      v-model="row.name"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                      persistent-hint
+                    />
+                  </div>
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                      dense
+                      v-model="row.value"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                      persistent-hint
+                    />
+                  </div>
+                  <div>
+                    <v-icon color="success" class="mr-4" @click="copyExtraLimit('quotaConfig', i)">mdi-content-copy</v-icon>
+                    <v-icon color="error" @click="deleteExtraLimit('quotaConfig', i)">mdi-trash-can-outline</v-icon>
+                  </div>
+                </div>
               </div>
             </v-form>
           </v-card-text>
@@ -5037,6 +5230,82 @@
                     </div>
                   </div>
                 </div>
+                <div class="params-item mt-4">
+                  <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request')}}</small>
+                  <v-tooltip right max-width="300px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                    </template>
+                    <div style="font-size: 12px;">
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request_tip_1')}}</div>
+                    </div>
+                  </v-tooltip>
+                  <v-icon color="success" class="ml-4" @click="addExtraRequest('debugComponent')">mdi-table-plus</v-icon>
+                  <div class="d-flex justify-space-between mt-4" v-for="(row, i) in addComponentDebugForm.debugQuota.extraRequest" :key="i">
+                    <div class="form-item-45 mt-4">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                        dense
+                        v-model="row.name"
+                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                        :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                        persistent-hint
+                      />
+                    </div>
+                    <div class="form-item-45 mt-4">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                        dense
+                        v-model="row.value"
+                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                        :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                        persistent-hint
+                      />
+                    </div>
+                    <div>
+                      <v-icon color="success" class="mr-4" @click="copyExtraRequest('debugComponent', i)">mdi-content-copy</v-icon>
+                      <v-icon color="error" @click="deleteExtraRequest('debugComponent', i)">mdi-trash-can-outline</v-icon>
+                    </div>
+                  </div>
+                </div>
+                <div class="params-item mt-4">
+                  <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit')}}</small>
+                  <v-tooltip right max-width="300px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                    </template>
+                    <div style="font-size: 12px;">
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit_tip_1')}}</div>
+                    </div>
+                  </v-tooltip>
+                  <v-icon color="success" class="ml-4" @click="addExtraLimit('debugComponent')">mdi-table-plus</v-icon>
+                  <div class="d-flex justify-space-between mt-4" v-for="(row, i) in addComponentDebugForm.debugQuota.extraLimit" :key="i">
+                    <div class="form-item-45 mt-4">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                        dense
+                        v-model="row.name"
+                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                        :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                        persistent-hint
+                      />
+                    </div>
+                    <div class="form-item-45 mt-4">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                        dense
+                        v-model="row.value"
+                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                        :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                        persistent-hint
+                      />
+                    </div>
+                    <div>
+                      <v-icon color="success" class="mr-4" @click="copyExtraLimit('debugComponent', i)">mdi-content-copy</v-icon>
+                      <v-icon color="error" @click="deleteExtraLimit('debugComponent', i)">mdi-trash-can-outline</v-icon>
+                    </div>
+                  </div>
+                </div>
                 <div class="form-item-100">
                   <div>{{$vuetify.lang.t('$vuetify.lang_form_debug_component_ingress')}}</div>
                   <div class="d-flex justify-space-between mt-4">
@@ -5122,7 +5391,6 @@
                           <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_local_ports_ingress_cert_path_tip_4')}}</div>
                         </div>
                       </v-tooltip>
-
                     </div>
                   </div>
                 </div>
@@ -5348,7 +5616,9 @@
                   addComponentForm.deploySpecStatic.deployResources.cpuLimit !== '' || 
                   addComponentForm.deploySpecStatic.deployResources.cpuRequest !== '' || 
                   addComponentForm.deploySpecStatic.deployResources.memoryLimit !== '' || 
-                  addComponentForm.deploySpecStatic.deployResources.memoryRequest !== ''
+                  addComponentForm.deploySpecStatic.deployResources.memoryRequest !== '' ||
+                  addComponentForm.deploySpecStatic.deployResources.extraRequest !== null ||
+                  addComponentForm.deploySpecStatic.deployResources.extraLimit !== null
                   " :id="'deployResources-add'"
                 >
                   <div>
@@ -5361,62 +5631,140 @@
                     </v-tooltip>
                     <v-icon color="error" class="ml-4" @click="clearParams('deployResources')">mdi-minus-circle-outline</v-icon>
                   </div>
-                  <div class="params-content d-flex justify-space-between mt-4" v-if="addComponentForm.deploySpecStatic.deployResources">
-                    <div class="form-item-20 d-flex">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_request')"
-                        dense
-                        v-model="addComponentForm.deploySpecStatic.deployResources.memoryRequest"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                      />
-                      <v-tooltip right max-width="250px">
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
-                        </template>
-                        <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_request_tip_1')}}</span>
-                      </v-tooltip>
+                  <div v-if="addComponentForm.deploySpecStatic.deployResources">
+                    <div class="params-content d-flex justify-space-between mt-4">
+                      <div class="form-item-20 d-flex">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_request')"
+                          dense
+                          v-model="addComponentForm.deploySpecStatic.deployResources.memoryRequest"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                        />
+                        <v-tooltip right max-width="250px">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                          </template>
+                          <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_request_tip_1')}}</span>
+                        </v-tooltip>
+                      </div>
+                      <div class="form-item-20 d-flex">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_limit')"
+                          dense
+                          v-model="addComponentForm.deploySpecStatic.deployResources.memoryLimit"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                        />
+                        <v-tooltip right max-width="250px">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                          </template>
+                          <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_limit_tip_1')}}</span>
+                        </v-tooltip>
+                      </div>
+                      <div class="form-item-20 d-flex">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_request')"
+                          dense
+                          v-model="addComponentForm.deploySpecStatic.deployResources.cpuRequest"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                        />
+                        <v-tooltip right max-width="250px">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                          </template>
+                          <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_request_tip_1')}}</span>
+                        </v-tooltip>
+                      </div>
+                      <div class="form-item-20 d-flex">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_limit')"
+                          dense
+                          v-model="addComponentForm.deploySpecStatic.deployResources.cpuLimit"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                        />
+                        <v-tooltip right max-width="250px">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                          </template>
+                          <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_limit_tip_1')}}</span>
+                        </v-tooltip>
+                      </div>
                     </div>
-                    <div class="form-item-20 d-flex">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_limit')"
-                        dense
-                        v-model="addComponentForm.deploySpecStatic.deployResources.memoryLimit"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                      />
-                      <v-tooltip right max-width="250px">
+                    <div class="params-item mt-4">
+                      <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request')}}</small>
+                      <v-tooltip right max-width="300px">
                         <template v-slot:activator="{ on, attrs }">
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
-                        <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_limit_tip_1')}}</span>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request_tip_1')}}</div>
+                        </div>
                       </v-tooltip>
+                      <v-icon color="success" class="ml-4" @click="addExtraRequest('component')">mdi-table-plus</v-icon>
+                      <div class="d-flex justify-space-between mt-4" v-for="(row, i) in addComponentForm.deploySpecStatic.deployResources.extraRequest" :key="i">
+                        <div class="form-item-45 mt-4">
+                          <v-text-field
+                            :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                            dense
+                            v-model="row.name"
+                            :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                            :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                            persistent-hint
+                          />
+                        </div>
+                        <div class="form-item-45 mt-4">
+                          <v-text-field
+                            :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                            dense
+                            v-model="row.value"
+                            :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                            :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                            persistent-hint
+                          />
+                        </div>
+                        <div>
+                          <v-icon color="success" class="mr-4" @click="copyExtraRequest('component', i)">mdi-content-copy</v-icon>
+                          <v-icon color="error" @click="deleteExtraRequest('component', i)">mdi-trash-can-outline</v-icon>
+                        </div>
+                      </div>
                     </div>
-                    <div class="form-item-20 d-flex">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_request')"
-                        dense
-                        v-model="addComponentForm.deploySpecStatic.deployResources.cpuRequest"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                      />
-                      <v-tooltip right max-width="250px">
+                    <div class="params-item mt-4">
+                      <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit')}}</small>
+                      <v-tooltip right max-width="300px">
                         <template v-slot:activator="{ on, attrs }">
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
-                        <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_request_tip_1')}}</span>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit_tip_1')}}</div>
+                        </div>
                       </v-tooltip>
-                    </div>
-                    <div class="form-item-20 d-flex">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_limit')"
-                        dense
-                        v-model="addComponentForm.deploySpecStatic.deployResources.cpuLimit"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                      />
-                      <v-tooltip right max-width="250px">
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
-                        </template>
-                        <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_limit_tip_1')}}</span>
-                      </v-tooltip>
+                      <v-icon color="success" class="ml-4" @click="addExtraLimit('component')">mdi-table-plus</v-icon>
+                      <div class="d-flex justify-space-between mt-4" v-for="(row, i) in addComponentForm.deploySpecStatic.deployResources.extraLimit" :key="i">
+                        <div class="form-item-45 mt-4">
+                          <v-text-field
+                            :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                            dense
+                            v-model="row.name"
+                            :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                            :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                            persistent-hint
+                          />
+                        </div>
+                        <div class="form-item-45 mt-4">
+                          <v-text-field
+                            :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                            dense
+                            v-model="row.value"
+                            :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                            :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                            persistent-hint
+                          />
+                        </div>
+                        <div>
+                          <v-icon color="success" class="mr-4" @click="copyExtraLimit('component', i)">mdi-content-copy</v-icon>
+                          <v-icon color="error" @click="deleteExtraLimit('component', i)">mdi-trash-can-outline</v-icon>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -6871,7 +7219,9 @@
                   addComponentForm.deploySpecStatic.deployResources.cpuLimit !== '' || 
                   addComponentForm.deploySpecStatic.deployResources.cpuRequest !== '' || 
                   addComponentForm.deploySpecStatic.deployResources.memoryLimit !== '' || 
-                  addComponentForm.deploySpecStatic.deployResources.memoryRequest !== ''
+                  addComponentForm.deploySpecStatic.deployResources.memoryRequest !== '' ||
+                  addComponentForm.deploySpecStatic.deployResources.extraRequest !== null ||
+                  addComponentForm.deploySpecStatic.deployResources.extraLimit !== null
                   " :id="'deployResources-'+targetIndex"
                 >
                   <div>
@@ -6884,62 +7234,140 @@
                     </v-tooltip>
                     <v-icon color="error" class="ml-4" @click="clearParams('deployResources')">mdi-minus-circle-outline</v-icon>
                   </div>
-                  <div class="params-content d-flex justify-space-between mt-4" v-if="addComponentForm.deploySpecStatic.deployResources">
-                    <div class="form-item-20 d-flex">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_request')"
-                        dense
-                        v-model="addComponentForm.deploySpecStatic.deployResources.memoryRequest"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                      />
-                      <v-tooltip right max-width="250px">
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
-                        </template>
-                        <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_request_tip_1')}}</span>
-                      </v-tooltip>
+                  <div v-if="addComponentForm.deploySpecStatic.deployResources">
+                    <div class="params-content d-flex justify-space-between mt-4">
+                      <div class="form-item-20 d-flex">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_request')"
+                          dense
+                          v-model="addComponentForm.deploySpecStatic.deployResources.memoryRequest"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                        />
+                        <v-tooltip right max-width="250px">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                          </template>
+                          <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_request_tip_1')}}</span>
+                        </v-tooltip>
+                      </div>
+                      <div class="form-item-20 d-flex">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_limit')"
+                          dense
+                          v-model="addComponentForm.deploySpecStatic.deployResources.memoryLimit"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                        />
+                        <v-tooltip right max-width="250px">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                          </template>
+                          <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_limit_tip_1')}}</span>
+                        </v-tooltip>
+                      </div>
+                      <div class="form-item-20 d-flex">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_request')"
+                          dense
+                          v-model="addComponentForm.deploySpecStatic.deployResources.cpuRequest"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                        />
+                        <v-tooltip right max-width="250px">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                          </template>
+                          <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_request_tip_1')}}</span>
+                        </v-tooltip>
+                      </div>
+                      <div class="form-item-20 d-flex">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_limit')"
+                          dense
+                          v-model="addComponentForm.deploySpecStatic.deployResources.cpuLimit"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                        />
+                        <v-tooltip right max-width="250px">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                          </template>
+                          <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_limit_tip_1')}}</span>
+                        </v-tooltip>
+                      </div>
                     </div>
-                    <div class="form-item-20 d-flex">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_limit')"
-                        dense
-                        v-model="addComponentForm.deploySpecStatic.deployResources.memoryLimit"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                      />
-                      <v-tooltip right max-width="250px">
+                    <div class="params-item mt-4">
+                      <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request')}}</small>
+                      <v-tooltip right max-width="300px">
                         <template v-slot:activator="{ on, attrs }">
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
-                        <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_limit_tip_1')}}</span>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request_tip_1')}}</div>
+                        </div>
                       </v-tooltip>
+                      <v-icon color="success" class="ml-4" @click="addExtraRequest('component')">mdi-table-plus</v-icon>
+                      <div class="d-flex justify-space-between mt-4" v-for="(row, i) in addComponentForm.deploySpecStatic.deployResources.extraRequest" :key="i">
+                        <div class="form-item-45 mt-4">
+                          <v-text-field
+                            :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                            dense
+                            v-model="row.name"
+                            :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                            :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                            persistent-hint
+                          />
+                        </div>
+                        <div class="form-item-45 mt-4">
+                          <v-text-field
+                            :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                            dense
+                            v-model="row.value"
+                            :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                            :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                            persistent-hint
+                          />
+                        </div>
+                        <div>
+                          <v-icon color="success" class="mr-4" @click="copyExtraRequest('component', i)">mdi-content-copy</v-icon>
+                          <v-icon color="error" @click="deleteExtraRequest('component', i)">mdi-trash-can-outline</v-icon>
+                        </div>
+                      </div>
                     </div>
-                    <div class="form-item-20 d-flex">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_request')"
-                        dense
-                        v-model="addComponentForm.deploySpecStatic.deployResources.cpuRequest"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                      />
-                      <v-tooltip right max-width="250px">
+                    <div class="params-item mt-4">
+                      <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit')}}</small>
+                      <v-tooltip right max-width="300px">
                         <template v-slot:activator="{ on, attrs }">
                           <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                         </template>
-                        <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_request_tip_1')}}</span>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit_tip_1')}}</div>
+                        </div>
                       </v-tooltip>
-                    </div>
-                    <div class="form-item-20 d-flex">
-                      <v-text-field
-                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_limit')"
-                        dense
-                        v-model="addComponentForm.deploySpecStatic.deployResources.cpuLimit"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                      />
-                      <v-tooltip right max-width="250px">
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
-                        </template>
-                        <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_limit_tip_1')}}</span>
-                      </v-tooltip>
+                      <v-icon color="success" class="ml-4" @click="addExtraLimit('component')">mdi-table-plus</v-icon>
+                      <div class="d-flex justify-space-between mt-4" v-for="(row, i) in addComponentForm.deploySpecStatic.deployResources.extraLimit" :key="i">
+                        <div class="form-item-45 mt-4">
+                          <v-text-field
+                            :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                            dense
+                            v-model="row.name"
+                            :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                            :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                            persistent-hint
+                          />
+                        </div>
+                        <div class="form-item-45 mt-4">
+                          <v-text-field
+                            :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                            dense
+                            v-model="row.value"
+                            :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                            :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                            persistent-hint
+                          />
+                        </div>
+                        <div>
+                          <v-icon color="success" class="mr-4" @click="copyExtraLimit('component', i)">mdi-content-copy</v-icon>
+                          <v-icon color="error" @click="deleteExtraLimit('component', i)">mdi-trash-can-outline</v-icon>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -8661,6 +9089,7 @@ export default {
       deleteProjectDialog: false,
       updateSecretKeyDialog: false,
       reApplyKubernetesDialog: false,
+      cleanGitRepoDialog: false,
       assignPermissionDialog: false,
       updatePermissionDialog: false,
       deletePermissionsDialog: false,
@@ -8903,6 +9332,7 @@ export default {
       { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_depend_services'), value:'dependServices' },
       { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_host_aliases'), value: 'hostAliases' },
       { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_security_context'), value: 'securityContext' },
+      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_patches'), value: 'patches' },
       { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_settings'), value: 'deployConfigSettings' },
     ]
     vm.userToken = JSON.parse(localStorage.getItem('userObj')).userToken
@@ -9204,6 +9634,17 @@ export default {
         vm.errorTip(true,error.response.data.msg)
       })
     },
+    cleanGitRepo () {
+      const vm = this
+      request.post(`/admin/project/${vm.targetProjectName}/cleanGitRepo`).then(response => {
+        vm.cleanGitRepoDialog = false
+        vm.successTip(true,response.msg)
+        vm.showLog(response)
+        vm.refreshList()
+      }).catch(error => {
+        vm.errorTip(true,error.response.data.msg)
+      })
+    },
     openMemberAdd (tenantCode) {
       const vm = this
       vm.assignPermissionDialog = true
@@ -9411,6 +9852,160 @@ export default {
         vm.errorTip(true,error.response.data.msg)
       })
     },
+    addExtraQuotas() {
+      const vm = this;
+      let addItem = {
+        name: '',
+        value: '',
+      };
+      if (vm.quotaConfigForm.namespaceQuota.extraQuotas === null) {
+        vm.quotaConfigForm.namespaceQuota.extraQuotas = [];
+        vm.quotaConfigForm.namespaceQuota.extraQuotas.push(addItem);
+      } else {
+        vm.quotaConfigForm.namespaceQuota.extraQuotas.push(addItem);
+      }
+    },
+    copyExtraQuotas(i) {
+      const vm = this;
+      let copyItem = JSON.parse(
+        JSON.stringify(
+          vm.quotaConfigForm.namespaceQuota.extraQuotas[i]
+        )
+      );
+      vm.quotaConfigForm.namespaceQuota.extraQuotas.push(copyItem);
+    },
+    deleteExtraQuotas(i) {
+      const vm = this;
+      vm.quotaConfigForm.namespaceQuota.extraQuotas.splice(i,1);
+    },
+    addExtraRequest(mode) {
+      const vm = this;
+      let addItem = {
+        name: '',
+        value: '',
+      };
+      if (mode === 'quotaConfig') {
+        if (vm.quotaConfigForm.defaultQuota.extraRequest === null) {
+          vm.quotaConfigForm.defaultQuota.extraRequest = [];
+          vm.quotaConfigForm.defaultQuota.extraRequest.push(addItem);
+        } else {
+          vm.quotaConfigForm.defaultQuota.extraRequest.push(addItem);
+        }
+      } else if (mode === 'debugComponent') {
+        if (vm.addComponentDebugForm.debugQuota.extraRequest === null) {
+          vm.addComponentDebugForm.debugQuota.extraRequest = [];
+          vm.addComponentDebugForm.debugQuota.extraRequest.push(addItem);
+        } else {
+          vm.addComponentDebugForm.debugQuota.extraRequest.push(addItem);
+        }
+      } else if (mode === 'component') {
+        if (vm.addComponentForm.deploySpecStatic.deployResources.extraRequest === null) {
+          vm.addComponentForm.deploySpecStatic.deployResources.extraRequest = [];
+          vm.addComponentForm.deploySpecStatic.deployResources.extraRequest.push(addItem);
+        } else {
+          vm.addComponentForm.deploySpecStatic.deployResources.extraRequest.push(addItem);
+        }
+      }
+    },
+    copyExtraRequest(mode, i) {
+      const vm = this;
+      if (mode === 'quotaConfig') {
+        let copyItem = JSON.parse(
+          JSON.stringify(
+            vm.quotaConfigForm.defaultQuota.extraRequest[i]
+          )
+        );
+        vm.quotaConfigForm.defaultQuota.extraRequest.push(copyItem);
+      } else if (mode === 'debugComponent') {
+        let copyItem = JSON.parse(
+          JSON.stringify(
+            vm.addComponentDebugForm.debugQuota.extraRequest[i]
+          )
+        );
+        vm.addComponentDebugForm.debugQuota.extraRequest.push(copyItem);
+      } else if (mode === 'component') {
+        let copyItem = JSON.parse(
+          JSON.stringify(
+            vm.addComponentForm.deploySpecStatic.deployResources.extraRequest[i]
+          )
+        );
+        vm.addComponentForm.deploySpecStatic.deployResources.extraRequest.push(copyItem);
+      }
+    },
+    deleteExtraRequest(mode, i) {
+      const vm = this;
+      if (mode === 'quotaConfig') {
+        vm.quotaConfigForm.defaultQuota.extraRequest.splice(i,1);
+      } else if (mode === 'debugComponent') {
+        vm.addComponentDebugForm.debugQuota.extraRequest.splice(i,1);
+      } else if (mode === 'component') {
+        vm.addComponentForm.deploySpecStatic.deployResources.extraRequest.splice(i,1);
+      }
+    },
+    addExtraLimit(mode) {
+      const vm = this;
+      let addItem = {
+        name: '',
+        value: '',
+      };
+      if (mode === 'quotaConfig') {
+        if (vm.quotaConfigForm.defaultQuota.extraLimit === null) {
+          vm.quotaConfigForm.defaultQuota.extraLimit = [];
+          vm.quotaConfigForm.defaultQuota.extraLimit.push(addItem);
+        } else {
+          vm.quotaConfigForm.defaultQuota.extraLimit.push(addItem);
+        }
+      } else if (mode === 'debugComponent') {
+        if (vm.addComponentDebugForm.debugQuota.extraLimit === null) {
+          vm.addComponentDebugForm.debugQuota.extraLimit = [];
+          vm.addComponentDebugForm.debugQuota.extraLimit.push(addItem);
+        } else {
+          vm.addComponentDebugForm.debugQuota.extraLimit.push(addItem);
+        }
+      } else if (mode === 'component') {
+        if (vm.addComponentForm.deploySpecStatic.deployResources.extraLimit === null) {
+          vm.addComponentForm.deploySpecStatic.deployResources.extraLimit = [];
+          vm.addComponentForm.deploySpecStatic.deployResources.extraLimit.push(addItem);
+        } else {
+          vm.addComponentForm.deploySpecStatic.deployResources.extraLimit.push(addItem);
+        }
+      }
+    },
+    copyExtraLimit(mode, i) {
+      const vm = this;
+      if (mode === 'quotaConfig') {
+        let copyItem = JSON.parse(
+          JSON.stringify(
+            vm.quotaConfigForm.defaultQuota.extraLimit[i]
+          )
+        );
+        vm.quotaConfigForm.defaultQuota.extraLimit.push(copyItem);
+      } else if (mode === 'debugComponent') {
+        let copyItem = JSON.parse(
+          JSON.stringify(
+            vm.addComponentDebugForm.debugQuota.extraLimit[i]
+          )
+        );
+        vm.addComponentDebugForm.debugQuota.extraLimit.push(copyItem);
+      } else if (mode === 'component') {
+        let copyItem = JSON.parse(
+          JSON.stringify(
+            vm.addComponentForm.deploySpecStatic.deployResources.extraLimit[i]
+          )
+        );
+        vm.addComponentForm.deploySpecStatic.deployResources.extraLimit.push(copyItem);
+      }
+    },
+    deleteExtraLimit(mode, i) {
+      const vm = this;
+      if (mode === 'quotaConfig') {
+        vm.quotaConfigForm.defaultQuota.extraLimit.splice(i,1);
+      } else if (mode === 'debugComponent') {
+        vm.addComponentDebugForm.debugQuota.extraLimit.splice(i,1);
+      } else if (mode === 'component') {
+        vm.addComponentForm.deploySpecStatic.deployResources.extraLimit.splice(i,1);
+      }
+    },
     openQuotaConfig (envName) {
       this.updateQuotaConfigDialog = true
       this.quotaConfigForm.envName = envName
@@ -9441,14 +10036,15 @@ export default {
       }
     },
     openAllotPV (envName) {
-      this.addPVDialog = true
-      this.targetEnvName = envName
-      this.dialogLoading = true
+      const vm = this
+      vm.addPVDialog = true
+      vm.targetEnvName = envName
+      vm.dialogLoading = true
       request.get(`/admin/env/${envName}/pvNames`).then(response => {
         response.data.pvs.map(item => {
-          this.pvList.push(item.pvName)
+          vm.pvList.push(item.pvName)
         })
-        this.dialogLoading = false
+        vm.dialogLoading = false
       }).catch(error => {
         vm.errorTip(true,error.response.data.msg)
       })
@@ -9897,7 +10493,9 @@ export default {
                   yaml.deployResources.cpuLimit === '' && 
                   yaml.deployResources.cpuRequest === '' && 
                   yaml.deployResources.memoryLimit === '' && 
-                  yaml.deployResources.memoryRequest === ''
+                  yaml.deployResources.memoryRequest === '' &&
+                  yaml.deployResources.extraRequest === null &&
+                  yaml.deployResources.extraLimit === null
                 ){
                   delete yaml.deployResources
                 }else{
@@ -10127,7 +10725,9 @@ export default {
                     copyData.deployResources.cpuLimit === '' && 
                     copyData.deployResources.cpuRequest === '' && 
                     copyData.deployResources.memoryLimit === '' && 
-                    copyData.deployResources.memoryRequest === ''
+                    copyData.deployResources.memoryRequest === '' && 
+                    copyData.deployResources.extraRequest === null && 
+                    copyData.deployResources.extraLimit === null
                   ) {
                   delete copyData.deployResources
                 } else {
@@ -10413,7 +11013,14 @@ export default {
           vm.addComponentForm.deploySpecStatic.hpaConfig.maxReplicas = 1;
         }
       } else if (e === "deployResources") {
-        if (vm.addComponentForm.deploySpecStatic.deployResources.cpuLimit === '' && vm.addComponentForm.deploySpecStatic.deployResources.cpuRequest === '' && vm.addComponentForm.deploySpecStatic.deployResources.memoryLimit === '' && vm.addComponentForm.deploySpecStatic.deployResources.memoryRequest === '') {
+        if (
+          vm.addComponentForm.deploySpecStatic.deployResources.cpuLimit === '' && 
+          vm.addComponentForm.deploySpecStatic.deployResources.cpuRequest === '' && 
+          vm.addComponentForm.deploySpecStatic.deployResources.memoryLimit === '' && 
+          vm.addComponentForm.deploySpecStatic.deployResources.memoryRequest === '' &&
+          vm.addComponentForm.deploySpecStatic.deployResources.extraRequest === null &&
+          vm.addComponentForm.deploySpecStatic.deployResources.extraLimit === null
+        ) {
           vm.addComponentForm.deploySpecStatic.deployResources = {
             memoryRequest: "10Mi",
             memoryLimit: "100Mi",
@@ -10928,7 +11535,9 @@ export default {
                     copyData.deployResources.cpuLimit === '' && 
                     copyData.deployResources.cpuRequest === '' && 
                     copyData.deployResources.memoryLimit === '' && 
-                    copyData.deployResources.memoryRequest === ''
+                    copyData.deployResources.memoryRequest === '' &&
+                    copyData.deployResources.extraRequest === null &&
+                    copyData.deployResources.extraLimit === null
                   ) {
                   delete copyData.deployResources
                 } else {

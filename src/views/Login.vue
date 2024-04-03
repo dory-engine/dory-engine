@@ -12,7 +12,7 @@
             <v-card class="elevation-12 pa-3">
               <v-card-title>
                 <img style="height: 40px; margin-right: 10px" :src="frontendInfo.appLogo" />
-                <span>{{ frontendInfo.appName }}</span>
+                <span>{{ frontendInfo.appName }} ({{ version }})</span>
               </v-card-title>
               <v-card-text>
                 <v-form ref="login_form">
@@ -96,11 +96,13 @@ export default {
       appFavIcon: '',
       appBackGroundImage: '',
     },
+    version: '',
   }),
   created () {
     const vm = this
     request.get('/public/about').then(response => {
       vm.frontendInfo = response.data.config.frontend
+      vm.version = response.data.version
     }).catch(error => {
       vm.errorTip(true, error.response.data.msg);
     })

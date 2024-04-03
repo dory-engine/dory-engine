@@ -263,7 +263,8 @@
                                 "packageImage": {
                                     "enable": true,
                                     "timeout": 0,
-                                    "retry": 0
+                                    "retry": 0,
+                                    "extraPush": false,
                                 },
                                 "scanImage": {
                                     "enable": false,
@@ -567,7 +568,8 @@
                             "packageImage": {
                                 "enable": true,
                                 "timeout": 0,
-                                "retry": 0
+                                "retry": 0,
+                                "extraPush": false,
                             },
                             "scanImage": {
                                 "enable": false,
@@ -964,7 +966,8 @@
                     "packageImage": {
                         "enable": true,
                         "timeout": 0,
-                        "retry": 0
+                        "retry": 0,
+                        "extraPush": false,
                     },
                     "scanImage": {
                         "enable": false,
@@ -3276,7 +3279,8 @@
                             "packageImage": {
                                 "enable": true,
                                 "timeout": 0,
-                                "retry": 0
+                                "retry": 0,
+                                "extraPush": false,
                             },
                             "scanImage": {
                                 "enable": false,
@@ -3462,7 +3466,19 @@
                                 "memoryRequest": "10Mi",
                                 "cpuRequest": "0.02",
                                 "memoryLimit": "100Mi",
-                                "cpuLimit": "0.1"
+                                "cpuLimit": "0.1",
+                                "extraRequest" : [
+                                    {
+                                        "name" : "xxx",
+                                        "value" : "xxx",
+                                    }
+                                ],
+                                "extraLimit" : [
+                                    {
+                                        "name" : "xxx",
+                                        "value" : "xxx",
+                                    }
+                                ],
                             },
                             "deployVolumes": [
                                 {
@@ -3658,10 +3674,14 @@
                         "relatedBuilds": [
                             "tp1-gin-demo"
                         ],
-                        "packageFrom": "registry.dory.cookeem.com/public/alpine:3.12.3-curl",
-                        "packages": [
-                            "COPY Codes/Backend/tp1-gin-demo/tp1-gin-demo /tp1-gin-demo/",
-                        ]
+                        "dockerFile": "xxx",
+                        "extraPushImages": [
+                            {
+                                "imagePath": "xxx",
+                                "username": "xxx",
+                                "password": "xxx",
+                            }
+                        ],
                     },                    
                 ],
                 "artifactDefs": [
@@ -3788,10 +3808,14 @@
                 "relatedBuilds": [
                     "tp1-gin-demo"
                 ],
-                "packageFrom": "registry.dory.cookeem.com/public/alpine:3.12.3-curl",
-                "packages": [
-                    "COPY Codes/Backend/tp1-gin-demo/tp1-gin-demo /tp1-gin-demo/",
-                ]
+                "dockerFile": "xxx",
+                "extraPushImages": [
+                    {
+                        "imagePath": "xxx",
+                        "username": "xxx",
+                        "password": "xxx",
+                    }
+                ],
             },                    
         ],
         "artifactDefs": [
@@ -3850,7 +3874,19 @@
                     "memoryRequest": "10Mi",
                     "cpuRequest": "0.02",
                     "memoryLimit": "100Mi",
-                    "cpuLimit": "0.1"
+                    "cpuLimit": "0.1",
+                    "extraRequest" : [
+                        {
+                            "name" : "xxx",
+                            "value" : "xxx",
+                        }
+                    ],
+                    "extraLimit" : [
+                        {
+                            "name" : "xxx",
+                            "value" : "xxx",
+                        }
+                    ],
                 },
                 "deployVolumes": [
                     {
@@ -4033,14 +4069,20 @@
   # @@ 下拉选择，多选，从buildNames中获取
   relatedBuilds:
   - tp1-spring-demo
-  # 镜像来源* 
-  # ++ 请填写完整的来源镜像路径
-  packageFrom: registry.dory.cookeem.com/public/openjdk:14-jdk-alpine3.10
-  # 制作镜像的Dockerfile指令*
-  # ++ 用于生成Dockerfile，不包含FROM指令，请注意Dockerfile指令执行顺序
-  packages:
-  - "COPY Codes/Backend/tp1-spring-demo/target/example.smallest-0.0.1-SNAPSHOT.war /tp1-spring-demo/example.smallest-0.0.1-SNAPSHOT.war"
-  - "RUN adduser -D -u 1000 userdemo && chown userdemo:userdemo -R /tp1-spring-demo"
+  # Dockerfile* 
+  # ++ 请填写dockerfile内容，支持流水线变量
+  dockerFile: XXX
+  # 把镜像推送到额外的镜像仓库设置
+  # ++ 需要把制作的镜像推送到其他镜像仓库情况下需要设置
+  extraPushImages:
+  # 镜像路径名称
+  # ++ 请不要包含镜像标签
+  # ++ 格式例如：your.harbor.local:5000/your-path/your-image
+  - imagePath: your.harbor.local:5000/your-path/your-image
+    # 镜像仓库用户名
+    username: xxx
+    # 镜像仓库密码
+    password: yyy
 ```
 
 - response响应内容
@@ -4154,6 +4196,8 @@
   # ++ 容器发布模块的部署方式
   # @@ 下拉选择 deployment statefulset job cronjob
   deployType: deployment
+  # 替换镜像路径
+  deployImagePath: xxxx
   # 是否headless服务
   # ++ headless服务不做负载均衡，并且pod之间可以通过域名互相访问，只有deployType为statefulset的时候，可以设置deployHeadless为true
   # @@ 下拉选择 true false
@@ -4272,6 +4316,18 @@
     # ++ 应用可以分配的最大cpu资源，所有应用的最大cpu配额总量可以超过节点cpu总量（100m表示0.1，表示0.1个CPU）
     # @@ 默认 100m
     cpuLimit: 0.25
+    # 扩展请求资源配额参数设置
+    extraRequest:
+        # 参数名
+    - name: nvidia.com/gpu
+        # 参数值
+        value: "1"
+    # 扩展最大资源配额参数设置
+    extraLimit:
+        # 参数名
+    - name: nvidia.com/gpu
+        # 参数值
+        value: "1"
   # 应用挂装存储设置  
   # ++ 该应用哪些目录或者文件需要进行持久化到共享存储
   deployVolumes:
@@ -5026,6 +5082,9 @@ pipelineStep:
     # 重试设置
     # ++ 执行异常的情况下重试次数
     retry: 0
+    # 是否推送到额外的镜像仓库
+    # ++ 模块镜像打包定义中设置了要把镜像推送到其他镜像仓库情况下才有效
+    extraPush: false
   # 容器镜像扫描
   scanImage:
     # 是否启用
@@ -5291,7 +5350,8 @@ customStepInsertDefs:
                 "packageImage": {
                     "enable": true,
                     "timeout": 0,
-                    "retry": 0
+                    "retry": 0,
+                    "extraPush": false,
                 },
                 "scanImage": {
                     "enable": false,

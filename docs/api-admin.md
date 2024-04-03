@@ -25,6 +25,7 @@
       - [\[POST\] api/admin/project/:projectName/envDeleteAll admin为项目回收环境并清理名字空间接口](#post-apiadminprojectprojectnameenvdeleteall-admin为项目回收环境并清理名字空间接口)
       - [\[POST\] api/admin/project/:projectName/refreshToken admin为项目更新所有密钥接口](#post-apiadminprojectprojectnamerefreshtoken-admin为项目更新所有密钥接口)
       - [\[POST\] api/admin/project/:projectName/reApply admin重新应用项目配置到所有可用环境](#post-apiadminprojectprojectnamereapply-admin重新应用项目配置到所有可用环境)
+      - [\[POST\] api/admin/project/:projectName/cleanGitRepo admin清理临时代码仓库](#post-apiadminprojectprojectnamecleangitrepo-admin清理临时代码仓库)
       - [\[GET\] api/admin/project/:projectName/members admin项目分配用户列表接口](#get-apiadminprojectprojectnamemembers-admin项目分配用户列表接口)
       - [\[POST\] api/admin/project/:projectName/memberAdd admin为项目分配用户接口](#post-apiadminprojectprojectnamememberadd-admin为项目分配用户接口)
       - [\[POST\] api/admin/project/:projectName/memberDelete admin为项目移除用户接口](#post-apiadminprojectprojectnamememberdelete-admin为项目移除用户接口)
@@ -587,21 +588,46 @@
                             "memoryRequest" : "20Mi",
                             "cpuRequest" : "10m",
                             "memoryLimit" : "50Mi",
-                            "cpuLimit" : "50m"
+                            "cpuLimit" : "50m",
+                            "extraRequest" : [
+                                {
+                                    "name" : "xxx",
+                                    "value" : "xxx",
+                                }
+                            ],
+                            "extraLimit" : [
+                                {
+                                    "name" : "xxx",
+                                    "value" : "xxx",
+                                }
+                            ],
                         },
                         "namespaceQuota" : {
                             "memoryRequest" : "500Mi",
                             "cpuRequest" : "500m",
                             "memoryLimit" : "2Gi",
                             "cpuLimit" : "2000m",
-                            "podsLimit" : 32
+                            "podsLimit" : 32,
+                            "extraQuotas" : [
+                                {
+                                    "name" : "xxx",
+                                    "value" : "xxx",
+                                }
+                            ],
                         },
                         "usedQuota": {
                             "cpuLimit": "4002m",
                             "cpuRequest": "650m",
                             "memoryLimit": "4302Mi",
                             "memoryRequest": "410Mi",
-                            "podsLimit": 19
+                            "podsLimit": 19,
+                            "extraQuotas" : [
+                                {
+                                    "name" : "xxx",
+                                    "value" : "xxx",
+                                    "hard" : "xxx",
+                                }
+                            ],
                         },
                         "resourceRate": {
                             "cpuLimitRate": 0.667,
@@ -682,7 +708,19 @@
                                 "cpuLimit": "100m",
                                 "cpuRequest": "10m",
                                 "memoryLimit": "100Mi",
-                                "memoryRequest": "10Mi"
+                                "memoryRequest": "10Mi",
+                                "extraRequest" : [
+                                    {
+                                        "name" : "xxx",
+                                        "value" : "xxx",
+                                    }
+                                ],
+                                "extraLimit" : [
+                                    {
+                                        "name" : "xxx",
+                                        "value" : "xxx",
+                                    }
+                                ],
                             },
                             "ingress": {
                                 "domainName": "",
@@ -765,7 +803,19 @@
                                     "cpuLimit": "1",
                                     "cpuRequest": "0.2",
                                     "memoryLimit": "400Mi",
-                                    "memoryRequest": "20Mi"
+                                    "memoryRequest": "20Mi",
+                                    "extraRequest" : [
+                                        {
+                                            "name" : "xxx",
+                                            "value" : "xxx",
+                                        }
+                                    ],
+                                    "extraLimit" : [
+                                        {
+                                            "name" : "xxx",
+                                            "value" : "xxx",
+                                        }
+                                    ],
                                 },
                                 "deploySessionAffinityTimeoutSeconds": 0,
                                 "deployVolumes": [
@@ -1086,6 +1136,21 @@
 ```
 
 #### [POST] api/admin/project/:projectName/reApply admin重新应用项目配置到所有可用环境
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {
+        "auditID": "xxx",
+        "withAdminLog": true,
+    }
+}
+```
+
+#### [POST] api/admin/project/:projectName/cleanGitRepo admin清理临时代码仓库
 
 - response响应内容
 ```json
@@ -1622,12 +1687,30 @@
         "memoryLimit": "1Gi",
         "cpuLimit": "1",
         "podsLimit": 64,
+        "extraQuotas" : [
+            {
+                "name" : "xxx",
+                "value" : "xxx",
+            }
+        ],
     },
     "defaultQuota": {
         "memoryRequest": "100Mi",
         "cpuRequest": "100m",
         "memoryLimit": "1Gi",
         "cpuLimit": "1",
+        "extraRequest" : [
+            {
+                "name" : "xxx",
+                "value" : "xxx",
+            }
+        ],
+        "extraLimit" : [
+            {
+                "name" : "xxx",
+                "value" : "xxx",
+            }
+        ],
     }
 }
 ```
@@ -2024,7 +2107,19 @@
                 "memoryRequest": "10Mi",
                 "memoryLimit": "100Mi",
                 "cpuRequest": "10m",
-                "cpuLimit": "100m"
+                "cpuLimit": "100m",
+                "extraRequest" : [
+                    {
+                        "name" : "xxx",
+                        "value" : "xxx",
+                    }
+                ],
+                "extraLimit" : [
+                    {
+                        "name" : "xxx",
+                        "value" : "xxx",
+                    }
+                ],
             },
             "ingress": {
                 "domainName": "",
@@ -2066,6 +2161,18 @@ debugQuota:
   # 最大分配的CPU资源*
   # + 100m表示0.1，表示0.1个CPU
   cpuLimit: 100m
+  # 扩展请求资源配额参数设置
+  extraRequest:
+    # 参数名
+  - name: nvidia.com/gpu
+    # 参数值
+    value: "1"
+  # 扩展最大资源配额参数设置
+  extraLimit:
+    # 参数名
+  - name: nvidia.com/gpu
+    # 参数值
+    value: "1"
 # vnc-debug容器启用服务的域名解析
 # ++ kubernetes集群外通过域名和子路径访问该服务
 # ++ 访问方式为 http://${domainName}${pathPrefix}
@@ -2165,7 +2272,19 @@ ingress:
                 "memoryRequest": "20Mi",
                 "memoryLimit": "400Mi",
                 "cpuRequest": "0.2",
-                "cpuLimit": "1"
+                "cpuLimit": "1",
+                "extraRequest" : [
+                    {
+                        "name" : "xxx",
+                        "value" : "xxx",
+                    }
+                ],
+                "extraLimit" : [
+                    {
+                        "name" : "xxx",
+                        "value" : "xxx",
+                    }
+                ],
             },
             "deployVolumes": [
                 {
@@ -2227,7 +2346,19 @@ ingress:
                         "memoryRequest": "20Mi",
                         "memoryLimit": "400Mi",
                         "cpuRequest": "0.2",
-                        "cpuLimit": "1"
+                        "cpuLimit": "1",
+                        "extraRequest" : [
+                            {
+                                "name" : "xxx",
+                                "value" : "xxx",
+                            }
+                        ],
+                        "extraLimit" : [
+                            {
+                                "name" : "xxx",
+                                "value" : "xxx",
+                            }
+                        ],
                     },
                     "deployVolumes": [
                         {
@@ -2408,6 +2539,18 @@ deployResources:
   # ++ 应用可以分配的最大cpu资源，所有应用的最大cpu配额总量可以超过节点cpu总量（100m表示0.1，表示0.1个CPU）
   # @@ 默认 100m
   cpuLimit: 0.25
+  # 扩展请求资源配额参数设置
+  extraRequest:
+    # 参数名
+  - name: nvidia.com/gpu
+    # 参数值
+    value: "1"
+  # 扩展最大资源配额参数设置
+  extraLimit:
+    # 参数名
+  - name: nvidia.com/gpu
+    # 参数值
+    value: "1"
 # 应用挂装存储设置  
 # ++ 该应用哪些目录或者文件需要进行持久化到共享存储
 deployVolumes:
@@ -4049,14 +4192,32 @@ token: "xxx"
 						"memoryRequest": "20Mi",
 						"cpuRequest": "10m",
 						"memoryLimit": "50Mi",
-						"cpuLimit": "50m"
+						"cpuLimit": "50m",
+                        "extraRequest" : [
+                            {
+                                "name" : "xxx",
+                                "value" : "xxx",
+                            }
+                        ],
+                        "extraLimit" : [
+                            {
+                                "name" : "xxx",
+                                "value" : "xxx",
+                            }
+                        ],
 					},
 					"namespaceQuota": {
 						"memoryRequest": "1Gi",
 						"cpuRequest": "1000m",
 						"memoryLimit": "4Gi",
 						"cpuLimit": "4000m",
-						"podsLimit": 32
+						"podsLimit": 32,
+                        "extraQuotas" : [
+                            {
+                                "name" : "xxx",
+                                "value" : "xxx",
+                            }
+                        ],
 					}
 				},
 				"resourceVersion": {
@@ -4302,6 +4463,18 @@ quotaConfig:
     # 默认每个Pod的最大cpu资源设置*
     # ++ 100m表示0.1，表示0.1个CPU
     cpuLimit: 50m
+    # 扩展请求资源配额参数设置
+    extraRequest:
+      # 参数名
+    - name: nvidia.com/gpu
+      # 参数值
+      value: "1"
+    # 扩展最大资源配额参数设置
+    extraLimit:
+      # 参数名
+    - name: nvidia.com/gpu
+      # 参数值
+      value: "1"
   # 整个项目的容器云资源配额限制
   # ++ 整个项目名字空间，所有应用可以使用的资源配额总量，超过这个总量将无法发布应用
   namespaceQuota:
@@ -4319,6 +4492,12 @@ quotaConfig:
     cpuLimit: 2000m
     # 整个项目所有Pod的数量总和设置*
     podsLimit: 32
+    # 扩展资源配额参数设置
+    extraQuotas:
+      # 参数名
+    - name: nvidia.com/gpu
+      # 参数值
+      value: "1"
 ```
 
 - response响应内容
@@ -4408,14 +4587,32 @@ quotaConfig:
 					"memoryRequest": "20Mi",
 					"cpuRequest": "10m",
 					"memoryLimit": "50Mi",
-					"cpuLimit": "50m"
+					"cpuLimit": "50m",
+                    "extraRequest" : [
+                        {
+                            "name" : "xxx",
+                            "value" : "xxx",
+                        }
+                    ],
+                    "extraLimit" : [
+                        {
+                            "name" : "xxx",
+                            "value" : "xxx",
+                        }
+                    ],                    
 				},
 				"namespaceQuota": {
 					"memoryRequest": "1Gi",
 					"cpuRequest": "1000m",
 					"memoryLimit": "4Gi",
 					"cpuLimit": "4000m",
-					"podsLimit": 32
+					"podsLimit": 32,
+                    "extraQuotas" : [
+                        {
+                            "name" : "xxx",
+                            "value" : "xxx",
+                        }
+                    ],
 				}
 			},
 			"resourceVersion": {
@@ -4700,7 +4897,19 @@ nfs:
                         "memoryRequest": "20Mi",
                         "memoryLimit": "400Mi",
                         "cpuRequest": "0.2",
-                        "cpuLimit": "1"
+                        "cpuLimit": "1",
+                        "extraRequest" : [
+                            {
+                                "name" : "xxx",
+                                "value" : "xxx",
+                            }
+                        ],
+                        "extraLimit" : [
+                            {
+                                "name" : "xxx",
+                                "value" : "xxx",
+                            }
+                        ],
                     },
                     "deployVolumes": [
                         {
@@ -4776,7 +4985,19 @@ nfs:
                 "memoryRequest": "20Mi",
                 "memoryLimit": "400Mi",
                 "cpuRequest": "0.2",
-                "cpuLimit": "1"
+                "cpuLimit": "1",
+                "extraRequest" : [
+                    {
+                        "name" : "xxx",
+                        "value" : "xxx",
+                    }
+                ],
+                "extraLimit" : [
+                    {
+                        "name" : "xxx",
+                        "value" : "xxx",
+                    }
+                ],
             },
             "deployVolumes": [
                 {
@@ -5244,12 +5465,15 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
                 memoryLimit: "1Gi", （可修改）
                 cpuLimit: "1", （可修改）
                 podsLimit: 64, （可修改）
+                extraQuotas: [{"name": "xxx", "value": "xxx"}],（可修改）
             }
             - defaultQuota: {（可修改）
                 memoryRequest: "100Mi",（可修改）
                 cpuRequest: "100m",（可修改）
                 memoryLimit: "1Gi",（可修改）
                 cpuLimit: "1",（可修改）
+                extraRequest: [{"name": "xxx", "value": "xxx"}],（可修改）
+                extraLimit: [{"name": "xxx", "value": "xxx"}],（可修改）
             }
         - envPvAdd: 新增环境pv
             - envName: "test1"（不可修改）

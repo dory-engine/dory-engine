@@ -10,7 +10,7 @@
         <img style="height: 40px" :src="frontendInfo.appLogo"/>
       </div>
       <div class="d-flex align-center mr-8">
-          <span style="font-size: 26px">{{ frontendInfo.appName }}</span>
+          <span style="font-size: 24px">{{ frontendInfo.appName }} ({{ version }})</span>
       </div>
       <v-spacer />
       <NavMenu :menu-data="menuService.state.topMenu.filter(menu => {
@@ -594,12 +594,14 @@ export default {
       appFavIcon: '',
       appBackGroundImage: '',
     },
+    version: '',
     selectedItem: ''
   }),
   created () {
     const vm = this
     request.get('/public/about').then(response => {
       vm.frontendInfo = response.data.config.frontend
+      vm.version = response.data.version
     }).catch(error => {
       vm.errorTip(true, error.response.data.msg);
     })

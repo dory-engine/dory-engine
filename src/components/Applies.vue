@@ -948,88 +948,144 @@ export default {
         reactiveOpParam.artifactRepoPort = Number(reactiveOpParam.artifactRepoPort)
       } else if (kind === 'envQuotaConfigUpdate') {
         formEls = [
-          <v-text-field
-            label={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_memory_request')}
-            dense
-            value={reactiveOpParam.namespaceQuota.memoryRequest}
-            vOn:input={(value) => { reactiveOpParam.namespaceQuota.memoryRequest = value }}
-            rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
-            hint={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_memory_request_tip_1')}
-            persistent-hint
-          />,
-          <v-text-field
-            label={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_cpu_request')}
-            dense
-            value={reactiveOpParam.namespaceQuota.cpuRequest}
-            vOn:input={(value) => { reactiveOpParam.namespaceQuota.cpuRequest = value }}
-            rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
-            hint={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_cpu_request_tip_1')}
-            persistent-hint
-          />,
-          <v-text-field
-            label={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_memory_limit')}
-            dense
-            value={reactiveOpParam.namespaceQuota.memoryLimit}
-            vOn:input={(value) => { reactiveOpParam.namespaceQuota.memoryLimit = value }}
-            rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
-            hint={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_memory_limit_tip_1')}
-            persistent-hint
-          />,
-          <v-text-field
-            label={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_cpu_limit')}
-            dense
-            value={reactiveOpParam.namespaceQuota.cpuLimit}
-            vOn:input={(value) => { reactiveOpParam.namespaceQuota.cpuLimit = value }}
-            rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
-            hint={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_cpu_limit_tip_1')}
-            persistent-hint
-          />,
-          <v-text-field
-            label={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_pods_limit')}
-            dense
-            type="number"
-            value={reactiveOpParam.namespaceQuota.podsLimit}
-            vOn:input={(value) => { reactiveOpParam.namespaceQuota.podsLimit = value }}
-            rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
-            hint={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_namespace_quota_pods_limit_tip_1')}
-            persistent-hint
-          />,
-          <v-text-field
-            label={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_memory_request')}
-            dense
-            value={reactiveOpParam.defaultQuota.memoryRequest}
-            vOn:input={(value) => { reactiveOpParam.defaultQuota.memoryRequest = value }}
-            rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
-            hint={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_memory_request_tip_1')}
-            persistent-hint
-          />,
-          <v-text-field
-            label={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_cpu_request')}
-            dense
-            value={reactiveOpParam.defaultQuota.cpuRequest}
-            vOn:input={(value) => { reactiveOpParam.defaultQuota.cpuRequest = value }}
-            rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
-            hint={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_cpu_request_tip_1')}
-            persistent-hint
-          />,
-          <v-text-field
-            label={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_memory_limit')}
-            dense
-            value={reactiveOpParam.defaultQuota.memoryLimit}
-            vOn:input={(value) => { reactiveOpParam.defaultQuota.memoryLimit = value }}
-            rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
-            hint={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_memory_limit_tip_1')}
-            persistent-hint
-          />,
-          <v-text-field
-            label={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_cpu_limit')}
-            dense
-            value={reactiveOpParam.defaultQuota.cpuLimit}
-            vOn:input={(value) => { reactiveOpParam.defaultQuota.cpuLimit = value }}
-            rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
-            hint={vuetify.preset.lang.t('$vuetify.lang_form_update_resource_quota_default_quota_cpu_limit_tip_1')}
-            persistent-hint
-          />
+          <v-container>
+            <v-row>
+              <v-col cols="6">
+                <div class="justify-space-between align-center mt-4">
+                  <div><strong>{vuetify.preset.lang.t('$vuetify.lang_form_quota_config_namespace_quota')}</strong></div>
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  <v-text-field
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_request')}
+                    dense
+                    value={reactiveOpParam.namespaceQuota.memoryRequest}
+                    vOn:input={(value) => { reactiveOpParam.namespaceQuota.memoryRequest = value }}
+                    rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
+                    hint={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_request_tip_1')}
+                    persistent-hint
+                  />
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  <v-text-field
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_request')}
+                    dense
+                    value={reactiveOpParam.namespaceQuota.cpuRequest}
+                    vOn:input={(value) => { reactiveOpParam.namespaceQuota.cpuRequest = value }}
+                    rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
+                    hint={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_request_tip_1')}
+                    persistent-hint
+                  />
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  <v-text-field
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_limit')}
+                    dense
+                    value={reactiveOpParam.namespaceQuota.memoryLimit}
+                    vOn:input={(value) => { reactiveOpParam.namespaceQuota.memoryLimit = value }}
+                    rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
+                    hint={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_namespace_quota_memory_limit_tip_1')}
+                    persistent-hint
+                  />
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  <v-text-field
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_limit')}
+                    dense
+                    value={reactiveOpParam.namespaceQuota.cpuLimit}
+                    vOn:input={(value) => { reactiveOpParam.namespaceQuota.cpuLimit = value }}
+                    rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
+                    hint={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_namespace_quota_cpu_limit_tip_1')}
+                    persistent-hint
+                  />
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  <v-text-field
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_namespace_quota_pods_limit')}
+                    dense
+                    type="number"
+                    value={reactiveOpParam.namespaceQuota.podsLimit}
+                    vOn:input={(value) => { reactiveOpParam.namespaceQuota.podsLimit = value }}
+                    rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
+                    hint={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_namespace_quota_pods_limit_tip_1')}
+                    persistent-hint
+                  />
+                </div>
+              </v-col>
+              <v-col cols="6">
+                <div class="justify-space-between align-center mt-4">
+                  <div><strong>{vuetify.preset.lang.t('$vuetify.lang_form_quota_config_default_quota')}</strong></div>
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  <v-text-field
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_request')}
+                    dense
+                    value={reactiveOpParam.defaultQuota.memoryRequest}
+                    vOn:input={(value) => { reactiveOpParam.defaultQuota.memoryRequest = value }}
+                    rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
+                    hint={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_request_tip_1')}
+                    persistent-hint
+                  />
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  <v-text-field
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_request')}
+                    dense
+                    value={reactiveOpParam.defaultQuota.cpuRequest}
+                    vOn:input={(value) => { reactiveOpParam.defaultQuota.cpuRequest = value }}
+                    rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
+                    hint={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_request_tip_1')}
+                    persistent-hint
+                  />
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  <v-text-field
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_limit')}
+                    dense
+                    value={reactiveOpParam.defaultQuota.memoryLimit}
+                    vOn:input={(value) => { reactiveOpParam.defaultQuota.memoryLimit = value }}
+                    rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
+                    hint={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_default_quota_memory_limit_tip_1')}
+                    persistent-hint
+                  />
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  <v-text-field
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_limit')}
+                    dense
+                    value={reactiveOpParam.defaultQuota.cpuLimit}
+                    vOn:input={(value) => { reactiveOpParam.defaultQuota.cpuLimit = value }}
+                    rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
+                    hint={vuetify.preset.lang.t('$vuetify.lang_form_quota_config_default_quota_cpu_limit_tip_1')}
+                    persistent-hint
+                  />
+                </div>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="6">
+                <div class="justify-space-between align-center mt-4">
+                  <strong>{vuetify.preset.lang.t('$vuetify.lang_form_quota_config_namespace_quota_extra_quotas')}</strong>
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  { JSON.stringify(reactiveOpParam.namespaceQuota.extraQuotas) }
+                </div>
+              </v-col>
+              <v-col cols="6">
+                <div class="justify-space-between align-center mt-4">
+                  <strong>{vuetify.preset.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request')}</strong>
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  { JSON.stringify(reactiveOpParam.defaultQuota.extraRequest) }
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  <strong>{vuetify.preset.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit')}</strong>
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  { JSON.stringify(reactiveOpParam.defaultQuota.extraLimit) }
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>,
         ]
       } else if (kind === 'userAdd') {
         formEls = [

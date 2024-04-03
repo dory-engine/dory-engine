@@ -829,6 +829,9 @@
                         <th class="text-left" v-if="stepInformation.retry !== undefined">
                           {{$vuetify.lang.t('$vuetify.lang_form_pipeline_def_pipeline_step_retry')}}
                         </th>
+                        <th class="text-left" v-if="stepInformation.extraPush !== undefined">
+                          {{$vuetify.lang.t('$vuetify.lang_form_pipeline_def_pipeline_step_extra_push')}}
+                        </th>
                         <th class="text-left" v-if="stepInformation.passingRate !== undefined">
                           {{$vuetify.lang.t('$vuetify.lang_form_pipeline_def_pipeline_step_passing_rate')}}
                         </th>
@@ -933,6 +936,16 @@
                             :rules="[intRuleZero]"
                             v-model.number="stepInformation.retry"
                           />
+                        </td>
+                        <td v-if="stepInformation.extraPush !== undefined">
+                          <v-switch
+                            v-model="stepInformation.extraPush"
+                            dense
+                            inset
+                            small
+                            :hint="$vuetify.lang.t('$vuetify.lang_form_pipeline_def_pipeline_step_extra_push_tip_1')"
+                            persistent-hint
+                          ></v-switch>
                         </td>
                         <td v-if="stepInformation.passingRate !== undefined">
                           <v-text-field
@@ -1621,6 +1634,55 @@
                       </v-textarea>
                     </div>
                   </div>
+                  <div class="params-item mt-4">
+                    <small>{{$vuetify.lang.t('$vuetify.lang_form_package_def_extra_push_images')}}</small>
+                    <v-tooltip right max-width="300px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_package_def_extra_push_images_tip_1')}}</div>
+                      </div>
+                    </v-tooltip>
+                    <v-icon color="success" class="ml-4" @click="addExtraPushImages(index)">mdi-table-plus</v-icon>
+                    <div class="d-flex justify-space-between mt-4" v-for="(row, i) in item.extraPushImages" :key="i">
+                      <div class="form-item-30 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_package_def_extra_push_images_image_path')"
+                          dense
+                          v-model="row.imagePath"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_package_def_extra_push_images_image_path_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-30 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_package_def_extra_push_images_username')"
+                          dense
+                          v-model="row.username"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_package_def_extra_push_images_username_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-30 mt-4">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_package_def_extra_push_images_password')"
+                          dense
+                          v-model="row.password"
+                          type="password"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_package_def_extra_push_images_password_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div>
+                        <v-icon color="success" class="mr-4" @click="copyExtraPushImages(index, i)">mdi-content-copy</v-icon>
+                        <v-icon color="error" @click="deleteExtraPushImages(index, i)">mdi-trash-can-outline</v-icon>
+                      </div>
+                    </div>
+                  </div>
                 </v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels>
@@ -2133,7 +2195,9 @@
                       item.deployResources.cpuLimit !== '' ||
                       item.deployResources.cpuRequest !== '' ||
                       item.deployResources.memoryLimit !== '' ||
-                      item.deployResources.memoryRequest !== ''
+                      item.deployResources.memoryRequest !== '' ||
+                      item.deployResources.extraRequest !== null ||
+                      item.deployResources.extraLimit !== null
                       " :id="'deployResources-' + index"
                     >
                       <div>
@@ -2146,62 +2210,140 @@
                         </v-tooltip>
                         <v-icon color="error" class="ml-4" @click="clearParams(index, 'deployResources')">mdi-minus-circle-outline</v-icon>
                       </div>
-                      <div class="params-content d-flex justify-space-between mt-4" v-if="item.deployResources">
-                        <div class="form-item-20 d-flex">
-                          <v-text-field
-                            :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_request')"
-                            dense
-                            v-model="item.deployResources.memoryRequest"
-                            :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                          />
-                          <v-tooltip right max-width="250px">
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
-                            </template>
-                            <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_request_tip_1')}}</span>
-                          </v-tooltip>
+                      <div v-if="item.deployResources">
+                        <div class="params-content d-flex justify-space-between mt-4">
+                          <div class="form-item-20 d-flex">
+                            <v-text-field
+                              :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_request')"
+                              dense
+                              v-model="item.deployResources.memoryRequest"
+                              :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                            />
+                            <v-tooltip right max-width="250px">
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                              </template>
+                              <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_request_tip_1')}}</span>
+                            </v-tooltip>
+                          </div>
+                          <div class="form-item-20 d-flex">
+                            <v-text-field
+                              :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_limit')"
+                              dense
+                              v-model="item.deployResources.memoryLimit"
+                              :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                            />
+                            <v-tooltip right max-width="250px">
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                              </template>
+                              <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_limit_tip_1')}}</span>
+                            </v-tooltip>
+                          </div>
+                          <div class="form-item-20 d-flex">
+                            <v-text-field
+                              :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_request')"
+                              dense
+                              v-model="item.deployResources.cpuRequest"
+                              :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                            />
+                            <v-tooltip right max-width="250px">
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                              </template>
+                              <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_request_tip_1')}}</span>
+                            </v-tooltip>
+                          </div>
+                          <div class="form-item-20 d-flex">
+                            <v-text-field
+                              :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_limit')"
+                              dense
+                              v-model="item.deployResources.cpuLimit"
+                              :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                            />
+                            <v-tooltip right max-width="250px">
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                              </template>
+                              <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_limit_tip_1')}}</span>
+                            </v-tooltip>
+                          </div>
                         </div>
-                        <div class="form-item-20 d-flex">
-                          <v-text-field
-                            :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_limit')"
-                            dense
-                            v-model="item.deployResources.memoryLimit"
-                            :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                          />
-                          <v-tooltip right max-width="250px">
+                        <div class="params-item mt-4">
+                          <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request')}}</small>
+                          <v-tooltip right max-width="300px">
                             <template v-slot:activator="{ on, attrs }">
                               <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                             </template>
-                            <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_memory_limit_tip_1')}}</span>
+                            <div style="font-size: 12px;">
+                              <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_request_tip_1')}}</div>
+                            </div>
                           </v-tooltip>
+                          <v-icon color="success" class="ml-4" @click="addExtraRequest(index)">mdi-table-plus</v-icon>
+                          <div class="d-flex justify-space-between mt-4" v-for="(row, i) in item.deployResources.extraRequest" :key="i">
+                            <div class="form-item-45 mt-4">
+                              <v-text-field
+                                :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                                dense
+                                v-model="row.name"
+                                :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                                :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                                persistent-hint
+                              />
+                            </div>
+                            <div class="form-item-45 mt-4">
+                              <v-text-field
+                                :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                                dense
+                                v-model="row.value"
+                                :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                                :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                                persistent-hint
+                              />
+                            </div>
+                            <div>
+                              <v-icon color="success" class="mr-4" @click="copyExtraRequest(index, i)">mdi-content-copy</v-icon>
+                              <v-icon color="error" @click="deleteExtraRequest(index, i)">mdi-trash-can-outline</v-icon>
+                            </div>
+                          </div>
                         </div>
-                        <div class="form-item-20 d-flex">
-                          <v-text-field
-                            :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_request')"
-                            dense
-                            v-model="item.deployResources.cpuRequest"
-                            :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                          />
-                          <v-tooltip right max-width="250px">
+                        <div class="params-item mt-4">
+                          <small>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit')}}</small>
+                          <v-tooltip right max-width="300px">
                             <template v-slot:activator="{ on, attrs }">
                               <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                             </template>
-                            <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_request_tip_1')}}</span>
+                            <div style="font-size: 12px;">
+                              <div>{{$vuetify.lang.t('$vuetify.lang_form_quota_config_default_quota_extra_limit_tip_1')}}</div>
+                            </div>
                           </v-tooltip>
-                        </div>
-                        <div class="form-item-20 d-flex">
-                          <v-text-field
-                            :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_limit')"
-                            dense
-                            v-model="item.deployResources.cpuLimit"
-                            :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                          />
-                          <v-tooltip right max-width="250px">
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
-                            </template>
-                            <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources_cpu_limit_tip_1')}}</span>
-                          </v-tooltip>
+                          <v-icon color="success" class="ml-4" @click="addExtraLimit(index)">mdi-table-plus</v-icon>
+                          <div class="d-flex justify-space-between mt-4" v-for="(row, i) in item.deployResources.extraLimit" :key="i">
+                            <div class="form-item-45 mt-4">
+                              <v-text-field
+                                :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_name')"
+                                dense
+                                v-model="row.name"
+                                :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                                :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_name_tip_2')"
+                                persistent-hint
+                              />
+                            </div>
+                            <div class="form-item-45 mt-4">
+                              <v-text-field
+                                :label="$vuetify.lang.t('$vuetify.lang_form_quota_config_value')"
+                                dense
+                                v-model="row.value"
+                                :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                                :hint="$vuetify.lang.t('$vuetify.lang_form_quota_config_value_tip_1')"
+                                persistent-hint
+                              />
+                            </div>
+                            <div>
+                              <v-icon color="success" class="mr-4" @click="copyExtraLimit(index, i)">mdi-content-copy</v-icon>
+                              <v-icon color="error" @click="deleteExtraLimit(index, i)">mdi-trash-can-outline</v-icon>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -2417,6 +2559,24 @@
                             >
                             </v-select>
                           </div>
+                          <div class="form-item-45 d-flex align-center">
+                            <v-text-field
+                              :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_image_path')"
+                              dense
+                              v-model="item.deployImagePath"
+                              :messages="[
+                                $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_image_path_tip_1'),
+                                $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_image_path_tip_2'),
+                                $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_image_path_tip_3'),
+                              ]"
+                            >
+                              <template v-slot:message>
+                                <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_image_path_tip_1')}}</div>
+                                <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_image_path_tip_2')}}</div>
+                                <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_image_path_tip_3')}}</div>
+                              </template>
+                            </v-text-field>
+                          </div>                          
                         </div>
                       </div>
                       <div class="form-item-100 params-item" v-if="item.deployType === 'statefulset'">
@@ -6735,6 +6895,33 @@ export default {
         vm.$refs.packageDefRef.validate();
       }, 500);
     },
+    addExtraPushImages(i) {
+      const vm = this;
+      let addItem = {
+        imagePath: '',
+        username: '',
+        password: '',
+      };
+      if (vm.packageDefForm[i].extraPushImages === null) {
+        vm.packageDefForm[i].extraPushImages = [];
+        vm.packageDefForm[i].extraPushImages.push(addItem);
+      } else {
+        vm.packageDefForm[i].extraPushImages.push(addItem);
+      }
+    },
+    copyExtraPushImages(i, j) {
+      const vm = this;
+      let copyItem = JSON.parse(
+        JSON.stringify(
+          vm.packageDefForm[i].extraPushImages[j]
+        )
+      );
+      vm.packageDefForm[i].extraPushImages.push(copyItem);
+    },
+    deleteExtraPushImages(i, j) {
+      const vm = this;
+      vm.packageDefForm[i].extraPushImages.splice(j,1);
+    },
     previewPackageDef() {
       const vm = this;
       if (vm.$refs.packageDefRef.validate()) {
@@ -7443,7 +7630,9 @@ export default {
                     e.deployResources.cpuLimit === '' &&
                     e.deployResources.cpuRequest === '' &&
                     e.deployResources.memoryLimit === '' &&
-                    e.deployResources.memoryRequest === ''
+                    e.deployResources.memoryRequest === '' &&
+                    e.deployResources.extraRequest === null &&
+                    e.deployResources.extraLimit === null
                   ) {
                   delete e.deployResources
                 } else {
@@ -7752,6 +7941,58 @@ export default {
     deletePatches(i, j) {
       const vm = this;
       vm.deployContainerDefForm[i].patches.splice(j, 1);
+    },
+    addExtraRequest(i) {
+      const vm = this;
+      let addItem = {
+        name: '',
+        value: '',
+      };
+      if (vm.deployContainerDefForm[i].deployResources.extraRequest === null) {
+        vm.deployContainerDefForm[i].deployResources.extraRequest = [];
+        vm.deployContainerDefForm[i].deployResources.extraRequest.push(addItem);
+      } else {
+        vm.deployContainerDefForm[i].deployResources.extraRequest.push(addItem);
+      }
+    },
+    copyExtraRequest(i, j) {
+      const vm = this;
+      let copyItem = JSON.parse(
+        JSON.stringify(
+          vm.deployContainerDefForm[i].deployResources.extraRequest[j]
+        )
+      );
+      vm.deployContainerDefForm[i].deployResources.extraRequest.push(copyItem);
+    },
+    deleteExtraRequest(i, j) {
+      const vm = this;
+      vm.deployContainerDefForm[i].deployResources.extraRequest.splice(j,1);
+    },
+    addExtraLimit(i) {
+      const vm = this;
+      let addItem = {
+        name: '',
+        value: '',
+      };
+      if (vm.deployContainerDefForm[i].deployResources.extraLimit === null) {
+        vm.deployContainerDefForm[i].deployResources.extraLimit = [];
+        vm.deployContainerDefForm[i].deployResources.extraLimit.push(addItem);
+      } else {
+        vm.deployContainerDefForm[i].deployResources.extraLimit.push(addItem);
+      }
+    },
+    copyExtraLimit(i, j) {
+      const vm = this;
+      let copyItem = JSON.parse(
+        JSON.stringify(
+          vm.deployContainerDefForm[i].deployResources.extraLimit[j]
+        )
+      );
+      vm.deployContainerDefForm[i].deployResources.extraLimit.push(copyItem);
+    },
+    deleteExtraLimit(i, j) {
+      const vm = this;
+      vm.deployContainerDefForm[i].deployResources.extraLimit.splice(j,1);
     },
     addDeployNodePort(i) {
       const vm = this;
@@ -8934,7 +9175,9 @@ export default {
             vm.deployContainerDefForm[i].deployResources.cpuLimit === '' &&
             vm.deployContainerDefForm[i].deployResources.cpuRequest === '' &&
             vm.deployContainerDefForm[i].deployResources.memoryLimit === '' &&
-            vm.deployContainerDefForm[i].deployResources.memoryRequest === ''
+            vm.deployContainerDefForm[i].deployResources.memoryRequest === '' &&
+            vm.deployContainerDefForm[i].deployResources.extraRequest === null &&
+            vm.deployContainerDefForm[i].deployResources.extraLimit === null
           ) {
           vm.deployContainerDefForm[i].deployResources = {
             memoryRequest: "10Mi",
