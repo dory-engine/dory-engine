@@ -72,11 +72,12 @@ export default {
       
     }
   },
-  created () {},
+  created () {
+  },
   methods: {
     changeOptions(e) {
       this.$emit('getpage', {page: e.page, perPage: e.itemsPerPage})
-    }
+    },
   },
   computed: {
     headers () {

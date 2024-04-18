@@ -16,6 +16,7 @@
 <script>
 import QueuesDataTable from "@/components/QueuesDataTable";
 import PageCard from '@/lib/ui-lib/page-templates/PageCard';
+import User from '@/services/user'
 import request from "@/utils/request";
 export default {
   inject: ['successTip', 'errorTip', 'warnTip'],
@@ -32,7 +33,13 @@ export default {
     }
   },
   created () {
+    const vm = this
+    vm.websocketInit()
   },
+  destroyed() {
+    const vm = this
+		vm.websock.close()
+	},
   methods: {
     pageOptions(data){
       const vm = this
@@ -68,7 +75,42 @@ export default {
       }).catch(error => {
         vm.errorTip(true, error.response.data.msg)
       })
-    }
+    },
+    websocketInit() {
+      const vm = this
+			vm.websock = new WebSocket(`${vm.GLOBAL_WS_API}/ws/log/runStatus?x-user-token=${User.getInstance().state.userObj.userToken}`)
+			vm.websock.onmessage = vm.websocketOnMessage
+			vm.websock.onopen = vm.websocketOnOpen
+			vm.websock.onerror = vm.websocketOnError
+			vm.websock.onclose = vm.websocketOnClose
+      console.log("websocket init")
+		},
+		websocketOnOpen() {
+		},
+		websocketOnError() {
+      const vm = this
+			console.log("websocket error")
+		},
+		websocketOnMessage(e) {
+      const vm = this
+      let runStatusUpdate = JSON.parse(e.data)
+      if (runStatusUpdate.status === 'PAUSE') {
+        vm.refreshList()
+      } else {
+        vm.queuesData.runs.forEach(item => {
+          if (item.runName === runStatusUpdate.runName) {
+            if (runStatusUpdate.status !== 'PAUSE') {
+              vm.refreshList()
+            }
+          }
+        })
+      }
+			console.log(runStatusUpdate)
+		},
+		websocketOnClose(e) {
+      const vm = this
+			console.log("websocket closed")
+		},
   },
   computed: {
   }

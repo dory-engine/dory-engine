@@ -67,8 +67,8 @@ export function rtnLeftMenu () {
       nodes: [
         { key: 'cicdProjects', name: vuetify.preset.lang.t('$vuetify.lang_menu_cicd'), icon: 'mdi-rocket-launch', type: 'router', routerKey: 'CicdProjects' },
         { key: 'cicdRuns', name: vuetify.preset.lang.t('$vuetify.lang_menu_runs'), icon: 'mdi-play-circle', type: 'router', routerKey: 'CicdRuns' },
-        { key: 'cicdFixRuns', name: vuetify.preset.lang.t('$vuetify.lang_menu_runs_fixed'), icon: 'mdi-motion-play-outline', type: 'router', routerKey: 'CicdFixRuns' },
         { key: 'cicdQueue', name: vuetify.preset.lang.t('$vuetify.lang_menu_runs_queue'), icon: 'mdi-format-list-bulleted-square', type: 'router', routerKey: 'CicdQueue' },
+        { key: 'cicdFixRuns', name: vuetify.preset.lang.t('$vuetify.lang_menu_runs_fixed'), icon: 'mdi-motion-play-outline', type: 'router', routerKey: 'CicdFixRuns' },
         { key: 'cicdSteps', name: vuetify.preset.lang.t('$vuetify.lang_menu_steps'), icon: 'mdi-step-forward-2', type: 'router', routerKey: 'CicdSteps'},
         { key: 'cicdCommits', name: vuetify.preset.lang.t('$vuetify.lang_menu_commits'), icon: 'mdi-git', type: 'router', routerKey: 'CicdCommits' },
         { key: 'cicdNotifications', name: vuetify.preset.lang.t('$vuetify.lang_menu_notifications'), icon: 'mdi-bell', type: 'router', routerKey: 'CicdNotifications' },

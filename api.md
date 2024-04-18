@@ -15,6 +15,7 @@
       - [\[POST\] api/public/webhook/pipeline?token=xxx 通过webhook创建运行接口](docs/api-public.md#post-apipublicwebhookpipeline-通过webhook创建运行接口)
     - [ws websocket相关接口](docs/api-ws.md#ws-websocket相关接口)
       - [\[GET\] api/ws/log/run/:runName?kind=xxx&phaseID=xxx&stageID=xxx&stepID=xxx 运行日志websocket接口](docs/api-ws.md#get-apiwslogrunrunnamekindxxxphaseidxxxstageidxxxstepidxxx-运行日志websocket接口)
+      - [\[GET\] api/ws/log/runStatus 运行状态变更websocket接口](docs/api-ws.md#get-apiwslogrunstatus-运行状态变更websocket接口)
       - [\[GET\] api/ws/log/audit/admin/:auditID 审计日志websocket接口，需要管理员权限](docs/api-ws.md#get-apiwslogauditadminauditid-审计日志websocket接口需要管理员权限)
       - [\[GET\] api/ws/log/audit/console/:auditID 审计日志websocket接口](docs/api-ws.md#get-apiwslogauditconsoleauditid-审计日志websocket接口)
     - [account 账号相关接口](docs/api-account.md#account-账号相关接口)

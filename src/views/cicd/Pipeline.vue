@@ -287,6 +287,7 @@ import DialogDefs from "@/components/DialogDefs";
 import PIPELINE_API from '@/api/cicd/pipeline';
 import MODULE_API from '@/api/cicd/module';
 import RUNS_API from '@/api/cicd/runs';
+import User from '@/services/user'
 import request from '@/utils/request';
 import {vuetify} from '@/plugins/vuetify'
 export default {
@@ -357,7 +358,12 @@ export default {
     MODULE_API.getPipelineName().then(response => {
       this.pipelineItems = response.data.pipelineNames
     })
+    this.websocketInit()
   },
+  destroyed() {
+    const vm = this
+		vm.websock.close()
+	},
   methods: {
     clearDates1 () {
       this.dates = []
@@ -433,6 +439,54 @@ export default {
         this.errorTip(true, error.response.data.msg)
       })
     },
+    updateRun(runName) {
+      let getForm = {
+        page: 1,
+        perPage: 1,
+        runNames: [runName],
+      }
+      RUNS_API.getRuns(getForm).then(response => {
+        if (response.data.runs.length === 1) {
+          let run = response.data.runs[0]
+          this.runsData.runs.forEach((item, index) => {
+            if (item.runName === run.runName) {
+              this.$set(this.runsData.runs, index, run)
+            }
+          })
+        }
+      }).catch(error => {
+        this.errorTip(true, error.response.data.msg)
+      })
+    },
+    websocketInit() {
+      const vm = this
+			vm.websock = new WebSocket(`${vm.GLOBAL_WS_API}/ws/log/runStatus?x-user-token=${User.getInstance().state.userObj.userToken}`)
+			vm.websock.onmessage = vm.websocketOnMessage
+			vm.websock.onopen = vm.websocketOnOpen
+			vm.websock.onerror = vm.websocketOnError
+			vm.websock.onclose = vm.websocketOnClose
+      console.log("websocket init")
+		},
+		websocketOnOpen() {
+		},
+		websocketOnError() {
+      const vm = this
+			console.log("websocket error")
+		},
+		websocketOnMessage(e) {
+      const vm = this
+      let runStatusUpdate = JSON.parse(e.data)
+      if (runStatusUpdate.status === '') {
+        vm.getRuns()
+      } else {
+        vm.updateRun(runStatusUpdate.runName)
+      }
+			console.log(runStatusUpdate)
+		},
+		websocketOnClose(e) {
+      const vm = this
+			console.log("websocket closed")
+		},
   },
   computed: {
     dateRangeText () {

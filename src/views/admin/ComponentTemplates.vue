@@ -1143,36 +1143,45 @@
                   <v-icon color="success" class="ml-4" @click="addDependServices()">mdi-table-plus</v-icon>
                   <v-icon color="error" class="ml-4" @click="clearParams('dependServices')">mdi-minus-circle-outline</v-icon>
                 </div>
-                <div class="params-content d-flex justify-space-between mt-4" v-for="(row, i) in addComponentForm.deploySpecStatic.dependServices">
-                  <div class="form-item-30">
-                    <v-text-field
-                      :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_name')"
-                      dense
-                      v-model="row.dependName"
-                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                      :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_name_tip_1')"
-                      persistent-hint
-                    />
+                <div class="params-content" v-for="(row, i) in addComponentForm.deploySpecStatic.dependServices">
+                  <div class="d-flex justify-space-between mt-4">
+                    <div class="form-item-30">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_name')"
+                        dense
+                        v-model="row.dependName"
+                        :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_name_tip_1')"
+                        persistent-hint
+                      />
+                    </div>
+                    <div class="form-item-30">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_port')"
+                        dense
+                        v-model.number="row.dependPort"
+                        type="number"
+                      />
+                    </div>
+                    <div class="form-item-30">
+                      <v-select
+                        :items="[ 'TCP', 'UDP' ]"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_type')"
+                        dense
+                        v-model="row.dependType"
+                        clearable
+                      />
+                    </div>
                   </div>
-                  <div class="form-item-30">
-                    <v-text-field
-                      :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_port')"
-                      dense
-                      v-model.number="row.dependPort"
-                      :rules="[intRule]"
-                      type="number"
-                    />
-                  </div>
-                  <div class="form-item-30">
-                    <v-select
-                      :items="[ 'TCP', 'UDP' ]"
-                      :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_type')"
-                      dense
-                      v-model="row.dependType"
-                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                    />
-                  </div>
-                  <div>
+                  <div class="d-flex justify-space-between mt-4">
+                    <div class="form-item-100">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_http_get_url')"
+                        dense
+                        v-model="row.httpGetUrl"
+                        :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_http_get_url_tip_1')"
+                        persistent-hint
+                      />
+                    </div>
                     <v-icon color="success" class="mr-4" @click="copyDependServices(i)">mdi-content-copy</v-icon>
                     <v-icon color="error" @click="deleteDependServices(i)">mdi-trash-can-outline</v-icon>
                   </div>
@@ -2313,36 +2322,45 @@
                   <v-icon color="success" class="ml-4" @click="addDependServices()">mdi-table-plus</v-icon>
                   <v-icon color="error" class="ml-4" @click="clearParams('dependServices')">mdi-minus-circle-outline</v-icon>
                 </div>
-                <div class="params-content d-flex justify-space-between mt-4" v-for="(row, i) in addComponentForm.deploySpecStatic.dependServices">
-                  <div class="form-item-30">
-                    <v-text-field
-                      :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_name')"
-                      dense
-                      v-model="row.dependName"
-                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                      :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_name_tip_1')"
-                      persistent-hint
-                    />
+                <div class="params-content" v-for="(row, i) in addComponentForm.deploySpecStatic.dependServices">
+                  <div class="d-flex justify-space-between mt-4">
+                    <div class="form-item-30">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_name')"
+                        dense
+                        v-model="row.dependName"
+                        :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_name_tip_1')"
+                        persistent-hint
+                      />
+                    </div>
+                    <div class="form-item-30">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_port')"
+                        dense
+                        v-model.number="row.dependPort"
+                        type="number"
+                      />
+                    </div>
+                    <div class="form-item-30">
+                      <v-select
+                        :items="[ 'TCP', 'UDP' ]"
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_type')"
+                        dense
+                        v-model="row.dependType"
+                        clearable
+                      />
+                    </div>
                   </div>
-                  <div class="form-item-30">
-                    <v-text-field
-                      :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_port')"
-                      dense
-                      v-model.number="row.dependPort"
-                      :rules="[intRule]"
-                      type="number"
-                    />
-                  </div>
-                  <div class="form-item-30">
-                    <v-select
-                      :items="[ 'TCP', 'UDP' ]"
-                      :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_type')"
-                      dense
-                      v-model="row.dependType"
-                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                    />
-                  </div>
-                  <div>
+                  <div class="d-flex justify-space-between mt-4">
+                    <div class="form-item-100">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_http_get_url')"
+                        dense
+                        v-model="row.httpGetUrl"
+                        :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_http_get_url_tip_1')"
+                        persistent-hint
+                      />
+                    </div>
                     <v-icon color="success" class="mr-4" @click="copyDependServices(i)">mdi-content-copy</v-icon>
                     <v-icon color="error" @click="deleteDependServices(i)">mdi-trash-can-outline</v-icon>
                   </div>
@@ -3510,7 +3528,8 @@ export default {
       let addItem = {
         dependName: "",
         dependPort: null,
-        dependType: "TCP",
+        dependType: "",
+        httpGetUrl: "",
       };
       if (vm.addComponentForm.deploySpecStatic.dependServices === null) {
         vm.addComponentForm.deploySpecStatic.dependServices = [];

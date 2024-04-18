@@ -7,6 +7,7 @@
   - [api接口](#api接口)
     - [ws websocket相关接口](#ws-websocket相关接口)
       - [\[GET\] api/ws/log/run/:runName?kind=xxx\&phaseID=xxx\&stageID=xxx\&stepID=xxx 运行日志websocket接口](#get-apiwslogrunrunnamekindxxxphaseidxxxstageidxxxstepidxxx-运行日志websocket接口)
+      - [\[GET\] api/ws/log/runStatus 运行状态变更websocket接口](#get-apiwslogrunstatus-运行状态变更websocket接口)
       - [\[GET\] api/ws/log/audit/admin/:auditID 审计日志websocket接口，需要管理员权限](#get-apiwslogauditadminauditid-审计日志websocket接口需要管理员权限)
       - [\[GET\] api/ws/log/audit/console/:auditID 审计日志websocket接口](#get-apiwslogauditconsoleauditid-审计日志websocket接口)
 
@@ -35,6 +36,28 @@
     "endTime": "02-02 12:12:12",
     "duration": "12ms",
     "content": "xxx"
+}
+```
+
+- response响应内容
+```json
+{
+    "status": "FAIL",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {}
+}
+```
+
+#### [GET] api/ws/log/runStatus 运行状态变更websocket接口
+
+- websocket输出内容
+```json
+{
+    "projectName": "test-project1",
+    "pipelineName": "test-project1-develop",
+    "runName": "test-project1-develop-12",
+    "status": "RUNNING",
 }
 ```
 

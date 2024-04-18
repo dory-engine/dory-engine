@@ -2617,15 +2617,19 @@ deployHealthCheck:
 # 服务依赖
 # ++ 启动该服务前必须先保证哪个服务的哪个端口先启动，如果有多个服务依赖请注意依赖的先后顺序
 dependServices:
-  # 依赖的服务名*
+  # 依赖的服务名
   # ++ 可以是集群内的服务名，也可以是集群外的ip地址或者主机名
 - dependName: tp1-spring-demo
-  # 依赖的服务端口*
+  # 依赖的服务端口
   dependPort: 9000
-  # 依赖的服务协议类型*
+  # 依赖的服务协议类型
   # @@ 下拉选择 TCP UDP
   # @@ 默认 TCP
   dependType: TCP
+  # 依赖服务的URL
+  # ++ HttpGet方式确认依赖服务是否可用
+  httpGetUrl: 9000
+
 # 应用容器主机名解析
 # ++ 设置后应用容器中的/etc/hosts将增加相关主机名解析
 hostAliases:
