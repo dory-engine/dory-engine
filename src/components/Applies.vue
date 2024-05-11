@@ -9,7 +9,7 @@
             <v-tab @change="tabChange(2)">{{$vuetify.lang.t('$vuetify.lang_form_i_related')}}</v-tab>
           </v-tabs>
           <search-form>
-            <v-select
+            <v-autocomplete
               :items="projectItems"
               :label="$vuetify.lang.t('$vuetify.lang_form_project_name')"
               dense
@@ -19,12 +19,13 @@
               v-model="appliesForm.projectNames"
               @change="$observables.queryPage$.next('')"
               :key="projectNameShow"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="[
                 {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_new_project_node_ports'), value: 'nodePortAdd'},
                 {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_delete_project_node_ports'), value: 'nodePortDelete'},
                 {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_new_project_envs'), value: 'envAdd'},
+                {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_update_project_env'), value: 'envUpdate'},
                 {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_delete_project_envs'), value: 'envDelete'},
                 {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_delete_project_envs_all'), value: 'envDeleteAll'},
                 {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_delete_project'), value: 'projectDelete'},
@@ -42,8 +43,8 @@
               clearable
               v-model="appliesForm.kinds"
               @change="$observables.queryPage$.next('')"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="(() => {
                 return [
                   {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_reviewing'), value: 'reviewing'},
@@ -60,7 +61,7 @@
               clearable
               v-model="appliesForm.statuses"
               @change="$observables.queryPage$.next('')"
-            ></v-select>
+            ></v-autocomplete>
             <v-text-field
               :label="$vuetify.lang.t('$vuetify.lang_form_search_apply_ticket')"
               dense
@@ -494,6 +495,7 @@ export default {
   data () {
     return {
       archNames: [],
+      disabledDefNames: [],
       projectNameShow: 'hidden',
       projectItems: [],
       projectForm: '',
@@ -553,6 +555,7 @@ export default {
         envAdd: vuetify.preset.lang.t('$vuetify.lang_menu_apply_new_project_envs'),
         envDelete: vuetify.preset.lang.t('$vuetify.lang_menu_apply_delete_project_envs'),
         envDeleteAll: vuetify.preset.lang.t('$vuetify.lang_menu_apply_delete_project_envs_all'),
+        envUpdate: vuetify.preset.lang.t('$vuetify.lang_menu_apply_update_project_env'),
         projectDelete: vuetify.preset.lang.t('$vuetify.lang_menu_apply_delete_project'),
         projectUpdate: vuetify.preset.lang.t('$vuetify.lang_menu_apply_update_project'),
         envQuotaConfigUpdate: vuetify.preset.lang.t('$vuetify.lang_menu_apply_update_resource_quota'),
@@ -571,6 +574,7 @@ export default {
   created () {
     const vm = this
     vm.getArchNames()
+    vm.getDisabledDefNames()
     function clearOperationForm () {
       vm.operationCardConfig.attrs.confirmLoading = false
       vm.operationCardConfig.attrs.title = ''
@@ -631,7 +635,7 @@ export default {
         msg = null
       } else if (kind === 'projectDelete') {
         formEls = [
-          <VSelect
+          <VAutocomplete
             label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_git_repo_type')}
             dense
             items={[
@@ -641,7 +645,7 @@ export default {
             value={reactiveOpParam.gitRepoDelete}
             vOn:input={(value) => { reactiveOpParam.gitRepoDelete = value }}
           />,
-          <VSelect
+          <VAutocomplete
             label={vuetify.preset.lang.t('$vuetify.lang_form_delete_project_scan_code_repo_delete')}
             dense
             items={[
@@ -651,7 +655,7 @@ export default {
             value={reactiveOpParam.scanCodeRepoDelete}
             vOn:input={(value) => { reactiveOpParam.scanCodeRepoDelete = value }}
           />,
-          <VSelect
+          <VAutocomplete
             label={vuetify.preset.lang.t('$vuetify.lang_form_delete_project_image_repo_delete')}
             dense
             items={[
@@ -661,7 +665,7 @@ export default {
             value={reactiveOpParam.imageRepoDelete}
             vOn:input={(value) => { reactiveOpParam.imageRepoDelete = value }}
           />,
-          <VSelect
+          <VAutocomplete
             label={vuetify.preset.lang.t('$vuetify.lang_form_delete_project_artifact_repo_delete')}
             dense
             items={[
@@ -671,7 +675,7 @@ export default {
             value={reactiveOpParam.artifactRepoDelete}
             vOn:input={(value) => { reactiveOpParam.artifactRepoDelete = value }}
           />,
-          <VSelect
+          <VAutocomplete
             label={vuetify.preset.lang.t('$vuetify.lang_form_delete_project_namespace_delete')}
             dense
             items={[
@@ -684,20 +688,6 @@ export default {
         ]
       } else if (kind === 'projectUpdate') {
         formEls = [
-          <VSelect
-            label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_privileged')}
-            dense
-            value={reactiveOpParam.privileged}
-            vOn:input={(value) => { reactiveOpParam.privileged = value }}
-            items={
-              [
-                {text: vuetify.preset.lang.t('$vuetify.lang_form_yes'), value: true},
-                {text: vuetify.preset.lang.t('$vuetify.lang_form_no'), value: false},
-              ]
-            }
-            hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_privileged_tip_1')}
-            persistent-hint
-          />,
           <VTextField
             label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_desc')}
             required
@@ -718,7 +708,7 @@ export default {
             hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_team_tip_1')}
             persistent-hint
           />,
-          <VSelect
+          <VAutocomplete
             label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_arch')}
             required
             dense
@@ -899,7 +889,7 @@ export default {
             hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_artifact_repo_http_url_tip_1') + vuetify.preset.lang.t('$vuetify.lang_form_update_project_leave_it_empty')}
             persistent-hint
           />,
-          <VSelect
+          <VAutocomplete
             v-show={reactiveOpParam.artifactRepoHttpUpload.url !== '' && reactiveOpParam.artifactRepoHttpUpload.method !== ''}
             label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_artifact_repo_http_upload_method')}
             dense
@@ -909,7 +899,7 @@ export default {
             hint={vuetify.preset.lang.t('$vuetify.lang_form_update_project_leave_it_empty')}
             persistent-hint
           />,
-          <VSelect
+          <VAutocomplete
             v-show={reactiveOpParam.artifactRepoHttpUpload.url !== ''}
             label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_artifact_repo_http_upload_insecure')}
             dense
@@ -931,7 +921,7 @@ export default {
             hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_artifact_repo_http_url_tip_1') + vuetify.preset.lang.t('$vuetify.lang_form_update_project_leave_it_empty')}
             persistent-hint
           />,
-          <VSelect
+          <VAutocomplete
             v-show={reactiveOpParam.artifactRepoHttpDownload.url !== ''}
             label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_artifact_repo_http_download_insecure')}
             dense
@@ -946,6 +936,58 @@ export default {
           />,
         ]
         reactiveOpParam.artifactRepoPort = Number(reactiveOpParam.artifactRepoPort)
+      } else if (kind === 'envUpdate') {
+        formEls = [
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <div><span class="headline">{vuetify.preset.lang.t('$vuetify.lang_form_update_project_env', reactiveOpParam.envName)}</span></div>
+                <div class="justify-space-between align-center mt-4">
+                  <v-autocomplete
+                    value={reactiveOpParam.privileged}
+                    items={[
+                      {text: vuetify.preset.lang.t('$vuetify.lang_form_yes'), value: true},
+                      {text: vuetify.preset.lang.t('$vuetify.lang_form_no'), value: false},
+                    ]}
+                    vOn:input={(value) => { reactiveOpParam.privileged = value }}
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_update_project_env_privileged')}
+                    hint={vuetify.preset.lang.t('$vuetify.lang_form_update_project_env_privileged_tip_1')}
+                    persistent-hint
+                    dense
+                  ></v-autocomplete>
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  <v-autocomplete
+                    value={reactiveOpParam.disabledDefs}
+                    items={vm.disabledDefNames}
+                    vOn:input={(value) => { reactiveOpParam.disabledDefs = value }}
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_update_project_env_disabled_defs')}
+                    hint={vuetify.preset.lang.t('$vuetify.lang_form_update_project_env_disabled_defs_tip_1')}
+                    persistent-hint
+                    dense
+                    multiple
+                    small-chips
+                  ></v-autocomplete>
+                </div>
+                <div class="justify-space-between align-center mt-4">
+                  <v-combobox
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_update_project_env_disabled_patches')}
+                    dense
+                    multiple
+                    small-chips
+                    hide-selected
+                    value={reactiveOpParam.disabledPatches}
+                    vOn:input={(value) => { reactiveOpParam.disabledPatches = value }}
+                    hint={vuetify.preset.lang.t('$vuetify.lang_form_update_project_env_disabled_patches_tip_1')}
+                    persistent-hint
+                    append-icon=""
+                  >
+                  </v-combobox>
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>,
+        ]
       } else if (kind === 'envQuotaConfigUpdate') {
         formEls = [
           <v-container>
@@ -1517,6 +1559,14 @@ export default {
     vm.$observables.queryProjectNames$.next('init')
   },
   methods: {
+    getDisabledDefNames () {
+      const vm = this
+      request.get(`/public/about`).then(response => {
+        vm.disabledDefNames = response.data.config.disabledDefNames
+      }).catch(error => {
+        vm.errorTip(true,error.response.data.msg)
+      })
+    },
     getArchNames () {
       const vm = this
       request.get(`/console/archNames`).then(response => {

@@ -11,7 +11,7 @@
         <VForm>
           <VContainer fluid>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="projectItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_project_name')"
                 class="mr-8"
@@ -20,8 +20,8 @@
                 multiple
                 v-model="stepsForm.projectNames"
                 @blur="stepsSearch()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_pipeline_name')"
                 class="mr-8"
@@ -30,7 +30,7 @@
                 multiple
                 v-model="stepsForm.pipelineNames"
                 @blur="stepsSearch()"
-              ></v-select>
+              ></v-autocomplete>
               <v-combobox
                 :label="$vuetify.lang.t('$vuetify.lang_view_run_name')"
                 class="mr-8"
@@ -42,7 +42,7 @@
                 @blur="stepsSearch()"
               >
               </v-combobox>
-              <v-select
+              <v-autocomplete
                 :items="branchItems"
                 :label="$vuetify.lang.t('$vuetify.lang_view_branch_name')"
                 class="mr-8"
@@ -51,8 +51,8 @@
                 multiple
                 v-model="stepsForm.branchNames"
                 @blur="stepsSearch()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_env')"
                 class="mr-8"
@@ -61,8 +61,8 @@
                 multiple
                 v-model="stepsForm.envNames"
                 @blur="stepsSearch()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_status')"
                 class="mr-8"
@@ -71,8 +71,8 @@
                 multiple
                 v-model="stepsForm.statusResults"
                 @blur="stepsSearch()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="stepItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_step_action')"
                 class="mr-8"
@@ -81,8 +81,8 @@
                 multiple
                 v-model="stepsForm.stepActions"
                 @blur="stepsSearch()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="moduleItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_module_type')"
                 class="mr-8"
@@ -91,8 +91,8 @@
                 multiple
                 v-model="stepsForm.moduleTypes"
                 @blur="stepsSearch()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="moduleNames"
                 :label="$vuetify.lang.t('$vuetify.lang_form_module_name')"
                 class="mr-8"
@@ -100,8 +100,8 @@
                 clearable
                 v-model="stepsForm.moduleName"
                 @change="stepsSearch()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="durationItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_duration')"
                 class="mr-8"
@@ -109,7 +109,7 @@
                 clearable
                 v-model="stepsForm.duration"
                 @change="stepsSearch()"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu2"
@@ -442,7 +442,7 @@ export default {
 .v-text-field {
   //min-width: 300px;
 }
-.v-select {
+.v-autocomplete {
   //width: 280px;
 }
 </style>

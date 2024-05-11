@@ -4,7 +4,7 @@
       <v-card-title>
         <v-form>
           <v-container class="d-flex flex-wrap">
-            <v-select
+            <v-autocomplete
               :items="userNames"
               :label="$vuetify.lang.t('$vuetify.lang_form_username')"
               class="mr-8"
@@ -13,8 +13,8 @@
               small-chips
               multiple
               @blur="getUsers()"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="projectNames"
               :label="$vuetify.lang.t('$vuetify.lang_form_project_name')"
               class="mr-8"
@@ -23,8 +23,8 @@
               small-chips
               multiple
               @blur="getUsers()"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="tenantCodes"
               :label="$vuetify.lang.t('$vuetify.lang_form_tenant_codes')"
               class="mr-8"
@@ -33,8 +33,8 @@
               small-chips
               multiple
               @blur="getUsers()"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="tenantCodes"
               :label="$vuetify.lang.t('$vuetify.lang_form_tenant_admins')"
               class="mr-8"
@@ -43,7 +43,7 @@
               small-chips
               multiple
               @blur="getUsers()"
-            ></v-select>
+            ></v-autocomplete>
             <v-text-field
               :label="$vuetify.lang.t('$vuetify.lang_form_user_name')"
               class="mr-8"
@@ -58,7 +58,7 @@
               v-model="usersForm.mail"
               @keydown.enter="getUsers()"
             />
-            <v-select
+            <v-autocomplete
               :items="isAdmin"
               :label="$vuetify.lang.t('$vuetify.lang_form_is_admin')"
               class="mr-8"
@@ -67,8 +67,8 @@
               v-model="usersForm.admin"
               @change="getUsers()"
               @click:clear="getUsers()"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="isAdmin"
               :label="$vuetify.lang.t('$vuetify.lang_form_is_tenant_admin')"
               class="mr-8"
@@ -77,8 +77,8 @@
               v-model="usersForm.tenantAdmin"
               @change="getUsers()"
               @click:clear="getUsers()"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="isActive"
               :label="$vuetify.lang.t('$vuetify.lang_form_is_active')"
               class="mr-8"
@@ -87,8 +87,8 @@
               v-model="usersForm.active"
               @change="getUsers()"
               @click:clear="getUsers()"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="[
                 { value: 'username', text: $vuetify.lang.t('$vuetify.lang_form_sort_username_asc') },
                 { value: 'name', text: $vuetify.lang.t('$vuetify.lang_form_sort_user_name_asc') },
@@ -104,7 +104,7 @@
               v-model="usersForm.sortMode"
               @change="getUsers()"
               @click:clear="getUsers()"
-            ></v-select>
+            ></v-autocomplete>
             <template>
               <v-menu
                 v-model="menuCreateTime"
@@ -376,7 +376,7 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                     v-model="addUserForm.tenantCode"
                     :items="tenantCodes"
@@ -387,7 +387,7 @@
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                     persistent-hint
                   >
-                  </v-select>
+                  </v-autocomplete>
                 </v-col>
               </v-row>
             </v-container>
@@ -501,7 +501,7 @@
             <v-container>
               <v-row>
                 <v-col cols="12">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                     v-model="updateTenantAdminsForm.tenantAdmins"
                     :items="tenantCodes"
@@ -510,7 +510,7 @@
                     multiple
                     small-chips
                   >
-                  </v-select>
+                  </v-autocomplete>
                 </v-col>
               </v-row>
             </v-container>
@@ -675,16 +675,16 @@
             <v-container>
               <v-row>
                 <v-col cols="12" class="pb-0">
-                  <v-select
+                  <v-autocomplete
                     :items="memberProjectNames"
                     :label="$vuetify.lang.t('$vuetify.lang_form_new_project_project_name')"
                     dense
                     :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                     v-model="projectAddForm.projectName"
-                  ></v-select>
+                  ></v-autocomplete>
                 </v-col>
                 <v-col cols="12" class="pb-0">
-                  <v-select
+                  <v-autocomplete
                     :items="[ 'runner', 'developer', 'maintainer' ]"
                     :label="$vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level')"
                     dense
@@ -701,7 +701,7 @@
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_2')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_3')}}</div>
                     </template>
-                  </v-select>
+                  </v-autocomplete>
                 </v-col>
               </v-row>
             </v-container>
@@ -746,7 +746,7 @@
             <v-container>
               <v-row>
                 <v-col cols="12" class="pb-0">
-                  <v-select
+                  <v-autocomplete
                     :items="[ 'runner', 'developer', 'maintainer' ]"
                     :label="$vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level')"
                     dense
@@ -763,7 +763,7 @@
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_2')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_3')}}</div>
                     </template>
-                  </v-select>
+                  </v-autocomplete>
                 </v-col>
               </v-row>
             </v-container>

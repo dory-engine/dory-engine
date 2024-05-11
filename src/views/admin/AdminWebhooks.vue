@@ -31,7 +31,7 @@
         <v-card-title>
           <v-form ref="form">
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="adminActions || []"
                 :label="$vuetify.lang.t('$vuetify.lang_view_admin_webhook_admin_action')"
                 class="mr-8"
@@ -40,8 +40,8 @@
                 multiple
                 v-model="adminWebhookLogsForm.adminActions"
                 @blur="getAdminWebhookLogs()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="[ 'SUCCESS', 'FAIL' ]"
                 :label="$vuetify.lang.t('$vuetify.lang_form_status')"
                 class="mr-8"
@@ -50,8 +50,8 @@
                 multiple
                 v-model="adminWebhookLogsForm.results"
                 @blur="getAdminWebhookLogs()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="tenantCodes"
                 :label="$vuetify.lang.t('$vuetify.lang_form_tenant_codes')"
                 dense
@@ -60,7 +60,7 @@
                 class="mr-8"
                 v-model="adminWebhookLogsForm.tenantCodes"
                 @change="getAdminWebhookLogs()"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu"
@@ -171,7 +171,7 @@
                 <div class="form-item-100 params-item">
                   <v-row>
                     <v-col cols="4">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_admin_webhook_admin_action')"
                         dense
                         :items="adminActions"
@@ -181,10 +181,10 @@
                         required
                         :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="4">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_admin_webhook_enable')"
                         dense
                         :items="[
@@ -196,10 +196,10 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_admin_webhook_enable_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="4">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                         v-model="addAdminWebhookForm.tenantCode"
                         :items="tenantCodes"
@@ -210,7 +210,7 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                 </div>
@@ -240,7 +240,7 @@
                   <v-row>
                     <v-col cols="6">
                       <small>{{$vuetify.lang.t('$vuetify.lang_form_admin_webhook_insecure')}}</small>
-                      <v-select
+                      <v-autocomplete
                         dense
                         :items="[
                           { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
@@ -250,11 +250,11 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_admin_webhook_insecure_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="6">
                       <small>{{$vuetify.lang.t('$vuetify.lang_form_admin_webhook_webhook_method')}}</small>
-                      <v-select
+                      <v-autocomplete
                         dense
                         :items="httpMethods"
                         v-model="addAdminWebhookForm.webhookMethod"
@@ -263,7 +263,7 @@
                         required
                         :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -468,7 +468,7 @@
                 <div class="form-item-100 params-item">
                   <v-row>
                     <v-col cols="4">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_admin_webhook_admin_action')"
                         dense
                         :items="adminActions"
@@ -478,10 +478,10 @@
                         required
                         :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="4">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_admin_webhook_enable')"
                         dense
                         :items="[
@@ -493,10 +493,10 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_admin_webhook_enable_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="4">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                         v-model="updateAdminWebhookForm.tenantCode"
                         :items="tenantCodes"
@@ -507,7 +507,7 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                 </div>
@@ -537,7 +537,7 @@
                   <v-row>
                     <v-col cols="6">
                       <small>{{$vuetify.lang.t('$vuetify.lang_form_admin_webhook_insecure')}}</small>
-                      <v-select
+                      <v-autocomplete
                         dense
                         :items="[
                           { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
@@ -547,11 +547,11 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_admin_webhook_insecure_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="6">
                       <small>{{$vuetify.lang.t('$vuetify.lang_form_admin_webhook_webhook_method')}}</small>
-                      <v-select
+                      <v-autocomplete
                         dense
                         :items="httpMethods"
                         v-model="updateAdminWebhookForm.webhookMethod"
@@ -560,7 +560,7 @@
                         required
                         :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row>

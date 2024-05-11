@@ -5,7 +5,7 @@
         <v-card-title>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="projectItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_project_name')"
                 class="mr-8"
@@ -14,8 +14,8 @@
                 multiple
                 v-model="runsForm.projectNames"
                 @blur="getRuns()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_pipeline_name')"
                 class="mr-8"
@@ -24,7 +24,7 @@
                 multiple
                 v-model="runsForm.pipelineNames"
                 @blur="getRuns()"
-              ></v-select>
+              ></v-autocomplete>
               <v-combobox
                 :label="$vuetify.lang.t('$vuetify.lang_form_run_name')"
                 class="mr-8"
@@ -36,7 +36,7 @@
                 @blur="getRuns()"
               >
               </v-combobox>
-              <v-select
+              <v-autocomplete
                 :items="branchItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_branch_name')"
                 class="mr-8"
@@ -45,8 +45,8 @@
                 multiple
                 v-model="runsForm.branchNames"
                 @blur="getRuns()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_status')"
                 class="mr-8"
@@ -55,8 +55,8 @@
                 multiple
                 v-model="runsForm.statusResults"
                 @blur="getRuns()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="durationItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_duration')"
                 class="mr-8"
@@ -64,7 +64,7 @@
                 clearable
                 v-model="runsForm.duration"
                 @change="getRuns()"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu2"
@@ -111,7 +111,7 @@
                 v-model="runsForm.tagName"
                 @keydown.enter="getRuns()"
               />
-              <v-select
+              <v-autocomplete
                 :items="['manual', 'webhook', 'crontab']"
                 :label="$vuetify.lang.t('$vuetify.lang_form_trigger_kind')"
                 class="mr-8"
@@ -120,7 +120,7 @@
                 multiple
                 v-model="runsForm.triggerKinds"
                 @blur="getRuns()"
-              ></v-select>
+              ></v-autocomplete>
               <v-text-field
                 :label="$vuetify.lang.t('$vuetify.lang_form_start_user')"
                 class="mr-8"

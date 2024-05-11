@@ -20,6 +20,7 @@
                     {{$vuetify.lang.t('$vuetify.lang_view_project_repo')}}
                   </th>
                   <th class="text-left" v-for="(item,index) in project.projectNodePorts" :key="index">
+                    <v-icon v-if="item.privileged">mdi-security</v-icon>
                     {{$vuetify.lang.t('$vuetify.lang_view_env')}}({{item.envName}})
                   </th>
                 </tr>
@@ -40,7 +41,7 @@
                     </template>
                   </td>
                   <td>
-                    <div>{{ project.projectInfo.projectNamespace }}({{ project.projectInfo.shortName }})<v-tooltip bottom><template v-slot:activator="{ on, attrs }"><v-icon color="orange" v-bind="attrs" v-on="on" v-show="project.projectInfo.privileged">mdi-security</v-icon></template><span>{{$vuetify.lang.t('$vuetify.lang_view_project_privileged')}}</span></v-tooltip></div>
+                    <div>{{ project.projectInfo.projectNamespace }}({{ project.projectInfo.shortName }})</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_project_team')}}: {{ project.projectInfo.projectTeam }}</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_project_arch')}}: {{ project.projectInfo.projectArch }}</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_tenant_code')}}: {{ project.tenantCode }}</div>
@@ -561,7 +562,7 @@ export default {
 .v-text-field {
   font-size: 14px;
 }
-.v-select {
+.v-autocomplete {
   font-size: 14px;
 }
 .steps-switch {

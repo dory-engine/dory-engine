@@ -4,7 +4,7 @@
       <v-card-title>
         <v-form>
           <v-container class="d-flex flex-wrap" fluid>
-            <v-select
+            <v-autocomplete
               :items="tenantCodes"
               :label="$vuetify.lang.t('$vuetify.lang_form_tenant_codes')"
               dense
@@ -13,7 +13,7 @@
               class="mr-8"
               v-model="pageRequest.tenantCodes"
               @change="getList(true)"
-            ></v-select>
+            ></v-autocomplete>
             <v-btn color="primary" @click="openAddTenants()">{{ $vuetify.lang.t('$vuetify.lang_menu_new_tenant') }}</v-btn>
           </v-container>
         </v-form>
@@ -97,7 +97,7 @@
                 />
               </div>
               <div class="form-item-45 d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_mesh_available')"
                   v-model="addTenantsForm.meshAvailable"
                   :items="[
@@ -107,7 +107,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_mesh_available_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
             </div>
             <div class="params-item">
@@ -148,7 +148,7 @@
               </div>
               <div class="d-flex mt-4 justify-space-between">
                 <div class="form-item d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_env_default_enable')"
                     v-model="addTenantsForm.envDefaultEnable"
                     :items="[
@@ -158,10 +158,10 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_env_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
                 <div class="form-item d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_custom_step_default_enable')"
                     v-model="addTenantsForm.customStepDefaultEnable"
                     :items="[
@@ -171,10 +171,10 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_custom_step_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
                 <div class="form-item d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_component_template_default_enable')"
                     v-model="addTenantsForm.componentTemplateDefaultEnable"
                     :items="[
@@ -184,7 +184,7 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_component_template_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
               </div>
             </div>
@@ -239,7 +239,7 @@
               </div>
               <div class="d-flex mt-4 justify-space-between">
                 <div class="form-item-45 d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_git_repo_default_enable')"
                     v-model="addTenantsForm.gitRepoDefaultEnable"
                     :items="[
@@ -249,10 +249,10 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_git_repo_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
                 <div class="form-item-45 d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_image_repo_default_enable')"
                     v-model="addTenantsForm.imageRepoDefaultEnable"
                     :items="[
@@ -262,12 +262,12 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_image_repo_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
               </div>
               <div class="d-flex mt-4 justify-space-between">
                 <div class="form-item-45 d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_artifact_repo_default_enable')"
                     v-model="addTenantsForm.artifactRepoDefaultEnable"
                     :items="[
@@ -277,10 +277,10 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_artifact_repo_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
                 <div class="form-item-45 d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_scan_code_repo_default_enable')"
                     v-model="addTenantsForm.scanCodeRepoDefaultEnable"
                     :items="[
@@ -290,7 +290,7 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_scan_code_repo_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
               </div>
             </div>
@@ -314,7 +314,7 @@
                 </v-text-field>
               </div>
               <div class="form-item-45 d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_is_active')"
                   v-model="addTenantsForm.isActive"
                   :items="[
@@ -324,7 +324,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_is_active_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
             </div>
           </v-form>
@@ -370,7 +370,7 @@
                 />
               </div>
               <div class="form-item-45 d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_mesh_available')"
                   v-model="updateTenantsForm.meshAvailable"
                   :items="[
@@ -380,7 +380,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_mesh_available_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
             </div>
             <div class="params-item">
@@ -421,7 +421,7 @@
               </div>
               <div class="d-flex mt-4 justify-space-between">
                 <div class="form-item d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_env_default_enable')"
                     v-model="updateTenantsForm.envDefaultEnable"
                     :items="[
@@ -431,10 +431,10 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_env_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
                 <div class="form-item d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_custom_step_default_enable')"
                     v-model="updateTenantsForm.customStepDefaultEnable"
                     :items="[
@@ -444,10 +444,10 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_custom_step_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
                 <div class="form-item d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_component_template_default_enable')"
                     v-model="updateTenantsForm.componentTemplateDefaultEnable"
                     :items="[
@@ -457,7 +457,7 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_component_template_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
               </div>
             </div>
@@ -512,7 +512,7 @@
               </div>
               <div class="d-flex mt-4 justify-space-between">
                 <div class="form-item-45 d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_git_repo_default_enable')"
                     v-model="updateTenantsForm.gitRepoDefaultEnable"
                     :items="[
@@ -522,10 +522,10 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_git_repo_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
                 <div class="form-item-45 d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_image_repo_default_enable')"
                     v-model="updateTenantsForm.imageRepoDefaultEnable"
                     :items="[
@@ -535,12 +535,12 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_image_repo_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
               </div>
               <div class="d-flex mt-4 justify-space-between">
                 <div class="form-item-45 d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_artifact_repo_default_enable')"
                     v-model="updateTenantsForm.artifactRepoDefaultEnable"
                     :items="[
@@ -550,10 +550,10 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_artifact_repo_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
                 <div class="form-item-45 d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_scan_code_repo_default_enable')"
                     v-model="updateTenantsForm.scanCodeRepoDefaultEnable"
                     :items="[
@@ -563,7 +563,7 @@
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_scan_code_repo_default_enable_tip_1')"
                     persistent-hint
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
               </div>
             </div>
@@ -589,7 +589,7 @@
                 </v-text-field>
               </div>
               <div class="form-item-45 d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_is_active')"
                   v-model="updateTenantsForm.isActive"
                   :items="[
@@ -599,7 +599,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_is_active_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
             </div>
           </v-form>

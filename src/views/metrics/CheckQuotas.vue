@@ -21,30 +21,30 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="dimensionList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_dimension')"
                 class="mr-8"
                 dense
                 v-model="chartParams.dimension"
                 @change="getEcharts()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeZoomList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams.timeZoom"
                 @change="getEcharts()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams.timeRangeDays"
                 @change="timeRangeDaysChange(chartParams.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu1"
@@ -84,7 +84,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -94,8 +94,8 @@
                 v-model="chartParams.projectNames"
                 @change="getEcharts()"
                 @blur="projectNameBlur(chartParams)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -104,8 +104,8 @@
                 multiple
                 v-model="chartParams.projectTeams"
                 @change="getEcharts()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -114,8 +114,8 @@
                 multiple
                 v-model="chartParams.branchNames"
                 @change="getEcharts()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -124,8 +124,8 @@
                 multiple
                 v-model="chartParams.pipelineNames"
                 @change="getEcharts()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusResultsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_status')"
                 class="mr-8"
@@ -134,8 +134,8 @@
                 multiple
                 v-model="chartParams.statusResults"
                 @change="getEcharts()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -144,7 +144,7 @@
                 multiple
                 v-model="chartParams.envNames"
                 @change="getEcharts()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading">
@@ -156,30 +156,30 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="dimensionList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_dimension')"
                 class="mr-8"
                 dense
                 v-model="chartParams2.dimension"
                 @change="getEcharts2()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeZoomList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams2.timeZoom"
                 @change="getEcharts2()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams2.timeRangeDays"
                 @change="timeRangeDaysChange2(chartParams2.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu2"
@@ -219,7 +219,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -229,8 +229,8 @@
                 v-model="chartParams2.projectNames"
                 @change="getEcharts2()"
                 @blur="projectNameBlur(chartParams2)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -239,8 +239,8 @@
                 multiple
                 v-model="chartParams2.projectTeams"
                 @change="getEcharts2()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -249,8 +249,8 @@
                 multiple
                 v-model="chartParams2.branchNames"
                 @change="getEcharts2()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -259,8 +259,8 @@
                 multiple
                 v-model="chartParams2.pipelineNames"
                 @change="getEcharts2()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusResultsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_status')"
                 class="mr-8"
@@ -269,8 +269,8 @@
                 multiple
                 v-model="chartParams2.statusResults"
                 @change="getEcharts2()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -279,7 +279,7 @@
                 multiple
                 v-model="chartParams2.envNames"
                 @change="getEcharts2()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading2">
@@ -291,7 +291,7 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="[
                   { text: $vuetify.lang.t('$vuetify.lang_form_metrics_range_day'), value: 'day' },
                   { text: $vuetify.lang.t('$vuetify.lang_form_metrics_range_hour'), value: 'hour' },
@@ -301,15 +301,15 @@
                 dense
                 v-model="chartParams3.timeZoom"
                 @change="getEcharts3()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams3.timeRangeDays"
                 @change="timeRangeDaysChange3(chartParams3.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu3"
@@ -349,7 +349,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -359,8 +359,8 @@
                 v-model="chartParams3.projectNames"
                 @change="getEcharts3()"
                 @blur="projectNameBlur(chartParams3)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -369,8 +369,8 @@
                 multiple
                 v-model="chartParams3.projectTeams"
                 @change="getEcharts3()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -379,8 +379,8 @@
                 multiple
                 v-model="chartParams3.branchNames"
                 @change="getEcharts3()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -389,8 +389,8 @@
                 multiple
                 v-model="chartParams3.pipelineNames"
                 @change="getEcharts3()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusResultsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_status')"
                 class="mr-8"
@@ -399,8 +399,8 @@
                 multiple
                 v-model="chartParams3.statusResults"
                 @change="getEcharts3()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -409,7 +409,7 @@
                 multiple
                 v-model="chartParams3.envNames"
                 @change="getEcharts3()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading3">
@@ -421,7 +421,7 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="[
                   { text: $vuetify.lang.t('$vuetify.lang_form_metrics_dimension_all'), value: 'all' },
                   { text: $vuetify.lang.t('$vuetify.lang_form_metrics_dimension_project_name'), value: 'projectName' },
@@ -435,23 +435,23 @@
                 dense
                 v-model="chartParams4.dimension"
                 @change="getEcharts4()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeZoomList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams4.timeZoom"
                 @change="getEcharts4()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams4.timeRangeDays"
                 @change="timeRangeDaysChange4(chartParams4.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu4"
@@ -491,7 +491,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -501,8 +501,8 @@
                 v-model="chartParams4.projectNames"
                 @change="getEcharts4()"
                 @blur="projectNameBlur(chartParams4)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -511,8 +511,8 @@
                 multiple
                 v-model="chartParams4.projectTeams"
                 @change="getEcharts4()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -521,8 +521,8 @@
                 multiple
                 v-model="chartParams4.branchNames"
                 @change="getEcharts4()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -531,8 +531,8 @@
                 multiple
                 v-model="chartParams4.pipelineNames"
                 @change="getEcharts4()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -541,7 +541,7 @@
                 multiple
                 v-model="chartParams4.envNames"
                 @change="getEcharts4()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading4">
@@ -553,30 +553,30 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="dimensionList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_dimension')"
                 class="mr-8"
                 dense
                 v-model="chartParams5.dimension"
                 @change="getEcharts5()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeZoomList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams5.timeZoom"
                 @change="getEcharts5()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams5.timeRangeDays"
                 @change="timeRangeDaysChange5(chartParams5.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu5"
@@ -616,7 +616,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -626,8 +626,8 @@
                 v-model="chartParams5.projectNames"
                 @change="getEcharts5()"
                 @blur="projectNameBlur(chartParams5)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -636,8 +636,8 @@
                 multiple
                 v-model="chartParams5.projectTeams"
                 @change="getEcharts5()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -646,8 +646,8 @@
                 multiple
                 v-model="chartParams5.branchNames"
                 @change="getEcharts5()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -656,8 +656,8 @@
                 multiple
                 v-model="chartParams5.pipelineNames"
                 @change="getEcharts5()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusResultsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_status')"
                 class="mr-8"
@@ -666,8 +666,8 @@
                 multiple
                 v-model="chartParams5.statusResults"
                 @change="getEcharts5()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -676,7 +676,7 @@
                 multiple
                 v-model="chartParams5.envNames"
                 @change="getEcharts5()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading5">
@@ -688,30 +688,30 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="dimensionList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_dimension')"
                 class="mr-8"
                 dense
                 v-model="chartParams6.dimension"
                 @change="getEcharts6()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeZoomList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams6.timeZoom"
                 @change="getEcharts6()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams6.timeRangeDays"
                 @change="timeRangeDaysChange6(chartParams6.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu6"
@@ -751,7 +751,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -761,8 +761,8 @@
                 v-model="chartParams6.projectNames"
                 @change="getEcharts6()"
                 @blur="projectNameBlur(chartParams6)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -771,8 +771,8 @@
                 multiple
                 v-model="chartParams6.projectTeams"
                 @change="getEcharts6()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -781,8 +781,8 @@
                 multiple
                 v-model="chartParams6.branchNames"
                 @change="getEcharts6()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -791,8 +791,8 @@
                 multiple
                 v-model="chartParams6.pipelineNames"
                 @change="getEcharts6()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusResultsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_status')"
                 class="mr-8"
@@ -801,8 +801,8 @@
                 multiple
                 v-model="chartParams6.statusResults"
                 @change="getEcharts6()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -811,7 +811,7 @@
                 multiple
                 v-model="chartParams6.envNames"
                 @change="getEcharts6()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading6">
@@ -823,30 +823,30 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="dimensionList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_dimension')"
                 class="mr-8"
                 dense
                 v-model="chartParams7.dimension"
                 @change="getEcharts7()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeZoomList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams7.timeZoom"
                 @change="getEcharts7()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams7.timeRangeDays"
                 @change="timeRangeDaysChange7(chartParams7.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu7"
@@ -886,7 +886,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -896,8 +896,8 @@
                 v-model="chartParams7.projectNames"
                 @change="getEcharts7()"
                 @blur="projectNameBlur(chartParams7)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -906,8 +906,8 @@
                 multiple
                 v-model="chartParams7.projectTeams"
                 @change="getEcharts7()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -916,8 +916,8 @@
                 multiple
                 v-model="chartParams7.branchNames"
                 @change="getEcharts7()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -926,8 +926,8 @@
                 multiple
                 v-model="chartParams7.pipelineNames"
                 @change="getEcharts7()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusResultsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_status')"
                 class="mr-8"
@@ -936,8 +936,8 @@
                 multiple
                 v-model="chartParams7.statusResults"
                 @change="getEcharts7()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -946,7 +946,7 @@
                 multiple
                 v-model="chartParams7.envNames"
                 @change="getEcharts7()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading7">
@@ -958,30 +958,30 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="dimensionList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_dimension')"
                 class="mr-8"
                 dense
                 v-model="chartParams8.dimension"
                 @change="getEcharts8()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeZoomList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams8.timeZoom"
                 @change="getEcharts8()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams8.timeRangeDays"
                 @change="timeRangeDaysChange8(chartParams8.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu8"
@@ -1021,7 +1021,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -1031,8 +1031,8 @@
                 v-model="chartParams8.projectNames"
                 @change="getEcharts8()"
                 @blur="projectNameBlur(chartParams8)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -1041,8 +1041,8 @@
                 multiple
                 v-model="chartParams8.projectTeams"
                 @change="getEcharts8()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -1051,8 +1051,8 @@
                 multiple
                 v-model="chartParams8.branchNames"
                 @change="getEcharts8()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -1061,8 +1061,8 @@
                 multiple
                 v-model="chartParams8.pipelineNames"
                 @change="getEcharts8()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusResultsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_status')"
                 class="mr-8"
@@ -1071,8 +1071,8 @@
                 multiple
                 v-model="chartParams8.statusResults"
                 @change="getEcharts8()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -1081,7 +1081,7 @@
                 multiple
                 v-model="chartParams8.envNames"
                 @change="getEcharts8()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading8">
@@ -1093,30 +1093,30 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="dimensionList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_dimension')"
                 class="mr-8"
                 dense
                 v-model="chartParams9.dimension"
                 @change="getEcharts9()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeZoomList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams9.timeZoom"
                 @change="getEcharts9()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams9.timeRangeDays"
                 @change="timeRangeDaysChange9(chartParams9.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu9"
@@ -1156,7 +1156,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -1166,8 +1166,8 @@
                 v-model="chartParams9.projectNames"
                 @change="getEcharts9()"
                 @blur="projectNameBlur(chartParams9)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -1176,8 +1176,8 @@
                 multiple
                 v-model="chartParams9.projectTeams"
                 @change="getEcharts9()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -1186,8 +1186,8 @@
                 multiple
                 v-model="chartParams9.branchNames"
                 @change="getEcharts9()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -1196,8 +1196,8 @@
                 multiple
                 v-model="chartParams9.pipelineNames"
                 @change="getEcharts9()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusResultsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_status')"
                 class="mr-8"
@@ -1206,8 +1206,8 @@
                 multiple
                 v-model="chartParams9.statusResults"
                 @change="getEcharts9()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -1216,7 +1216,7 @@
                 multiple
                 v-model="chartParams9.envNames"
                 @change="getEcharts9()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading9">
@@ -1228,30 +1228,30 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="dimensionList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_dimension')"
                 class="mr-8"
                 dense
                 v-model="chartParams10.dimension"
                 @change="getEcharts10()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeZoomList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams10.timeZoom"
                 @change="getEcharts10()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams10.timeRangeDays"
                 @change="timeRangeDaysChange10(chartParams10.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu10"
@@ -1291,7 +1291,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -1301,8 +1301,8 @@
                 v-model="chartParams10.projectNames"
                 @change="getEcharts10()"
                 @blur="projectNameBlur(chartParams10)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -1311,8 +1311,8 @@
                 multiple
                 v-model="chartParams10.projectTeams"
                 @change="getEcharts10()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -1321,8 +1321,8 @@
                 multiple
                 v-model="chartParams10.branchNames"
                 @change="getEcharts10()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -1331,8 +1331,8 @@
                 multiple
                 v-model="chartParams10.pipelineNames"
                 @change="getEcharts10()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusResultsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_status')"
                 class="mr-8"
@@ -1341,8 +1341,8 @@
                 multiple
                 v-model="chartParams10.statusResults"
                 @change="getEcharts10()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -1351,7 +1351,7 @@
                 multiple
                 v-model="chartParams10.envNames"
                 @change="getEcharts10()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading10">
@@ -1363,30 +1363,30 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="dimensionList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_dimension')"
                 class="mr-8"
                 dense
                 v-model="chartParams11.dimension"
                 @change="getEcharts11()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeZoomList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams11.timeZoom"
                 @change="getEcharts11()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams11.timeRangeDays"
                 @change="timeRangeDaysChange11(chartParams11.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu11"
@@ -1426,7 +1426,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -1436,8 +1436,8 @@
                 v-model="chartParams11.projectNames"
                 @change="getEcharts11()"
                 @blur="projectNameBlur(chartParams11)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -1446,8 +1446,8 @@
                 multiple
                 v-model="chartParams11.projectTeams"
                 @change="getEcharts11()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -1456,8 +1456,8 @@
                 multiple
                 v-model="chartParams11.branchNames"
                 @change="getEcharts11()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -1466,8 +1466,8 @@
                 multiple
                 v-model="chartParams11.pipelineNames"
                 @change="getEcharts11()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusResultsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_status')"
                 class="mr-8"
@@ -1476,8 +1476,8 @@
                 multiple
                 v-model="chartParams11.statusResults"
                 @change="getEcharts11()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -1486,7 +1486,7 @@
                 multiple
                 v-model="chartParams11.envNames"
                 @change="getEcharts11()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading11">
@@ -1498,30 +1498,30 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="dimensionList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_dimension')"
                 class="mr-8"
                 dense
                 v-model="chartParams12.dimension"
                 @change="getEcharts12()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeZoomList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams12.timeZoom"
                 @change="getEcharts12()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams12.timeRangeDays"
                 @change="timeRangeDaysChange12(chartParams12.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu12"
@@ -1561,7 +1561,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -1571,8 +1571,8 @@
                 v-model="chartParams12.projectNames"
                 @change="getEcharts12()"
                 @blur="projectNameBlur(chartParams12)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -1581,8 +1581,8 @@
                 multiple
                 v-model="chartParams12.projectTeams"
                 @change="getEcharts12()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -1591,8 +1591,8 @@
                 multiple
                 v-model="chartParams12.branchNames"
                 @change="getEcharts12()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -1601,8 +1601,8 @@
                 multiple
                 v-model="chartParams12.pipelineNames"
                 @change="getEcharts12()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusResultsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_status')"
                 class="mr-8"
@@ -1611,8 +1611,8 @@
                 multiple
                 v-model="chartParams12.statusResults"
                 @change="getEcharts12()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -1621,7 +1621,7 @@
                 multiple
                 v-model="chartParams12.envNames"
                 @change="getEcharts12()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading12">
@@ -1633,30 +1633,30 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="dimensionList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_dimension')"
                 class="mr-8"
                 dense
                 v-model="chartParams13.dimension"
                 @change="getEcharts13()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeZoomList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams13.timeZoom"
                 @change="getEcharts13()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams13.timeRangeDays"
                 @change="timeRangeDaysChange13(chartParams13.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu13"
@@ -1696,7 +1696,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -1706,8 +1706,8 @@
                 v-model="chartParams13.projectNames"
                 @change="getEcharts13()"
                 @blur="projectNameBlur(chartParams13)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -1716,8 +1716,8 @@
                 multiple
                 v-model="chartParams13.projectTeams"
                 @change="getEcharts13()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -1726,8 +1726,8 @@
                 multiple
                 v-model="chartParams13.branchNames"
                 @change="getEcharts13()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -1736,8 +1736,8 @@
                 multiple
                 v-model="chartParams13.pipelineNames"
                 @change="getEcharts13()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusResultsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_status')"
                 class="mr-8"
@@ -1746,8 +1746,8 @@
                 multiple
                 v-model="chartParams13.statusResults"
                 @change="getEcharts13()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -1756,7 +1756,7 @@
                 multiple
                 v-model="chartParams13.envNames"
                 @change="getEcharts13()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading13">
@@ -1768,30 +1768,30 @@
         <v-tab-item>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="dimensionList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_dimension')"
                 class="mr-8"
                 dense
                 v-model="chartParams14.dimension"
                 @change="getEcharts14()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeZoomList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams14.timeZoom"
                 @change="getEcharts14()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="timeRangeDaysList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_time_range')"
                 class="mr-8"
                 dense
                 v-model="chartParams14.timeRangeDays"
                 @change="timeRangeDaysChange14(chartParams14.timeRangeDays)"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu14"
@@ -1831,7 +1831,7 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-select
+              <v-autocomplete
                 :items="projectNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_name')"
                 class="mr-8"
@@ -1841,8 +1841,8 @@
                 v-model="chartParams14.projectNames"
                 @change="getEcharts14()"
                 @blur="projectNameBlur(chartParams14)"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectTeamsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_project_team')"
                 class="mr-8"
@@ -1851,8 +1851,8 @@
                 multiple
                 v-model="chartParams14.projectTeams"
                 @change="getEcharts14()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_branch_name')"
                 class="mr-8"
@@ -1861,8 +1861,8 @@
                 multiple
                 v-model="chartParams14.branchNames"
                 @change="getEcharts14()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -1871,8 +1871,8 @@
                 multiple
                 v-model="chartParams14.pipelineNames"
                 @change="getEcharts14()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusResultsList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_status')"
                 class="mr-8"
@@ -1881,8 +1881,8 @@
                 multiple
                 v-model="chartParams14.statusResults"
                 @change="getEcharts14()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="envNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_env_name')"
                 class="mr-8"
@@ -1891,7 +1891,7 @@
                 multiple
                 v-model="chartParams14.envNames"
                 @change="getEcharts14()"
-              ></v-select>
+              ></v-autocomplete>
             </v-container>
           </v-form>
           <v-card :loading="cardLoading14">

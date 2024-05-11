@@ -21,7 +21,7 @@
                 @keyup.enter="mailLogsSearch()"
               >
               </v-text-field>
-              <v-select
+              <v-autocomplete
                 :items="[
                   {text: $vuetify.lang.t('$vuetify.lang_form_all'), value: ''},
                   {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: 'yes'},
@@ -33,8 +33,8 @@
                 v-model="mailLogsForm.enableResend"
                 @blur="mailLogsSearch()"
               >
-              </v-select>
-              <v-select
+              </v-autocomplete>
+              <v-autocomplete
                 :items="['SUCCESS', 'FAIL']"
                 :label="$vuetify.lang.t('$vuetify.lang_from_mail_log_statuses')"
                 class="mr-8"
@@ -44,7 +44,7 @@
                 v-model="mailLogsForm.statuses"
                 @blur="mailLogsSearch()"
               >
-              </v-select>
+              </v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu"

@@ -4,7 +4,7 @@
       <v-card-title>
         <v-form style="width: 100%">
           <v-container class="d-flex flex-wrap" fluid>
-            <v-select
+            <v-autocomplete
               :items="customStepNames"
               :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_name')"
               dense
@@ -13,8 +13,8 @@
               class="mr-8"
               v-model="pageRequest.customStepNames"
               @change="getList(true)"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="tenantCodes"
               :label="$vuetify.lang.t('$vuetify.lang_form_tenant_codes')"
               dense
@@ -23,7 +23,7 @@
               class="mr-8"
               v-model="pageRequest.tenantCodes"
               @change="getList(true)"
-            ></v-select>
+            ></v-autocomplete>
             <v-btn color="primary" @click="openAddCustomSteps()">{{ $vuetify.lang.t('$vuetify.lang_menu_new_custom_step') }}</v-btn>
           </v-container>
         </v-form>
@@ -152,7 +152,7 @@
                 </v-tooltip>
               </div>
               <div class="form-item-45 d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="addCustomStepsForm.tenantCode"
                   :items="tenantCodes"
@@ -163,12 +163,12 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :items="[ true, false ]"
                   :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_is_env_diff')"
                   dense
@@ -255,7 +255,7 @@
               </v-tooltip>
               <div class="d-flex mt-4 justify-space-between">
                 <div class="form-item d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :items="gitRepoNames"
                     :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_git_repo_name')"
                     dense
@@ -315,7 +315,7 @@
                 </v-tooltip>
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :items="[ 'yaml', 'json' ]"
                   :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_param_input_format')"
                   dense
@@ -368,7 +368,7 @@
                 </v-tooltip>
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :items="[ 'yaml', 'json' ]"
                   :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_param_output_format')"
                   dense
@@ -477,7 +477,7 @@
               </div>
               <div class="d-flex mt-4 justify-space-between">
                 <div class="form-item d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :items="[ true, false ]"
                     :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_show_commands')"
                     dense
@@ -485,7 +485,7 @@
                   />
                 </div>
                 <div class="form-item d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :items="[ true, false ]"
                     :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_run_as_root')"
                     dense
@@ -706,7 +706,7 @@
                 </v-tooltip>
               </div>
               <div class="form-item-45 d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="updateCustomStepsForm.tenantCode"
                   :items="tenantCodes"
@@ -717,12 +717,12 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>              
             </div>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :items="[ true, false ]"
                   :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_is_env_diff')"
                   dense
@@ -809,7 +809,7 @@
               </v-tooltip>
               <div class="d-flex mt-4 justify-space-between">
                 <div class="form-item d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :items="gitRepoNames"
                     :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_git_repo_name')"
                     dense
@@ -869,7 +869,7 @@
                 </v-tooltip>
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :items="[ 'yaml', 'json' ]"
                   :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_param_input_format')"
                   dense
@@ -922,7 +922,7 @@
                 </v-tooltip>
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :items="[ 'yaml', 'json' ]"
                   :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_param_output_format')"
                   dense
@@ -1031,7 +1031,7 @@
               </div>
               <div class="d-flex mt-4 justify-space-between">
                 <div class="form-item d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :items="[ true, false ]"
                     :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_show_commands')"
                     dense
@@ -1039,7 +1039,7 @@
                   />
                 </div>
                 <div class="form-item d-flex align-center">
-                  <v-select
+                  <v-autocomplete
                     :items="[ true, false ]"
                     :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_run_as_root')"
                     dense

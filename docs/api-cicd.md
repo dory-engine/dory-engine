@@ -139,7 +139,6 @@
                     "projectNamespace" : "test-project1",
                     "projectShortName" : "tp1",
                     "shortName" : "tp1",
-                    "privileged": false,
                     "projectDesc" : "测试-项目1",
                     "projectTeam" : "测试团队1",
                     "projectArch" : "amd64",
@@ -162,6 +161,7 @@
                 "projectNodePorts": [
                     {
                         "envName": "devops",
+                        "privileged": false,
                         "envNodePorts": [
                             {
                                 "isDefault": true,
@@ -169,14 +169,6 @@
                                 "nodePortEnd": 30109,
                             }
                         ]
-                    }
-                ],
-                "projectAvailableEnvs": [
-                    {
-                        "envName": "test"
-                    },
-                    {
-                        "envName": "uat"
                     }
                 ],
                 "modules": {
@@ -424,7 +416,6 @@
                 "projectNamespace" : "test-project1",
                 "projectShortName" : "tp1",
                 "shortName" : "tp1",
-                "privileged": false,
                 "projectDesc" : "测试-项目1",
                 "projectTeam" : "测试团队1",
                 "projectArch" : "amd64",
@@ -459,11 +450,13 @@
             "projectAvailableEnvs": [
                 {
                     "envName": "test",
+                    "privileged": false,
                     "k8sToken": "xxx",
                     "dashboardUrl":	"https://k8s.dory.cookeem.com/#/workloads?namespace=test-project1",
                 },
                 {
                     "envName": "uat",
+                    "privileged": false,
                     "k8sToken": "xxx",
                     "dashboardUrl":	"https://k8s.dory.cookeem.com/#/workloads?namespace=test-project1",
                 }
@@ -1083,7 +1076,6 @@
             "projectNamespace" : "test-project1",
             "projectShortName" : "tp1",
             "shortName" : "tp1",
-            "privileged": false,
             "projectDesc" : "测试-项目1",
             "projectTeam" : "测试团队1",
             "projectArch" : "amd64",
@@ -1106,6 +1098,7 @@
         "projectNodePorts": [
             {
                 "envName": "devops",
+                "privileged": false,
                 "envNodePorts": [
                     {
                         "isDefault": true,
@@ -1113,14 +1106,6 @@
                         "nodePortEnd": 30109,
                     }
                 ]
-            }
-        ],
-        "projectAvailableEnvs": [
-            {
-                "envName": "test",
-            },
-            {
-                "envName": "uat",
             }
         ],
         "modules": {
@@ -3394,6 +3379,9 @@
             ],
             "projectAvailableEnvs": [
                 {
+                    "privileged": false,
+                    "disabledDefs": [],
+                    "disabledPatches": [],
                     "nodeNames": [
                         "vm-dory"
                     ],
@@ -3764,7 +3752,6 @@
                 "projectNamespace" : "test-project1",
                 "projectShortName" : "tp1",
                 "shortName" : "tp1",
-                "privileged": false,
                 "projectDesc" : "测试-项目1",
                 "projectTeam" : "测试团队1",
                 "projectArch" : "amd64",

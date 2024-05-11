@@ -15,6 +15,7 @@
       - [\[POST\] api/console/project/:projectName/envAdd console\[申请\]为项目分配新环境接口](#post-apiconsoleprojectprojectnameenvadd-console申请为项目分配新环境接口)
       - [\[POST\] api/console/project/:projectName/envDelete console\[申请\]为项目回收环境接口](#post-apiconsoleprojectprojectnameenvdelete-console申请为项目回收环境接口)
       - [\[POST\] api/console/project/:projectName/envDeleteAll console\[申请\]为项目回收环境并清理名字空间接口](#post-apiconsoleprojectprojectnameenvdeleteall-console申请为项目回收环境并清理名字空间接口)
+      - [\[POST\] api/console/project/:projectName/envUpdate console\[申请\]修改项目环境设置接口](#post-apiconsoleprojectprojectnameenvupdate-console申请修改项目环境设置接口)
       - [\[POST\] api/console/project/:projectName/delete console\[申请\]删除项目接口](#post-apiconsoleprojectprojectnamedelete-console申请删除项目接口)
       - [\[POST\] api/console/project/:projectName console\[申请\]修改项目接口](#post-apiconsoleprojectprojectname-console申请修改项目接口)
       - [\[POST\] api/console/project/:projectName/refreshToken console为项目更新所有密钥接口](#post-apiconsoleprojectprojectnamerefreshtoken-console为项目更新所有密钥接口)
@@ -157,7 +158,6 @@
                     "projectNamespace" : "test-project1",
                     "projectShortName" : "tp1",
                     "shortName" : "tp1",
-                    "privileged": false,
                     "projectDesc" : "测试-项目1",
                     "projectTeam" : "测试团队1",
                     "projectArch" : "amd64",
@@ -180,9 +180,18 @@
                     "scanCodeRepo": "http://vm.dory.cookeem.com:30009/projects",
                     "scanCodeRepoName": "xxx"
                 },
+                "projectAvailableEnvs": [
+                    {
+                        "envName" : "test",
+                        "privileged": false,
+                        "disabledDefs": [],
+                        "disabledPatches": [],
+                    }
+                ],
                 "projectNodePorts": [
                     {
                         "envName": "devops",
+                        "privileged": false,
                         "envNodePorts": [
                             {
                                 "isDefault": true,
@@ -254,7 +263,6 @@
                 "projectNamespace" : "test-project1",
                 "projectShortName" : "tp1",
                 "shortName" : "tp1",
-                "privileged": false,
                 "projectDesc" : "测试-项目1",
                 "projectTeam" : "测试团队1",
                 "projectArch" : "amd64",
@@ -280,6 +288,7 @@
             "projectNodePorts": [
                 {
                     "envName": "devops",
+                    "privileged": false,
                     "envNodePorts": [
                         {
                             "isDefault": true,
@@ -295,6 +304,19 @@
             "projectAvailableEnvs": [
                 {
                     "envName" : "test",
+                    "privileged": false,
+                    "disabledDefs": [],
+                    "disabledPatches": [],
+                    "nodeNames": [
+                        "vm-dory"
+                    ],
+                    "nodeLabels": [
+                        {
+                            "text": "xxx=yyy",
+                            "name": "xxx",
+                            "value": "yyy"
+                        }
+                    ],
                     "quotaConfig" : {
                         "defaultQuota" : {
                             "memoryRequest" : "20Mi",
@@ -773,6 +795,40 @@
 }
 ```
 
+#### [POST] api/console/project/:projectName/envUpdate console[申请]修改项目环境设置接口
+
+- request请求内容
+```json
+{
+    "envName": "xxx",
+    "privileged": false,
+    "disabledDefs": [
+        "xxx",
+    ],
+    "disabledPatches": [
+        "xxx",
+    ],
+    "title": "xxx",
+    "content": "xxx",
+    "attachmentIDs": [
+        "xxx"
+    ],
+}
+```
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {
+        "auditID": "xxx",
+        "withAdminLog": true,
+    }
+}
+```
+
 #### [POST] api/console/project/:projectName/delete console[申请]删除项目接口
 
 - request请求内容
@@ -813,7 +869,6 @@
     "projectDesc": "xxx",
     "projectTeam": "xxx",
     "projectArch": "xxx",
-    "privileged": false,
     "gitRepoUser": "xxx",
     "gitRepoToken": "xxx",
     "gitRepoPassword": "xxx",
@@ -2758,6 +2813,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         - envAdd: 新增项目环境
         - envDelete: 删除项目环境
         - envDeleteAll: 删除项目环境并清理名字空间
+        - envUpdate: 更新项目环境
         - projectAdd: 新增项目
         - projectDelete: 删除项目
         - projectDeleteAll: 删除项目并清理名字空间
@@ -2944,6 +3000,11 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
             - envName: "test123"（不可修改）
         - envDeleteAll: 删除项目环境并清理名字空间
             - envName: "test123"（不可修改）
+        - envUpdate: 更新项目环境
+            - envName: "test123"（不可修改）
+            - privileged: false（可修改）
+            - disabledDefs: []（可修改）
+            - disabledPatches: []（可修改）
         - projectAdd: 新增项目
             - projectName: "test-project1"（可修改）
             - projectDesc: "测试-项目1"（可修改）

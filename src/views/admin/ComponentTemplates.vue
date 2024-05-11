@@ -4,7 +4,7 @@
       <v-card-title>
         <v-form style="width: 100%">
           <v-container class="d-flex flex-wrap" fluid>
-            <v-select
+            <v-autocomplete
               :items="tenantCodes"
               :label="$vuetify.lang.t('$vuetify.lang_form_tenant_codes')"
               dense
@@ -13,7 +13,7 @@
               class="mr-8"
               v-model="componentsForm.tenantCodes"
               @change="refreshList()"
-            ></v-select>
+            ></v-autocomplete>
             <v-btn color="primary" style="margin-left: auto" @click="openAddComponent('add')">{{ $vuetify.lang.t('$vuetify.lang_menu_new_component_template') }}</v-btn>
           </v-container>
         </v-form>
@@ -138,7 +138,7 @@
                 ></v-text-field>
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="addComponentForm.tenantCode"
                   :items="tenantCodes"
@@ -149,7 +149,7 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex justify-space-between mt-4">
@@ -164,7 +164,7 @@
                 />
               </div>
               <div class="form-item-30">
-                <v-select
+                <v-autocomplete
                   :items="['deployment', 'statefulset']"
                   :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_type')"
                   dense
@@ -173,7 +173,7 @@
                   v-model="addComponentForm.deploySpecStatic.deployType"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
               <div class="form-item-30">
                 <v-text-field
@@ -189,12 +189,12 @@
             <div class="form-row mt-4">
               <div class="form-item-50">
                 <v-spacer></v-spacer>
-                <v-select
+                <v-autocomplete
                   :items="componentOpts"
                   dense
                   :label="$vuetify.lang.t('$vuetify.lang_form_def_add_params')"
                   @change="chooseParams($event)"
-                ></v-select>
+                ></v-autocomplete>
               </div>
               <div class="form-item-100 params-item" v-if="
                 addComponentForm.deploySpecStatic.deployResources.cpuLimit !== '' ||
@@ -390,7 +390,7 @@
                       </v-text-field>
                     </div>
                     <div class="form-item-40 d-flex align-center">
-                      <v-select
+                      <v-autocomplete
                         :items="[
                           { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
                           { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false },
@@ -409,14 +409,14 @@
                           <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_2')}}</div>
                           <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_3')}}</div>
                         </template>
-                      </v-select>
+                      </v-autocomplete>
                     </div>
                   </div>
                 </div>
                 <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.deployType === 'statefulset'">
                   <div class="params-content d-flex justify-space-between mt-4">
                     <div class="form-item-50 d-flex align-center">
-                      <v-select
+                      <v-autocomplete
                         :items="[
                           { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
                           { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false },
@@ -429,7 +429,7 @@
                       />
                     </div>
                     <div class="form-item-50 d-flex align-center">
-                      <v-select
+                      <v-autocomplete
                         :items="['OrderedReady', 'Parallel']"
                         :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy')"
                         dense
@@ -445,7 +445,7 @@
                           <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_2')}}</div>
                           <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_3')}}</div>
                         </template>
-                      </v-select>
+                      </v-autocomplete>
                     </div>
                   </div>
                 </div>
@@ -532,7 +532,7 @@
                       />
                     </div>
                     <div class="form-item-45">
-                      <v-select
+                      <v-autocomplete
                         :items="[ 'HTTP', 'TCP', 'UDP', 'SCTP' ]"
                         :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_local_ports_protocol')"
                         dense
@@ -720,7 +720,7 @@
                 <div class="params-content d-flex justify-space-between">
                   <div class="form-item-100">
                     <div class="form-item-50 d-flex">
-                      <v-select
+                      <v-autocomplete
                         :items="[
                           {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_check_port'), value: 'checkPort'},
                           {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_exec'), value: 'exec'},
@@ -729,7 +729,7 @@
                         :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_select_method')"
                         @change="healthCheckChange($event)"
                         :value="healthCheckInit()"
-                      ></v-select>
+                      ></v-autocomplete>
                     </div>
                     <div class="mt-4" v-if="addComponentForm.deploySpecStatic.deployHealthCheck.checkPort !== 0">
                       <v-text-field
@@ -771,7 +771,7 @@
                           />
                         </div>
                         <div class="form-item-40">
-                          <v-select
+                          <v-autocomplete
                             :items="['HTTP', 'HTTPS']"
                             :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_http_get_scheme')"
                             dense
@@ -852,7 +852,7 @@
                   <div class="params-content d-flex justify-space-between">
                     <div class="form-item-100">
                       <div class="form-item-50 d-flex">
-                        <v-select
+                        <v-autocomplete
                           :items="[
                             {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_exec'), value: 'exec'},
                             {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get'), value: 'httpGet'},
@@ -860,7 +860,7 @@
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_post_start_select_method')"
                           @change="lifecyclePostStartChange($event)"
                           :value="lifecyclePostStartInit()"
-                        ></v-select>
+                        ></v-autocomplete>
                       </div>
                       <div class="mt-4" v-if="addComponentForm.deploySpecStatic.lifecycle.postStart.exec !== ''">
                         <v-text-field
@@ -893,7 +893,7 @@
                             />
                           </div>
                           <div class="form-item-40">
-                            <v-select
+                            <v-autocomplete
                               :items="['HTTP', 'HTTPS']"
                               :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get_scheme')"
                               dense
@@ -950,7 +950,7 @@
                   <div class="params-content d-flex justify-space-between">
                     <div class="form-item-100">
                       <div class="form-item-50 d-flex">
-                        <v-select
+                        <v-autocomplete
                           :items="[
                             {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_exec'), value: 'exec'},
                             {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get'), value: 'httpGet'},
@@ -958,7 +958,7 @@
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_pre_stop_select_method')"
                           @change="lifecyclePreStopChange($event)"
                           :value="lifecyclePreStopInit()"
-                        ></v-select>
+                        ></v-autocomplete>
                       </div>
                       <div class="mt-4" v-if="addComponentForm.deploySpecStatic.lifecycle.preStop.exec !== ''">
                         <v-text-field
@@ -991,7 +991,7 @@
                             />
                           </div>
                           <div class="form-item-40">
-                            <v-select
+                            <v-autocomplete
                               :items="['HTTP', 'HTTPS']"
                               :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get_scheme')"
                               dense
@@ -1163,7 +1163,7 @@
                       />
                     </div>
                     <div class="form-item-30">
-                      <v-select
+                      <v-autocomplete
                         :items="[ 'TCP', 'UDP' ]"
                         :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_type')"
                         dense
@@ -1317,7 +1317,7 @@
                 ></v-text-field>
               </div>
               <div class="form-item-45 d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="addComponentForm.tenantCode"
                   :items="tenantCodes"
@@ -1328,7 +1328,7 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex justify-space-between mt-4">
@@ -1343,7 +1343,7 @@
                 />
               </div>
               <div class="form-item-30">
-                <v-select
+                <v-autocomplete
                   :items="['deployment', 'statefulset']"
                   :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_type')"
                   dense
@@ -1352,7 +1352,7 @@
                   v-model="addComponentForm.deploySpecStatic.deployType"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
               <div class="form-item-30">
                 <v-text-field
@@ -1368,12 +1368,12 @@
             <div class="form-row mt-4">
               <div class="form-item-50">
                 <v-spacer></v-spacer>
-                <v-select
+                <v-autocomplete
                   :items="componentOpts"
                   dense
                   :label="$vuetify.lang.t('$vuetify.lang_form_def_add_params')"
                   @change="chooseParams($event)"
-                ></v-select>
+                ></v-autocomplete>
               </div>
               <div class="form-item-100 params-item" v-if="
                 addComponentForm.deploySpecStatic.deployResources.cpuLimit !== '' ||
@@ -1569,7 +1569,7 @@
                       </v-text-field>
                     </div>
                     <div class="form-item-40 d-flex align-center">
-                      <v-select
+                      <v-autocomplete
                         :items="[
                           { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
                           { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false },
@@ -1588,14 +1588,14 @@
                           <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_2')}}</div>
                           <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_3')}}</div>
                         </template>
-                      </v-select>
+                      </v-autocomplete>
                     </div>
                   </div>
                 </div>
                 <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.deployType === 'statefulset'">
                   <div class="params-content d-flex justify-space-between mt-4">
                     <div class="form-item-50 d-flex align-center">
-                      <v-select
+                      <v-autocomplete
                         :items="[
                           { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
                           { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false },
@@ -1608,7 +1608,7 @@
                       />
                     </div>
                     <div class="form-item-50 d-flex align-center">
-                      <v-select
+                      <v-autocomplete
                         :items="['OrderedReady', 'Parallel']"
                         :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy')"
                         dense
@@ -1624,7 +1624,7 @@
                           <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_2')}}</div>
                           <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_3')}}</div>
                         </template>
-                      </v-select>
+                      </v-autocomplete>
                     </div>
                   </div>
                 </div>
@@ -1711,7 +1711,7 @@
                       />
                     </div>
                     <div class="form-item-45">
-                      <v-select
+                      <v-autocomplete
                         :items="[ 'HTTP', 'TCP', 'UDP', 'SCTP' ]"
                         :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_local_ports_protocol')"
                         dense
@@ -1899,7 +1899,7 @@
                 <div class="params-content d-flex justify-space-between">
                   <div class="form-item-100">
                     <div class="form-item-50 d-flex">
-                      <v-select
+                      <v-autocomplete
                         :items="[
                           {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_check_port'), value: 'checkPort'},
                           {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_exec'), value: 'exec'},
@@ -1908,7 +1908,7 @@
                         :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_select_method')"
                         @change="healthCheckChange($event)"
                         :value="healthCheckInit()"
-                      ></v-select>
+                      ></v-autocomplete>
                     </div>
                     <div class="mt-4" v-if="addComponentForm.deploySpecStatic.deployHealthCheck.checkPort !== 0">
                       <v-text-field
@@ -1950,7 +1950,7 @@
                           />
                         </div>
                         <div class="form-item-40">
-                          <v-select
+                          <v-autocomplete
                             :items="['HTTP', 'HTTPS']"
                             :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_http_get_scheme')"
                             dense
@@ -2031,7 +2031,7 @@
                   <div class="params-content d-flex justify-space-between">
                     <div class="form-item-100">
                       <div class="form-item-50 d-flex">
-                        <v-select
+                        <v-autocomplete
                           :items="[
                             {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_exec'), value: 'exec'},
                             {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get'), value: 'httpGet'},
@@ -2039,7 +2039,7 @@
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_post_start_select_method')"
                           @change="lifecyclePostStartChange($event)"
                           :value="lifecyclePostStartInit()"
-                        ></v-select>
+                        ></v-autocomplete>
                       </div>
                       <div class="mt-4" v-if="addComponentForm.deploySpecStatic.lifecycle.postStart.exec !== ''">
                         <v-text-field
@@ -2072,7 +2072,7 @@
                             />
                           </div>
                           <div class="form-item-40">
-                            <v-select
+                            <v-autocomplete
                               :items="['HTTP', 'HTTPS']"
                               :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get_scheme')"
                               dense
@@ -2129,7 +2129,7 @@
                   <div class="params-content d-flex justify-space-between">
                     <div class="form-item-100">
                       <div class="form-item-50 d-flex">
-                        <v-select
+                        <v-autocomplete
                           :items="[
                             {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_exec'), value: 'exec'},
                             {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get'), value: 'httpGet'},
@@ -2137,7 +2137,7 @@
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_pre_stop_select_method')"
                           @change="lifecyclePreStopChange($event)"
                           :value="lifecyclePreStopInit()"
-                        ></v-select>
+                        ></v-autocomplete>
                       </div>
                       <div class="mt-4" v-if="addComponentForm.deploySpecStatic.lifecycle.preStop.exec !== ''">
                         <v-text-field
@@ -2170,7 +2170,7 @@
                             />
                           </div>
                           <div class="form-item-40">
-                            <v-select
+                            <v-autocomplete
                               :items="['HTTP', 'HTTPS']"
                               :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get_scheme')"
                               dense
@@ -2342,7 +2342,7 @@
                       />
                     </div>
                     <div class="form-item-30">
-                      <v-select
+                      <v-autocomplete
                         :items="[ 'TCP', 'UDP' ]"
                         :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_type')"
                         dense

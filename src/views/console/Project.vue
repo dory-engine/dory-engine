@@ -36,7 +36,7 @@
                     </template>
                   </td>
                   <td>
-                    <div>{{ project.projectInfo.projectNamespace }}({{ project.projectInfo.shortName }})<v-tooltip bottom><template v-slot:activator="{ on, attrs }"><v-icon color="orange" v-bind="attrs" v-on="on" v-if="project.projectInfo.privileged">mdi-security</v-icon></template><span>{{$vuetify.lang.t('$vuetify.lang_view_project_privileged')}}</span></v-tooltip></div>
+                    <div>{{ project.projectInfo.projectNamespace }}({{ project.projectInfo.shortName }})</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_project_team')}}: {{ project.projectInfo.projectTeam }}</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_project_arch')}}: {{ project.projectInfo.projectArch }}</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_tenant_code')}}: {{ project.tenantCode }}</div>
@@ -86,9 +86,11 @@
                         <Operations
                           :operations="[
                             { text: $vuetify.lang.t('$vuetify.lang_menu_apply_new_project_node_ports'), onClick: () => {openNewNodeport(item.envName)} },
+                            { text: $vuetify.lang.t('$vuetify.lang_menu_apply_update_project_env'), onClick: () => {openUpdateProjectEnv(item.envName)} },
                             { text: $vuetify.lang.t('$vuetify.lang_menu_apply_delete_project_envs'), onClick: () => {openRecycleEnv(item.envName)} },
                           ]"
                           :opt-button-text="item.envName"
+                          :opt-button-icon="(item.privileged ? 'mdi-security' : '')"
                           color="yellow"
                         />
                       </div>
@@ -1043,7 +1045,7 @@
             <v-form ref="envAddRef">
               <v-row>
                 <v-col cols="12">
-                  <v-select
+                  <v-autocomplete
                     v-model="envAddForm.envNames"
                     :items="newEnvSelectList"
                     :label="$vuetify.lang.t('$vuetify.lang_form_new_project_envs_env_names')"
@@ -1051,7 +1053,7 @@
                     dense
                     small-chips
                     :rules="[v => v.length > 0 || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                  ></v-select>
+                  ></v-autocomplete>
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
@@ -1231,13 +1233,13 @@
               <v-container>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       v-model="handleEnvType"
                       :items="[{text: $vuetify.lang.t('$vuetify.lang_menu_apply_delete_project_envs'), value: '0'}, {text: $vuetify.lang.t('$vuetify.lang_menu_apply_delete_project_envs_all'), value: '1'}]"
                       :label="$vuetify.lang.t('$vuetify.lang_form_delete_project_envs_select')"
                       dense
                       :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
@@ -1399,19 +1401,6 @@
               <v-container>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
-                      :label="$vuetify.lang.t('$vuetify.lang_form_new_project_privileged')"
-                      v-model="updateProjectForm.privileged"
-                      :items="[
-                        {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true},
-                        {text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false},
-                      ]"
-                      dense
-                      :hint="$vuetify.lang.t('$vuetify.lang_form_new_project_privileged_tip_1')"
-                      persistent-hint
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12">
                     <v-text-field
                       :label="$vuetify.lang.t('$vuetify.lang_form_new_project_project_desc')"
                       v-model="updateProjectForm.projectDesc"
@@ -1434,7 +1423,7 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       v-model="updateProjectForm.projectArch"
                       :items="archNames"
                       :label="$vuetify.lang.t('$vuetify.lang_form_new_project_project_arch')"
@@ -1443,7 +1432,7 @@
                       :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                       :hint="$vuetify.lang.t('$vuetify.lang_form_new_project_project_arch_tip_1')"
                       persistent-hint
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                   <v-col
                     cols="12"
@@ -1664,20 +1653,20 @@
                     cols="12"
                     v-if="project.projectRepo.artifactRepoType === 'http'"
                   >
-                    <v-select
+                    <v-autocomplete
                       v-model="updateProjectForm.artifactRepoHttpUpload.method"
                       :items="['PUT', 'POST']"
                       :label="$vuetify.lang.t('$vuetify.lang_form_new_project_artifact_repo_http_upload_method')"
                       :hint="$vuetify.lang.t('$vuetify.lang_form_update_project_leave_it_empty')"
                       persistent-hint
                       dense
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                   <v-col
                     cols="12"
                     v-if="project.projectRepo.artifactRepoType === 'http'"
                   >
-                    <v-select
+                    <v-autocomplete
                       v-model="updateProjectForm.artifactRepoHttpUpload.insecure"
                       :items="[
                         {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true},
@@ -1687,7 +1676,7 @@
                       :hint="$vuetify.lang.t('$vuetify.lang_form_update_project_leave_it_empty')"
                       persistent-hint
                       dense
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                   <v-col
                     cols="12"
@@ -1705,7 +1694,7 @@
                     cols="12"
                     v-if="project.projectRepo.artifactRepoType === 'http'"
                   >
-                    <v-select
+                    <v-autocomplete
                       v-model="updateProjectForm.artifactRepoHttpDownload.insecure"
                       :items="[
                         {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true},
@@ -1715,7 +1704,7 @@
                       :hint="$vuetify.lang.t('$vuetify.lang_form_update_project_leave_it_empty')"
                       persistent-hint
                       dense
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
@@ -1781,6 +1770,120 @@
         </v-card>
       </v-dialog>
       <v-dialog
+        v-model="updateProjectEnvDialog"
+        max-width="600px"
+        persistent
+      >
+        <v-card>
+          <v-card-title>
+            <span class="headline">{{$vuetify.lang.t('$vuetify.lang_form_apply_update_project_env', updateProjectEnvForm.envName)}}</span>
+          </v-card-title>
+          <v-card-text>
+            <v-form ref="updateProjectEnvRef">
+              <small>{{$vuetify.lang.t('$vuetify.lang_form_required_tip')}}</small>
+              <v-container>
+                <v-row>
+                  <v-col cols="12">
+                    <v-autocomplete
+                      v-model="updateProjectEnvForm.privileged"
+                      :items="[
+                        {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true},
+                        {text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false},
+                      ]"
+                      :label="$vuetify.lang.t('$vuetify.lang_form_update_project_env_privileged')"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_update_project_env_privileged_tip_1')"
+                      persistent-hint
+                      dense
+                    ></v-autocomplete>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-autocomplete
+                      v-model="updateProjectEnvForm.disabledDefs"
+                      :items="disabledDefNames"
+                      :label="$vuetify.lang.t('$vuetify.lang_form_update_project_env_disabled_defs')"
+                      dense
+                      multiple
+                      small-chips
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_update_project_env_disabled_defs_tip_1')"
+                      persistent-hint
+                    ></v-autocomplete>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-combobox
+                      :label="$vuetify.lang.t('$vuetify.lang_form_update_project_env_disabled_patches')"
+                      dense
+                      multiple
+                      small-chips
+                      hide-selected
+                      v-model="updateProjectEnvForm.disabledPatches"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_update_project_env_disabled_patches_tip_1')"
+                      persistent-hint
+                      append-icon=""
+                    >
+                    </v-combobox>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_apply_title')"
+                      required
+                      dense
+                      v-model="updateProjectEnvForm.title"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_apply_title_tip_1')"
+                      persistent-hint
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-textarea
+                      :label="$vuetify.lang.t('$vuetify.lang_form_apply_content')"
+                      required
+                      dense
+                      v-model="updateProjectEnvForm.content"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_apply_content_tip_1')"
+                      persistent-hint
+                    ></v-textarea>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-file-input
+                      :label="$vuetify.lang.t('$vuetify.lang_form_apply_attachments')"
+                      required
+                      dense
+                      multiple
+                      small-chips
+                      show-size
+                      v-model="updateProjectAttachment"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_apply_attachments_tip_1')"
+                      persistent-hint
+                    ></v-file-input>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="() => {
+                this,$refs.updateProjectEnvRef.resetValidation()
+                this.updateProjectEnvDialog = false
+              }"
+            >
+              {{ $vuetify.lang.t('$vuetify.lang_menu_cancel') }}
+            </v-btn>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="updateProjectEnv()"
+            >
+              {{ $vuetify.lang.t('$vuetify.lang_menu_confirm') }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog
         v-model="deleteProjectDialog"
         max-width="600px"
         persistent
@@ -1800,7 +1903,7 @@
               <v-container>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       v-model="deleteProjectForm.gitRepoDelete"
                       :items="[
                         {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true},
@@ -1808,10 +1911,10 @@
                       ]"
                       :label="$vuetify.lang.t('$vuetify.lang_form_delete_project_git_repo_delete')"
                       dense
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       v-model="deleteProjectForm.scanCodeRepoDelete"
                       :items="[
                         {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true},
@@ -1819,10 +1922,10 @@
                       ]"
                       :label="$vuetify.lang.t('$vuetify.lang_form_delete_project_scan_code_repo_delete')"
                       dense
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       v-model="deleteProjectForm.imageRepoDelete"
                       :items="[
                         {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true},
@@ -1830,10 +1933,10 @@
                       ]"
                       :label="$vuetify.lang.t('$vuetify.lang_form_delete_project_image_repo_delete')"
                       dense
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       v-model="deleteProjectForm.artifactRepoDelete"
                       :items="[
                         {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true},
@@ -1841,10 +1944,10 @@
                       ]"
                       :label="$vuetify.lang.t('$vuetify.lang_form_delete_project_artifact_repo_delete')"
                       dense
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       v-model="deleteProjectForm.namespaceDelete"
                       :items="[
                         {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true},
@@ -1852,7 +1955,7 @@
                       ]"
                       :label="$vuetify.lang.t('$vuetify.lang_form_delete_project_namespace_delete')"
                       dense
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
@@ -2089,7 +2192,7 @@
                     ></v-autocomplete>
                   </v-col>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :items="accessLevel"
                       :label="$vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level')"
                       dense
@@ -2107,7 +2210,7 @@
                         <div>{{$vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_2')}}</div>
                         <div>{{$vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_3')}}</div>
                       </template>
-                    </v-select>
+                    </v-autocomplete>
                   </v-col>
                 </v-row>
               </v-container>
@@ -2151,7 +2254,7 @@
               <v-container>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :items="accessLevel"
                       :label="$vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level')"
                       dense
@@ -2168,7 +2271,7 @@
                         <div>{{$vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_2')}}</div>
                         <div>{{$vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_3')}}</div>
                       </template>
-                    </v-select>
+                    </v-autocomplete>
                   </v-col>
                 </v-row>
               </v-container>
@@ -2257,7 +2360,7 @@
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :items="sourceBranchNames"
                       :label="$vuetify.lang.t('$vuetify.lang_form_new_pipeline_source_branch')"
                       dense
@@ -2265,12 +2368,12 @@
                       :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                       :hint="$vuetify.lang.t('$vuetify.lang_form_new_pipeline_source_branch_tip_1')"
                       persistent-hint
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :items="envList"
                       :label="$vuetify.lang.t('$vuetify.lang_form_new_pipeline_envs')"
                       multiple
@@ -2280,12 +2383,12 @@
                       :rules="[v => v.length > 0 || $vuetify.lang.t('$vuetify.lang_form_required')]"
                       :hint="$vuetify.lang.t('$vuetify.lang_form_new_pipeline_envs_tip_1')"
                       persistent-hint
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :items="envList"
                       :label="$vuetify.lang.t('$vuetify.lang_form_new_pipeline_env_productions')"
                       multiple
@@ -2294,12 +2397,12 @@
                       v-model="addPipelineForm.envProductions"
                       :hint="$vuetify.lang.t('$vuetify.lang_form_new_pipeline_env_productions_tip_1')"
                       persistent-hint
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row v-if="project.projectRepo.gitRepoType !== 'externalExist'">
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :items="gitPush"
                       :label="$vuetify.lang.t('$vuetify.lang_form_new_pipeline_webhook_push_event')"
                       dense
@@ -2307,7 +2410,7 @@
                       :rules="[v => (project.projectRepo.gitRepoType === 'externalExist' || typeof(v) == 'boolean') || $vuetify.lang.t('$vuetify.lang_form_required')]"
                       :hint="$vuetify.lang.t('$vuetify.lang_form_new_pipeline_webhook_push_event_tip_1')"
                       persistent-hint
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                 </v-row>
               </v-container>
@@ -2403,7 +2506,7 @@
               <v-container>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :items="envList"
                       :label="$vuetify.lang.t('$vuetify.lang_form_assign_pipeline_envs_env_name')"
                       dense
@@ -2411,12 +2514,12 @@
                       :hint="$vuetify.lang.t('$vuetify.lang_form_assign_pipeline_envs_env_name_tip_1')"
                       persistent-hint
                       :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :items="[{ text: $vuetify.lang.t('$vuetify.lang_view_production_envs'), value: true }, { text: $vuetify.lang.t('$vuetify.lang_view_ci_envs'), value: false }]"
                       :label="$vuetify.lang.t('$vuetify.lang_form_assign_pipeline_envs_is_production_env')"
                       dense
@@ -2424,7 +2527,7 @@
                       :hint="$vuetify.lang.t('$vuetify.lang_form_assign_pipeline_envs_is_production_env_tip_1')"
                       persistent-hint
                       :rules="[v => typeof(v)== 'boolean' || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                 </v-row>
               </v-container>
@@ -2567,7 +2670,7 @@
               <v-container>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_crontab_crontab_minute')"
                       dense
                       :items="[
@@ -2637,12 +2740,12 @@
                       :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_crontab_crontab_minute_tip_1')"
                       persistent-hint
                     >
-                    </v-select>
+                    </v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_crontab_crontab_hour')"
                       dense
                       :items="[
@@ -2677,12 +2780,12 @@
                       :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_crontab_crontab_hour_tip_1')"
                       persistent-hint
                     >
-                    </v-select>
+                    </v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_crontab_crontab_day')"
                       dense
                       :items="[
@@ -2724,12 +2827,12 @@
                       :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_crontab_crontab_day_tip_1')"
                       persistent-hint
                     >
-                    </v-select>
+                    </v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_crontab_crontab_month')"
                       dense
                       :items="[
@@ -2752,12 +2855,12 @@
                       :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_crontab_crontab_month_tip_1')"
                       persistent-hint
                     >
-                    </v-select>
+                    </v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_crontab_crontab_week')"
                       dense
                       :items="[
@@ -2775,7 +2878,7 @@
                       :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_crontab_crontab_week_tip_1')"
                       persistent-hint
                     >
-                    </v-select>
+                    </v-autocomplete>
                   </v-col>
                 </v-row>
               </v-container>
@@ -2807,7 +2910,7 @@
           </v-card-title>
           <v-card-text>
             <v-form ref="copyToBranchCrontabRef">
-              <v-select
+              <v-autocomplete
                 :items="branchNames"
                 :label="$vuetify.lang.t('$vuetify.lang_form_new_pipeline_branch_name')"
                 dense
@@ -2875,7 +2978,7 @@
                 <div class="form-item-100 params-item">
                   <v-row>
                     <v-col cols="12">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_before_execute')"
                         dense
                         :items="[
@@ -2886,10 +2989,10 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_before_execute_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="4">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_step_action')"
                         dense
                         :items="stepActionList"
@@ -2900,10 +3003,10 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_step_action_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="4" v-if="!addTriggerForm.beforeExecute">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_status_results')"
                         dense
                         :items="[
@@ -2917,10 +3020,10 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_status_results_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="4">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_enable')"
                         dense
                         :items="[
@@ -2932,7 +3035,7 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_enable_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -2990,7 +3093,7 @@
                   <v-row>
                     <v-col cols="6">
                       <small>{{$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_insecure')}}</small>
-                      <v-select
+                      <v-autocomplete
                         dense
                         :items="[
                           { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
@@ -3000,11 +3103,11 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_insecure_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="6">
                       <small>{{$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_webhook_method')}}</small>
-                      <v-select
+                      <v-autocomplete
                         dense
                         :items="httpMethods"
                         v-model="addTriggerForm.webhookMethod"
@@ -3012,7 +3115,7 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_webhook_method_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -3169,7 +3272,7 @@
                 <div class="form-item-100 params-item" v-if="!addTriggerForm.beforeExecute">
                   <v-row>
                     <v-col cols="6">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_mail_committees')"
                         dense
                         :items="[
@@ -3181,7 +3284,7 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_mail_committees_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="6">
                       <v-combobox
@@ -3219,7 +3322,7 @@
                     </v-col>
                     <v-col cols="6">
                       <small>{{$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_mail_attachment_format')}}</small>
-                      <v-select
+                      <v-autocomplete
                         dense
                         :items="[
                           { text: 'yaml', value: 'yaml' },
@@ -3230,7 +3333,7 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_mail_attachment_format_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -3259,7 +3362,7 @@
                 <div class="form-item-100 params-item" v-if="!addTriggerForm.beforeExecute">
                   <v-row>
                     <v-col cols="6">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_notice_committees')"
                         dense
                         :items="[
@@ -3271,10 +3374,10 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_notice_committees_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="6">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_notice_usernames')"
                         dense
                         :items="project.projectMembers"
@@ -3286,7 +3389,7 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_notice_usernames_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                 </div>
@@ -3349,7 +3452,7 @@
                 <div class="form-item-100 params-item">
                   <v-row>
                     <v-col cols="12">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_before_execute')"
                         dense
                         :items="[
@@ -3361,10 +3464,10 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_before_execute_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="4">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_step_action')"
                         dense
                         :items="stepActionList"
@@ -3375,10 +3478,10 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_step_action_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="4" v-if="!updateTriggerForm.beforeExecute">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_status_results')"
                         dense
                         :items="[
@@ -3392,10 +3495,10 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_status_results_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="4">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_enable')"
                         dense
                         :items="[
@@ -3407,7 +3510,7 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_enable_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -3465,7 +3568,7 @@
                   <v-row>
                     <v-col cols="6">
                       <small>{{$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_insecure')}}</small>
-                      <v-select
+                      <v-autocomplete
                         dense
                         :items="[
                           { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
@@ -3475,11 +3578,11 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_insecure_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="6">
                       <small>{{$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_webhook_method')}}</small>
-                      <v-select
+                      <v-autocomplete
                         dense
                         :items="httpMethods"
                         v-model="updateTriggerForm.webhookMethod"
@@ -3487,7 +3590,7 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_webhook_method_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -3644,7 +3747,7 @@
                 <div class="form-item-100 params-item" v-if="!updateTriggerForm.beforeExecute">
                   <v-row>
                     <v-col cols="6">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_mail_committees')"
                         dense
                         :items="[
@@ -3656,7 +3759,7 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_mail_committees_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="6">
                       <v-combobox
@@ -3694,7 +3797,7 @@
                     </v-col>
                     <v-col cols="6">
                       <small>{{$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_mail_attachment_format')}}</small>
-                      <v-select
+                      <v-autocomplete
                         dense
                         :items="[
                           { text: 'yaml', value: 'yaml' },
@@ -3705,7 +3808,7 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_mail_attachment_format_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -3734,7 +3837,7 @@
                 <div class="form-item-100 params-item" v-if="!updateTriggerForm.beforeExecute">
                   <v-row>
                     <v-col cols="6">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_notice_committees')"
                         dense
                         :items="[
@@ -3746,10 +3849,10 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_notice_committees_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                     <v-col cols="6">
-                      <v-select
+                      <v-autocomplete
                         :label="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_notice_usernames')"
                         dense
                         :items="project.projectMembers"
@@ -3761,7 +3864,7 @@
                         :hint="$vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_notice_usernames_tip_1')"
                         persistent-hint
                       >
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                 </div>
@@ -3794,7 +3897,7 @@
           </v-card-title>
           <v-card-text>
             <v-form ref="copyToBranchTriggerRef">
-              <v-select
+              <v-autocomplete
                 :items="branchNames"
                 :label="$vuetify.lang.t('$vuetify.lang_form_new_pipeline_branch_name')"
                 dense
@@ -4604,7 +4707,7 @@
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :label="$vuetify.lang.t('$vuetify.lang_form_new_host_host_become')"
                       :items="[ { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true }, { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false } ]"
                       dense
@@ -4612,7 +4715,7 @@
                       :rules="[v => typeof(v)== 'boolean' || $vuetify.lang.t('$vuetify.lang_form_required')]"
                       persistent-hint
                     >
-                    </v-select>
+                    </v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -4784,7 +4887,7 @@
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :label="$vuetify.lang.t('$vuetify.lang_form_new_host_host_become')"
                       :items="[ { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true }, { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false } ]"
                       dense
@@ -4792,7 +4895,7 @@
                       :rules="[v => typeof(v)== 'boolean' || $vuetify.lang.t('$vuetify.lang_form_required')]"
                       persistent-hint
                     >
-                    </v-select>
+                    </v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -4864,7 +4967,7 @@
               <v-container>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :items="projectEnvList"
                       :label="$vuetify.lang.t('$vuetify.lang_form_add_host_to_other_project_project_name')"
                       dense
@@ -4873,12 +4976,12 @@
                       :hint="$vuetify.lang.t('$vuetify.lang_form_add_host_to_other_project_project_name_tip_1')"
                       persistent-hint
                       @change="projectChange(joinHostForm.projectName)"
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :items="projectEnvListChildren"
                       :label="$vuetify.lang.t('$vuetify.lang_form_add_host_to_other_project_env_name')"
                       dense
@@ -4887,7 +4990,7 @@
                       v-model="joinHostForm.envName"
                       :hint="$vuetify.lang.t('$vuetify.lang_form_add_host_to_other_project_env_name_tip_1')"
                       persistent-hint
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row class="mb-2">
@@ -5259,7 +5362,7 @@
               <v-container>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :items="projectEnvList"
                       :label="$vuetify.lang.t('$vuetify.lang_form_add_database_to_other_project_project_name')"
                       dense
@@ -5268,12 +5371,12 @@
                       :hint="$vuetify.lang.t('$vuetify.lang_form_add_database_to_other_project_project_name_tip_1')"
                       persistent-hint
                       @change="projectChange(joinDbForm.projectName)"
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols="12">
-                    <v-select
+                    <v-autocomplete
                       :items="projectEnvListChildren"
                       :label="$vuetify.lang.t('$vuetify.lang_form_add_database_to_other_project_env_name')"
                       dense
@@ -5282,7 +5385,7 @@
                       v-model="joinDbForm.envName"
                       :hint="$vuetify.lang.t('$vuetify.lang_form_add_database_to_other_project_env_name_tip_1')"
                       persistent-hint
-                    ></v-select>
+                    ></v-autocomplete>
                   </v-col>
                 </v-row>
               </v-container>
@@ -5495,7 +5598,7 @@
                 <div class="form-item-100">
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item-50 d-flex align-center">
-                      <v-select
+                      <v-autocomplete
                         :items="['amd64', 'arm64v8']"
                         :label="$vuetify.lang.t('$vuetify.lang_form_component_arch')"
                         dense
@@ -5696,7 +5799,7 @@
                 <div class="form-item-100">
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item-45 d-flex align-center">
-                      <v-select
+                      <v-autocomplete
                         :items="[
                           { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
                           { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false },
@@ -5709,12 +5812,12 @@
                       />
                     </div>
                     <div class="form-item-45 d-flex align-center">
-                      <v-select
+                      <v-autocomplete
                         :items="sourceBranchNames"
                         :label="$vuetify.lang.t('$vuetify.lang_form_debug_component_ingress_cert_branch')"
                         dense
                         v-model="addComponentDebugForm.ingress.certBranch"
-                      ></v-select>
+                      ></v-autocomplete>
                     </div>
                   </div>
                   <div class="d-flex justify-space-between mt-4">
@@ -5869,13 +5972,13 @@
               </v-alert>
               <div class="form-item-100 d-flex justify-space-between mt-4">
                 <div class="form-item-45">
-                  <v-select
+                  <v-autocomplete
                     :label="$vuetify.lang.t('$vuetify.lang_form_new_component_template_name')"
                     required
                     :items="componentList"
                     dense
                     v-model="addComponentForm"
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
               </div>
               <div class="form-item-100 d-flex justify-space-between mt-4">
@@ -5913,7 +6016,7 @@
                   />
                 </div>
                 <div class="form-item-45">
-                  <v-select
+                  <v-autocomplete
                     :items="archNames"
                     :label="$vuetify.lang.t('$vuetify.lang_form_component_arch')"
                     dense
@@ -5924,7 +6027,7 @@
               </div>
               <div class="form-row d-flex justify-space-between mt-4">
                 <div class="form-item-45">
-                  <v-select
+                  <v-autocomplete
                     :items="['deployment', 'statefulset']"
                     :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_type')"
                     dense
@@ -5933,7 +6036,7 @@
                     v-model="addComponentForm.deploySpecStatic.deployType"
                     :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                   >
-                  </v-select>
+                  </v-autocomplete>
                 </div>
                 <div class="form-item-45">
                   <v-text-field
@@ -5949,12 +6052,12 @@
               <div class="form-row mt-4">
                 <div class="form-item-30">
                   <v-spacer></v-spacer>
-                  <v-select
+                  <v-autocomplete
                     :items="componentOpts"
                     dense
                     :label="$vuetify.lang.t('$vuetify.lang_form_def_add_params')"
                     @change="chooseParams($event)"
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
                 <div class="form-item-100 params-item" v-if="
                   addComponentForm.deploySpecStatic.deployResources.cpuLimit !== '' || 
@@ -6195,7 +6298,7 @@
                   <div class="form-item-100 params-item">
                     <div class="params-content d-flex justify-space-between mt-4">
                       <div class="form-item-45">
-                        <v-select
+                        <v-autocomplete
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_node_selector')"
                           dense
                           multiple
@@ -6207,10 +6310,10 @@
                           :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_node_selector_tip_1')"
                           persistent-hint
                           v-model="addComponentForm.deploySpecStatic.nodeSelector"
-                        ></v-select>
+                        ></v-autocomplete>
                       </div>
                       <div class="form-item-45 d-flex align-center">
-                        <v-select
+                        <v-autocomplete
                           :items="nodeNames"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_node_name')"
                           dense
@@ -6218,7 +6321,7 @@
                           :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_node_name_tip_1')"
                           persistent-hint
                           v-model="addComponentForm.deploySpecStatic.nodeName"
-                        ></v-select>
+                        ></v-autocomplete>
                       </div>
                     </div>
                   </div>
@@ -6265,7 +6368,7 @@
                         </v-text-field>
                       </div>
                       <div class="form-item-45 d-flex align-center">
-                        <v-select
+                        <v-autocomplete
                           :items="[
                             { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
                             { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false },
@@ -6284,14 +6387,14 @@
                             <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_2')}}</div>
                             <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_3')}}</div>
                           </template>
-                        </v-select>
+                        </v-autocomplete>
                       </div>                    
                     </div>
                   </div>
                   <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.deployType === 'statefulset'">
                     <div class="params-content d-flex justify-space-between mt-4">
                       <div class="form-item-50 d-flex align-center">
-                        <v-select
+                        <v-autocomplete
                           :items="[
                             { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
                             { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false },
@@ -6304,7 +6407,7 @@
                         />
                       </div>
                       <div class="form-item-50 d-flex align-center">
-                        <v-select
+                        <v-autocomplete
                           :items="['OrderedReady', 'Parallel']"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy')"
                           dense
@@ -6320,7 +6423,7 @@
                             <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_2')}}</div>
                             <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_3')}}</div>
                           </template>
-                        </v-select>
+                        </v-autocomplete>
                       </div>
                     </div>
                   </div>
@@ -6384,7 +6487,7 @@
                   " :id="'deployPorts-add'"
                 >
                   <div class="form-item-45 mt-4 d-flex align-center">
-                    <v-select
+                    <v-autocomplete
                       :items="[
                         { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_local_ports'), value: 'deployLocalPorts' },
                         { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_node_ports'), value: 'deployNodePorts' },
@@ -6393,7 +6496,7 @@
                       :value="addComponentForm.deploySpecStatic.deployLocalPorts === null ? 'deployNodePorts' : 'deployLocalPorts'"
                       :label="$vuetify.lang.t('$vuetify.lang_form_def_add_params')"
                       @change="changePortSet($event)"
-                    ></v-select>
+                    ></v-autocomplete>
                     <v-icon color="error" class="ml-4" @click="clearParams('deployPorts')">mdi-minus-circle-outline</v-icon>
                   </div>
                   <div class="form-item-100" v-if="addComponentForm.deploySpecStatic.deployLocalPorts !== null" :id="'deployLocalPorts-add'">
@@ -6421,7 +6524,7 @@
                           />
                         </div>
                         <div class="form-item-40 mt-4 d-flex">
-                          <v-select
+                          <v-autocomplete
                             :items="[ 'HTTP', 'TCP', 'UDP', 'SCTP' ]"
                             :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_local_ports_protocol')"
                             dense
@@ -6476,7 +6579,7 @@
                       </div>
                       <div class="form-item-100 d-flex">
                         <div class="form-item-45 mt-4 d-flex">
-                          <v-select
+                          <v-autocomplete
                             :items="[
                               { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
                               { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false },
@@ -6489,12 +6592,12 @@
                           />
                         </div>
                         <div class="form-item-45 mt-4 d-flex">
-                          <v-select
+                          <v-autocomplete
                             :items="sourceBranchNames"
                             :label="$vuetify.lang.t('$vuetify.lang_form_debug_component_ingress_cert_branch')"
                             dense
                             v-model="row.ingress.certBranch"
-                          ></v-select>
+                          ></v-autocomplete>
                         </div>
                       </div>
                       <div class="form-item-100 d-flex">
@@ -6543,7 +6646,7 @@
                         />
                       </div>
                       <div class="form-item-30">
-                        <v-select
+                        <v-autocomplete
                           :items="[ 'HTTP', 'TCP', 'UDP', 'SCTP' ]"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_node_ports_protocol')"
                           dense
@@ -6552,7 +6655,7 @@
                         />
                       </div>
                       <div class="form-item-30 d-flex">
-                        <v-select
+                        <v-autocomplete
                           :items="nodePorts"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_node_ports_node_port')"
                           dense
@@ -6606,7 +6709,7 @@
                       />
                     </div>
                     <div class="form-item-30 d-flex">
-                      <v-select
+                      <v-autocomplete
                         :items="pvcNames || []"
                         :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_volumes_pvc')"
                         dense
@@ -6758,7 +6861,7 @@
                   <div class="params-content d-flex justify-space-between">
                     <div class="form-item-100">
                       <div class="form-item-50 d-flex">
-                        <v-select
+                        <v-autocomplete
                           :items="[
                             {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_check_port'), value: 'checkPort'},
                             {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_exec'), value: 'exec'},
@@ -6767,7 +6870,7 @@
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_select_method')"
                           @change="healthCheckChange($event)"
                           :value="healthCheckInit()"
-                        ></v-select>
+                        ></v-autocomplete>
                       </div>
                       <div class="mt-4" v-if="addComponentForm.deploySpecStatic.deployHealthCheck.checkPort !== 0">
                         <v-text-field
@@ -6809,7 +6912,7 @@
                             />
                           </div>
                           <div class="form-item-40">
-                            <v-select
+                            <v-autocomplete
                               :items="['HTTP', 'HTTPS']"
                               :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_http_get_scheme')"
                               dense
@@ -6890,7 +6993,7 @@
                     <div class="params-content d-flex justify-space-between">
                       <div class="form-item-100">
                         <div class="form-item-50 d-flex">
-                          <v-select
+                          <v-autocomplete
                             :items="[
                               {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_exec'), value: 'exec'},
                               {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get'), value: 'httpGet'},
@@ -6898,7 +7001,7 @@
                             :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_post_start_select_method')"
                             @change="lifecyclePostStartChange($event)"
                             :value="lifecyclePostStartInit()"
-                          ></v-select>
+                          ></v-autocomplete>
                         </div>
                         <div class="mt-4" v-if="addComponentForm.deploySpecStatic.lifecycle.postStart.exec !== ''">
                           <v-text-field
@@ -6931,7 +7034,7 @@
                               />
                             </div>
                             <div class="form-item-40">
-                              <v-select
+                              <v-autocomplete
                                 :items="['HTTP', 'HTTPS']"
                                 :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get_scheme')"
                                 dense
@@ -6988,7 +7091,7 @@
                     <div class="params-content d-flex justify-space-between">
                       <div class="form-item-100">
                         <div class="form-item-50 d-flex">
-                          <v-select
+                          <v-autocomplete
                             :items="[
                               {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_exec'), value: 'exec'},
                               {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get'), value: 'httpGet'},
@@ -6996,7 +7099,7 @@
                             :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_pre_stop_select_method')"
                             @change="lifecyclePreStopChange($event)"
                             :value="lifecyclePreStopInit()"
-                          ></v-select>
+                          ></v-autocomplete>
                         </div>
                         <div class="mt-4" v-if="addComponentForm.deploySpecStatic.lifecycle.preStop.exec !== ''">
                           <v-text-field
@@ -7029,7 +7132,7 @@
                               />
                             </div>
                             <div class="form-item-40">
-                              <v-select
+                              <v-autocomplete
                                 :items="['HTTP', 'HTTPS']"
                                 :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get_scheme')"
                                 dense
@@ -7201,7 +7304,7 @@
                         />
                       </div>
                       <div class="form-item-30">
-                        <v-select
+                        <v-autocomplete
                           :items="[ 'TCP', 'UDP' ]"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_type')"
                           dense
@@ -7318,12 +7421,12 @@
                     <v-icon color="error" class="ml-4" @click="clearParams('deployConfigSettings')">mdi-minus-circle-outline</v-icon>
                   </div>
                   <div class="form-item-50">
-                    <v-select
+                    <v-autocomplete
                       :items="sourceBranchNames"
                       :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_settings_deploy_config_branch')"
                       dense
                       v-model="addComponentForm.deploySpecStatic.deployConfigBranch"
-                    ></v-select>
+                    ></v-autocomplete>
                   </div>
                   <div class="params-content" v-for="(row, i) in addComponentForm.deploySpecStatic.deployConfigSettings">
                     <div class="d-flex justify-space-between align-center mt-4" >
@@ -7350,7 +7453,7 @@
                     </div>
                     <div class="d-flex justify-space-between align-center mt-4" >
                       <div class="form-item-45">
-                        <v-select
+                        <v-autocomplete
                           :items="pvcNames || []"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_settings_pvc_name')"
                           dense
@@ -7385,7 +7488,7 @@
                   <div v-for="(patch, i) in addComponentForm.deploySpecStatic.patches">
                     <div class="params-content d-flex justify-space-between align-center mt-4">
                       <div class="form-item-40 d-flex align-center">
-                        <v-select
+                        <v-autocomplete
                           :items="[ 'deployment', 'service', 'hpa', 'ingress' ]"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_patches_resource_kind')"
                           dense
@@ -7525,7 +7628,7 @@
                   />
                 </div>
                 <div class="form-item-45">
-                  <v-select
+                  <v-autocomplete
                     :items="archNames"
                     :label="$vuetify.lang.t('$vuetify.lang_form_component_arch')"
                     dense
@@ -7536,7 +7639,7 @@
               </div>
               <div class="form-row d-flex justify-space-between mt-4">
                 <div class="form-item-45">
-                  <v-select
+                  <v-autocomplete
                     :items="['deployment', 'statefulset']"
                     :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_type')"
                     dense
@@ -7545,7 +7648,7 @@
                     v-model="addComponentForm.deploySpecStatic.deployType"
                     :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                   >
-                  </v-select>
+                  </v-autocomplete>
                 </div>
                 <div class="form-item-45">
                   <v-text-field
@@ -7561,12 +7664,12 @@
               <div class="form-row mt-4">
                 <div class="form-item-30">
                   <v-spacer></v-spacer>
-                  <v-select
+                  <v-autocomplete
                     :items="componentOpts"
                     dense
                     :label="$vuetify.lang.t('$vuetify.lang_form_def_add_params')"
                     @change="chooseParams($event)"
-                  ></v-select>
+                  ></v-autocomplete>
                 </div>
                 <div class="form-item-100 params-item" v-if="
                   addComponentForm.deploySpecStatic.deployResources.cpuLimit !== '' || 
@@ -7807,7 +7910,7 @@
                   <div class="form-item-100 params-item">
                     <div class="params-content d-flex justify-space-between mt-4">
                       <div class="form-item-45">
-                        <v-select
+                        <v-autocomplete
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_node_selector')"
                           dense
                           multiple
@@ -7819,10 +7922,10 @@
                           :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_node_selector_tip_1')"
                           persistent-hint
                           v-model="addComponentForm.deploySpecStatic.nodeSelector"
-                        ></v-select>
+                        ></v-autocomplete>
                       </div>
                       <div class="form-item-45 d-flex align-center">
-                        <v-select
+                        <v-autocomplete
                           :items="nodeNames"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_node_name')"
                           dense
@@ -7830,7 +7933,7 @@
                           :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_node_name_tip_1')"
                           persistent-hint
                           v-model="addComponentForm.deploySpecStatic.nodeName"
-                        ></v-select>
+                        ></v-autocomplete>
                       </div>
                     </div>
                   </div>
@@ -7877,7 +7980,7 @@
                         </v-text-field>
                       </div>
                       <div class="form-item-45 d-flex align-center">
-                        <v-select
+                        <v-autocomplete
                           :items="[
                             { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
                             { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false },
@@ -7896,14 +7999,14 @@
                             <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_2')}}</div>
                             <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_3')}}</div>
                           </template>
-                        </v-select>
+                        </v-autocomplete>
                       </div>                    
                     </div>
                   </div>
                   <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.deployType === 'statefulset'">
                     <div class="params-content d-flex justify-space-between mt-4">
                       <div class="form-item-50 d-flex align-center">
-                        <v-select
+                        <v-autocomplete
                           :items="[
                             { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
                             { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false },
@@ -7916,7 +8019,7 @@
                         />
                       </div>
                       <div class="form-item-50 d-flex align-center">
-                        <v-select
+                        <v-autocomplete
                           :items="['OrderedReady', 'Parallel']"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy')"
                           dense
@@ -7932,7 +8035,7 @@
                             <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_2')}}</div>
                             <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_3')}}</div>
                           </template>
-                        </v-select>
+                        </v-autocomplete>
                       </div>
                     </div>
                   </div>
@@ -7996,7 +8099,7 @@
                   " :id="'deployPorts-'+targetIndex"
                 >
                   <div class="form-item-45 mt-4 d-flex align-center">
-                    <v-select
+                    <v-autocomplete
                       :items="[
                         { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_local_ports'), value: 'deployLocalPorts' },
                         { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_node_ports'), value: 'deployNodePorts' },
@@ -8005,7 +8108,7 @@
                       :value="addComponentForm.deploySpecStatic.deployLocalPorts === null ? 'deployNodePorts' : 'deployLocalPorts'"
                       :label="$vuetify.lang.t('$vuetify.lang_form_def_add_params')"
                       @change="changePortSet($event)"
-                    ></v-select>
+                    ></v-autocomplete>
                     <v-icon color="error" class="ml-4" @click="clearParams('deployPorts')">mdi-minus-circle-outline</v-icon>
                   </div>
                   <div class="form-item-100" v-if="addComponentForm.deploySpecStatic.deployLocalPorts !== null" :id="'deployLocalPorts-'+targetIndex">
@@ -8033,7 +8136,7 @@
                           />
                         </div>
                         <div class="form-item-40 mt-4 d-flex">
-                          <v-select
+                          <v-autocomplete
                             :items="[ 'HTTP', 'TCP', 'UDP', 'SCTP' ]"
                             :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_local_ports_protocol')"
                             dense
@@ -8088,7 +8191,7 @@
                       </div>
                       <div class="form-item-100 d-flex">
                         <div class="form-item-45 mt-4 d-flex">
-                          <v-select
+                          <v-autocomplete
                             :items="[
                               { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
                               { text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false },
@@ -8101,12 +8204,12 @@
                           />
                         </div>
                         <div class="form-item-45 mt-4 d-flex">
-                          <v-select
+                          <v-autocomplete
                             :items="sourceBranchNames"
                             :label="$vuetify.lang.t('$vuetify.lang_form_debug_component_ingress_cert_branch')"
                             dense
                             v-model="row.ingress.certBranch"
-                          ></v-select>
+                          ></v-autocomplete>
                         </div>
                       </div>
                       <div class="form-item-100 d-flex">
@@ -8155,7 +8258,7 @@
                         />
                       </div>
                       <div class="form-item-30">
-                        <v-select
+                        <v-autocomplete
                           :items="[ 'HTTP', 'TCP', 'UDP', 'SCTP' ]"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_node_ports_protocol')"
                           dense
@@ -8164,7 +8267,7 @@
                         />
                       </div>
                       <div class="form-item-30 d-flex">
-                        <v-select
+                        <v-autocomplete
                           :items="nodePorts"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_node_ports_node_port')"
                           dense
@@ -8218,7 +8321,7 @@
                       />
                     </div>
                     <div class="form-item-30 d-flex">
-                      <v-select
+                      <v-autocomplete
                         :items="pvcNames || []"
                         :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_volumes_pvc')"
                         dense
@@ -8370,7 +8473,7 @@
                   <div class="params-content d-flex justify-space-between">
                     <div class="form-item-100">
                       <div class="form-item-50 d-flex">
-                        <v-select
+                        <v-autocomplete
                           :items="[
                             {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_check_port'), value: 'checkPort'},
                             {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_exec'), value: 'exec'},
@@ -8379,7 +8482,7 @@
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_select_method')"
                           @change="healthCheckChange($event)"
                           :value="healthCheckInit()"
-                        ></v-select>
+                        ></v-autocomplete>
                       </div>
                       <div class="mt-4" v-if="addComponentForm.deploySpecStatic.deployHealthCheck.checkPort !== 0">
                         <v-text-field
@@ -8421,7 +8524,7 @@
                             />
                           </div>
                           <div class="form-item-40">
-                            <v-select
+                            <v-autocomplete
                               :items="['HTTP', 'HTTPS']"
                               :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check_http_get_scheme')"
                               dense
@@ -8502,7 +8605,7 @@
                     <div class="params-content d-flex justify-space-between">
                       <div class="form-item-100">
                         <div class="form-item-50 d-flex">
-                          <v-select
+                          <v-autocomplete
                             :items="[
                               {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_exec'), value: 'exec'},
                               {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get'), value: 'httpGet'},
@@ -8510,7 +8613,7 @@
                             :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_post_start_select_method')"
                             @change="lifecyclePostStartChange($event)"
                             :value="lifecyclePostStartInit()"
-                          ></v-select>
+                          ></v-autocomplete>
                         </div>
                         <div class="mt-4" v-if="addComponentForm.deploySpecStatic.lifecycle.postStart.exec !== ''">
                           <v-text-field
@@ -8543,7 +8646,7 @@
                               />
                             </div>
                             <div class="form-item-40">
-                              <v-select
+                              <v-autocomplete
                                 :items="['HTTP', 'HTTPS']"
                                 :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get_scheme')"
                                 dense
@@ -8600,7 +8703,7 @@
                     <div class="params-content d-flex justify-space-between">
                       <div class="form-item-100">
                         <div class="form-item-50 d-flex">
-                          <v-select
+                          <v-autocomplete
                             :items="[
                               {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_exec'), value: 'exec'},
                               {text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get'), value: 'httpGet'},
@@ -8608,7 +8711,7 @@
                             :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_pre_stop_select_method')"
                             @change="lifecyclePreStopChange($event)"
                             :value="lifecyclePreStopInit()"
-                          ></v-select>
+                          ></v-autocomplete>
                         </div>
                         <div class="mt-4" v-if="addComponentForm.deploySpecStatic.lifecycle.preStop.exec !== ''">
                           <v-text-field
@@ -8641,7 +8744,7 @@
                               />
                             </div>
                             <div class="form-item-40">
-                              <v-select
+                              <v-autocomplete
                                 :items="['HTTP', 'HTTPS']"
                                 :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle_http_get_scheme')"
                                 dense
@@ -8813,7 +8916,7 @@
                         />
                       </div>
                       <div class="form-item-30">
-                        <v-select
+                        <v-autocomplete
                           :items="[ 'TCP', 'UDP' ]"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_depend_services_depend_type')"
                           dense
@@ -8930,12 +9033,12 @@
                     <v-icon color="error" class="ml-4" @click="clearParams('deployConfigSettings')">mdi-minus-circle-outline</v-icon>
                   </div>
                   <div class="form-item-50">
-                    <v-select
+                    <v-autocomplete
                       :items="sourceBranchNames"
                       :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_settings_deploy_config_branch')"
                       dense
                       v-model="addComponentForm.deploySpecStatic.deployConfigBranch"
-                    ></v-select>
+                    ></v-autocomplete>
                   </div>
                   <div class="params-content" v-for="(row, i) in addComponentForm.deploySpecStatic.deployConfigSettings">
                     <div class="d-flex justify-space-between align-center mt-4" >
@@ -8962,7 +9065,7 @@
                     </div>
                     <div class="d-flex justify-space-between align-center mt-4" >
                       <div class="form-item-45">
-                        <v-select
+                        <v-autocomplete
                           :items="pvcNames || []"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_settings_pvc_name')"
                           dense
@@ -8997,7 +9100,7 @@
                   <div v-for="(patch, i) in addComponentForm.deploySpecStatic.patches">
                     <div class="params-content d-flex justify-space-between align-center mt-4">
                       <div class="form-item-40 d-flex align-center">
-                        <v-select
+                        <v-autocomplete
                           :items="[ 'deployment', 'service', 'hpa', 'ingress' ]"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_patches_resource_kind')"
                           dense
@@ -9310,7 +9413,6 @@ export default {
       },
       deleteAttachment: [],
       updateProjectForm: {
-        privileged: '',
         projectDesc: '',
         projectTeam: '',
         projectArch: '',
@@ -9349,6 +9451,16 @@ export default {
         attachmentIDs: []
       },
       updateProjectAttachment: [],
+      updateProjectEnvForm: {
+        envName: '',
+        privileged: false,
+        disabledDefs: [],
+        disabledPatches: [],
+        title: '',
+        content: '',
+        attachmentIDs: []
+      },
+      updateProjectEnvAttachment: [],
       memberAddForm: {
         username: '',
         accessLevel: ''
@@ -9507,6 +9619,7 @@ export default {
       deleteNodePortDialog: false,
       addNodePortDialog: false,
       updateProjectDialog: false,
+      updateProjectEnvDialog: false,
       deleteProjectDialog: false,
       updateSecretKeyDialog: false,
       reApplyKubernetesDialog: false,
@@ -9736,6 +9849,7 @@ export default {
       refreshTokenDialog: false,
       targetBranchName: '',
       httpMethods: [],
+      disabledDefNames: [],
     }
   },
   created () {
@@ -9780,14 +9894,12 @@ export default {
       response.data.project.projectAvailableEnvs.map(item => {
         vm.envList.push(item.envName)
       })
-      if (vm.project.projectInfo.privileged) {
-        vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_patches'), value: 'patches' })
-      }
     }).catch(error => {
       vm.errorTip(true,error.response.data.msg)
     })
     request.get('/public/about').then(response => {
       vm.httpMethods = response.data.httpMethods
+      vm.disabledDefNames = response.data.config.disabledDefNames
     }).catch(error => {
       vm.errorTip(true, error.response.data.msg);
     })
@@ -10077,7 +10189,6 @@ export default {
     },
     openUpdateProject() {
       const vm = this
-      vm.updateProjectForm.privileged = vm.project.projectInfo.privileged
       vm.updateProjectForm.projectDesc = vm.project.projectInfo.projectDesc
       vm.updateProjectForm.projectTeam = vm.project.projectInfo.projectTeam
       vm.updateProjectForm.projectArch = vm.project.projectInfo.projectArch
@@ -10119,6 +10230,37 @@ export default {
       }else{
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
       }
+    },
+    openUpdateProjectEnv(envName) {
+      const vm =this
+      vm.project.projectAvailableEnvs.forEach(pae => {
+        if (pae.envName === envName) {
+          vm.updateProjectEnvForm.envName = pae.envName
+          vm.updateProjectEnvForm.privileged = pae.privileged
+          vm.updateProjectEnvForm.disabledDefs = pae.disabledDefs
+          vm.updateProjectEnvForm.disabledPatches = pae.disabledPatches
+        }
+      })
+      if (vm.updateProjectEnvForm.envName === '') {
+        vm.errorTip(true, `envName ${envName} not exists`)
+      } else {
+        vm.updateProjectEnvDialog = true
+      }
+    },
+    updateProjectEnv() {
+      const vm =this
+      request.post(`/console/project/${vm.targetProjectName}/envUpdate`, vm.updateProjectEnvForm).then(response => {
+        vm.updateProjectEnvDialog = false
+        vm.updateProjectEnvForm.envName = ''
+        vm.updateProjectEnvForm.privileged = false
+        vm.updateProjectEnvForm.disabledDefs = []
+        vm.updateProjectEnvForm.disabledPatches = []
+        vm.successTip(true,response.msg)
+        vm.showLog(response)
+        vm.refreshList()
+      }).catch(error => {
+        vm.errorTip(true,error.response.data.msg)
+      })
     },
     deleteProject() {
       const vm = this

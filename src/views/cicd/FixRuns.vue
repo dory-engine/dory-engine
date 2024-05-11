@@ -5,7 +5,7 @@
         <v-card-title>
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="[ 'yes', 'no' ]"
                 :label="$vuetify.lang.t('$vuetify.lang_form_is_closed')"
                 class="mr-8"
@@ -13,8 +13,8 @@
                 clearable
                 v-model="fixRunsForm.closed"
                 @change="getFixRuns()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="projectItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_project_name')"
                 class="mr-8"
@@ -23,8 +23,8 @@
                 multiple
                 v-model="fixRunsForm.projectNames"
                 @blur="getFixRuns()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_pipeline_name')"
                 class="mr-8"
@@ -33,8 +33,8 @@
                 multiple
                 v-model="fixRunsForm.pipelineNames"
                 @blur="getFixRuns()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="branchItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_branch_name')"
                 class="mr-8"
@@ -43,7 +43,7 @@
                 multiple
                 v-model="fixRunsForm.branchNames"
                 @blur="getFixRuns()"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu2"

@@ -4,7 +4,7 @@
       <v-card-title>
         <v-form ref="form">
           <v-container class="d-flex flex-wrap">
-            <v-select
+            <v-autocomplete
               :items="[
                 { text: $vuetify.lang.t('$vuetify.lang_form_all'), value: '' },
                 { text: $vuetify.lang.t('$vuetify.lang_view_read'), value: 'read' },
@@ -15,8 +15,8 @@
               dense
               v-model="announcementsForm.readMode"
               @blur="getList(true)"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="pageData.levels || []"
               :label="$vuetify.lang.t('$vuetify.lang_form_announcement_level')"
               class="mr-8"
@@ -25,7 +25,7 @@
               multiple
               v-model="announcementsForm.levels"
               @blur="getList(true)"
-            ></v-select>
+            ></v-autocomplete>
             <template>
               <v-menu
                 v-model="menu2"
@@ -163,7 +163,7 @@
                 <mavon-editor v-model="announcementForm.content" :toolbars="toolbars" :placeholder="$vuetify.lang.t('$vuetify.lang_form_new_announcement_content_tip_1')" :language="language" @imgAdd="handleEditorImgAdd" @imgDel="handleEditorImgDel" @save="release" />
               </div>
               <div class="mt-6">
-                <v-select
+                <v-autocomplete
                   :items="levelList"
                   :label="$vuetify.lang.t('$vuetify.lang_form_new_announcement_level')"
                   dense

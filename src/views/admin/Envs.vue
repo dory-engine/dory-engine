@@ -7,7 +7,7 @@
             <v-container class="d-flex flex-wrap" fluid>
               <v-row>
                 <v-col cols="3">
-                  <v-select
+                  <v-autocomplete
                     :items="envNamesResponse.data.envNames"
                     v-model="pageRequest.envNames"
                     :label="$vuetify.lang.t('$vuetify.lang_form_env')"
@@ -16,10 +16,10 @@
                     multiple
                     clearable
                     @change="$observables.queryPage$.next('envNameChange')"
-                  ></v-select>
+                  ></v-autocomplete>
                 </v-col>
                 <v-col cols="3">
-                  <v-select
+                  <v-autocomplete
                     :items="tenantCodes"
                     v-model="pageRequest.tenantCodes"
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_codes')"
@@ -28,10 +28,10 @@
                     multiple
                     clearable
                     @change="$observables.queryPage$.next('envNameChange')"
-                  ></v-select>
+                  ></v-autocomplete>
                 </v-col>
                 <v-col cols="3">
-                  <v-select
+                  <v-autocomplete
                     :items="['yes', 'no']"
                     v-model="pageRequest.fromFile"
                     :label="$vuetify.lang.t('$vuetify.lang_form_from_file')"
@@ -39,7 +39,7 @@
                     small-chips
                     clearable
                     @change="$observables.queryPage$.next('envNameChange')"
-                  ></v-select>
+                  ></v-autocomplete>
                 </v-col>
 
                 <v-spacer></v-spacer>
@@ -140,7 +140,7 @@
               </div>
               <div class="d-flex justify-space-between">
                 <div class="form-item-45">
-                  <v-select
+                  <v-autocomplete
                     v-model="formValue.envK8s.tenantCode"
                     :items="tenantCodes"
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
@@ -331,7 +331,7 @@
                 </div>
                 <div class="d-flex justify-space-between mt-4">
                   <div class="form-item-45 d-flex align-center">
-                    <v-select
+                    <v-autocomplete
                       :items="[
                         {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true},
                         {text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false},
@@ -342,7 +342,7 @@
                     />
                   </div>
                   <div class="form-item-45 d-flex align-center">
-                    <v-select
+                    <v-autocomplete
                       :items="[
                         {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true},
                         {text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false},
@@ -462,7 +462,7 @@
               </div>
               <div class="params-item mt-4">
                 <div class="form-item mt-4">
-                  <v-select
+                  <v-autocomplete
                     :items="[
                       {text: $vuetify.lang.t('$vuetify.lang_form_env_k8s_pv_settings_pv_config_local'), value: 'pvConfigLocal'},
                       {text: $vuetify.lang.t('$vuetify.lang_form_env_k8s_pv_settings_pv_config_cephfs'), value: 'pvConfigCephfs'},
@@ -629,7 +629,7 @@
                 <div class="justify-space-between params-item mt-4" v-for="(archSetting, i) in formValue.envK8s.archSettings" :key="i">
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item-45">
-                      <v-select
+                      <v-autocomplete
                         :items="archNames"
                         :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_arch_settings_arch')"
                         v-model="archSetting.arch"
@@ -719,6 +719,36 @@
                   <div>
                     <v-icon color="success" class="mr-4" @click="copyProjectNodeSelector(i)">mdi-content-copy</v-icon>
                     <v-icon color="error" @click="deleteProjectNodeSelector(i)">mdi-trash-can-outline</v-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="params-item mt-4">
+                <div class="d-flex justify-space-between mt-4">
+                  <div class="form-item-45">
+                    <v-autocomplete
+                      v-model="formValue.envK8s.disabledDefs"
+                      :items="disabledDefNames"
+                      :label="$vuetify.lang.t('$vuetify.lang_form_update_project_env_disabled_defs')"
+                      dense
+                      multiple
+                      small-chips
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_update_project_env_disabled_defs_tip_1')"
+                      persistent-hint
+                    ></v-autocomplete>
+                  </div>
+                  <div class="form-item-45">
+                    <v-combobox
+                      :label="$vuetify.lang.t('$vuetify.lang_form_update_project_env_disabled_patches')"
+                      dense
+                      multiple
+                      small-chips
+                      hide-selected
+                      v-model="formValue.envK8s.disabledPatches"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_update_project_env_disabled_patches_tip_1')"
+                      persistent-hint
+                      append-icon=""
+                    >
+                    </v-combobox>
                   </div>
                 </div>
               </div>
@@ -1060,7 +1090,7 @@
                   />
                 </div>
                 <div class="form-item-45">
-                  <v-select
+                  <v-autocomplete
                     v-model="formValue.envK8s.tenantCode"
                     :items="tenantCodes"
                     :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
@@ -1251,7 +1281,7 @@
                 </div>
                 <div class="d-flex justify-space-between mt-4">
                   <div class="form-item-45 d-flex align-center">
-                    <v-select
+                    <v-autocomplete
                       :items="[
                         {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true},
                         {text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false},
@@ -1262,7 +1292,7 @@
                     />
                   </div>
                   <div class="form-item-45 d-flex align-center">
-                    <v-select
+                    <v-autocomplete
                       :items="[
                         {text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true},
                         {text: $vuetify.lang.t('$vuetify.lang_form_no'), value: false},
@@ -1382,7 +1412,7 @@
               </div>
               <div class="params-item mt-4">
                 <div class="form-item mt-4">
-                  <v-select
+                  <v-autocomplete
                     :items="[
                       {text: $vuetify.lang.t('$vuetify.lang_form_env_k8s_pv_settings_pv_config_local'), value: 'pvConfigLocal'},
                       {text: $vuetify.lang.t('$vuetify.lang_form_env_k8s_pv_settings_pv_config_cephfs'), value: 'pvConfigCephfs'},
@@ -1549,7 +1579,7 @@
                 <div class="justify-space-between params-item mt-4" v-for="(archSetting, i) in formValue.envK8s.archSettings" :key="i">
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item-45">
-                      <v-select
+                      <v-autocomplete
                         :items="archNames"
                         :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_arch_settings_arch')"
                         v-model="archSetting.arch"
@@ -1642,6 +1672,36 @@
                   </div>
                 </div>
               </div>
+              <div class="params-item mt-4">
+                <div class="d-flex justify-space-between mt-4">
+                  <div class="form-item-45">
+                    <v-autocomplete
+                      v-model="formValue.envK8s.disabledDefs"
+                      :items="disabledDefNames"
+                      :label="$vuetify.lang.t('$vuetify.lang_form_update_project_env_disabled_defs')"
+                      dense
+                      multiple
+                      small-chips
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_update_project_env_disabled_defs_tip_1')"
+                      persistent-hint
+                    ></v-autocomplete>
+                  </div>
+                  <div class="form-item-45">
+                    <v-combobox
+                      :label="$vuetify.lang.t('$vuetify.lang_form_update_project_env_disabled_patches')"
+                      dense
+                      multiple
+                      small-chips
+                      hide-selected
+                      v-model="formValue.envK8s.disabledPatches"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_update_project_env_disabled_patches_tip_1')"
+                      persistent-hint
+                      append-icon=""
+                    >
+                    </v-combobox>
+                  </div>
+                </div>
+              </div>              
               <div class="params-item mt-4">
                 <small>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_quota_config')}}</small>
                 <div class="params-item mt-4">
@@ -1982,7 +2042,7 @@
               </div>
             </div>
             <div class="form-item-100 mt-4">
-              <v-select
+              <v-autocomplete
                 :items="[ true, false ]"
                 :label="$vuetify.lang.t('$vuetify.lang_form_pv_read_only')"
                 v-model="formValue.pvDefYaml.readOnly"
@@ -1993,7 +2053,7 @@
             </div>
             <div class="params-item">
               <div class="form-item mt-4">
-                <v-select
+                <v-autocomplete
                   :items="[
                     { text: $vuetify.lang.t('$vuetify.lang_form_pv_host_path'), value: 'hostPath' },
                     { text: $vuetify.lang.t('$vuetify.lang_form_pv_cephfs'), value: 'cephfs' },
@@ -2152,7 +2212,7 @@
                     />
                   </div>
                   <div class="form-item">
-                    <v-select
+                    <v-autocomplete
                       :items="[ 'ext4', 'xfs' ]"
                       :label="$vuetify.lang.t('$vuetify.lang_form_pv_rbd_fs_type')"
                       required
@@ -2482,6 +2542,7 @@ export default {
         language: "yaml"
       },
       tenantCodes: [],
+      disabledDefNames: [],
     }
   },
   methods: {
@@ -2967,6 +3028,11 @@ export default {
     const vm = this
     vm.userToken = JSON.parse(localStorage.getItem('userObj')).userToken
     vm.userObj = JSON.parse(localStorage.getItem('userObj'))
+    request.get('/public/about').then(response => {
+      vm.disabledDefNames = response.data.config.disabledDefNames
+    }).catch(error => {
+      vm.errorTip(true, error.response.data.msg);
+    })
     request.get(`/admin/archNames`).then(response => {
       vm.archNames = response.data.archNames
     }).catch(error => {

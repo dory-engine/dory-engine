@@ -107,6 +107,7 @@
                     {{$vuetify.lang.t('$vuetify.lang_view_project_repo')}}
                   </th>
                   <th class="text-left" v-for="(item,index) in pipelineData.projectNodePorts" :key="index">
+                    <v-icon v-if="item.privileged">mdi-security</v-icon>
                     {{$vuetify.lang.t('$vuetify.lang_view_env')}}({{item.envName}})
                   </th>
                 </tr>
@@ -122,7 +123,7 @@
                     </template>
                   </td>
                   <td>
-                    <div>{{ pipelineData.projectInfo.projectNamespace }}({{ pipelineData.projectInfo.shortName }})<v-tooltip bottom><template v-slot:activator="{ on, attrs }"><v-icon color="orange" v-bind="attrs" v-on="on" v-show="pipelineData.projectInfo.privileged">mdi-security</v-icon></template><span>{{$vuetify.lang.t('$vuetify.lang_view_project_privileged')}}</span></v-tooltip></div>
+                    <div>{{ pipelineData.projectInfo.projectNamespace }}({{ pipelineData.projectInfo.shortName }})</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_project_team')}}: {{ pipelineData.projectInfo.projectTeam }}</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_project_arch')}}: {{ pipelineData.projectInfo.projectArch }}</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_tenant_code')}}: {{ pipelineData.tenantCode }}</div>
@@ -191,7 +192,7 @@
             {{$vuetify.lang.t('$vuetify.lang_view_runs_list')}}
             <v-form>
               <v-container class="d-flex flex-wrap">
-                <v-select
+                <v-autocomplete
                   :items="durationItems"
                   :label="$vuetify.lang.t('$vuetify.lang_form_duration')"
                   class="mr-8"
@@ -199,8 +200,8 @@
                   clearable
                   v-model="runsForm.duration"
                   @change="getRuns()"
-                ></v-select>
-                <v-select
+                ></v-autocomplete>
+                <v-autocomplete
                   :items="statusItems"
                   :label="$vuetify.lang.t('$vuetify.lang_form_status')"
                   class="mr-8"
@@ -209,7 +210,7 @@
                   multiple
                   v-model="runsForm.statusResults"
                   @blur="getRuns()"
-                ></v-select>
+                ></v-autocomplete>
                 <template>
                   <v-menu
                     v-model="menu2"
@@ -554,10 +555,10 @@ export default {
 .v-text-field {
   min-width: 300px;
 }
-.mine-css .v-select {
+.mine-css .v-autocomplete {
   width: auto;
 }
-.v-select {
+.v-autocomplete {
   font-size: 14px;
 }
 .steps-switch {

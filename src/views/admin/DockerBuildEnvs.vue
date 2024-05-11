@@ -4,7 +4,7 @@
       <v-card-title>
         <v-form>
           <v-container class="d-flex flex-wrap" fluid>
-            <v-select
+            <v-autocomplete
               :items="buildEnvNames"
               :label="$vuetify.lang.t('$vuetify.lang_form_build_env_names')"
               dense
@@ -13,8 +13,8 @@
               class="mr-8"
               v-model="pageRequest.buildEnvNames"
               @change="getList(true)"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="tenantCodes"
               :label="$vuetify.lang.t('$vuetify.lang_form_tenant_codes')"
               dense
@@ -23,8 +23,8 @@
               class="mr-8"
               v-model="pageRequest.tenantCodes"
               @change="getList(true)"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="['yes', 'no']"
               :label="$vuetify.lang.t('$vuetify.lang_form_from_file')"
               dense
@@ -33,7 +33,7 @@
               clearable
               v-model="pageRequest.fromFile"
               @change="getList(true)"
-            ></v-select>
+            ></v-autocomplete>
             <v-btn color="primary" @click="openAddDockerBuildEnvs()">{{ $vuetify.lang.t('$vuetify.lang_menu_new_docker_build_env') }}</v-btn>
           </v-container>
         </v-form>
@@ -158,7 +158,7 @@
                 />
               </div>
               <div class="form-item-45 d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="addDockerBuildEnvsForm.tenantCode"
                   :items="tenantCodes"
@@ -169,7 +169,7 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -193,7 +193,7 @@
                 </v-text-field>
               </div>
               <div class="form-item-45 d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_build_arches')"
                   v-model="addDockerBuildEnvsForm.buildArches"
                   :items="archNames"
@@ -209,7 +209,7 @@
                     <div>{{$vuetify.lang.t('$vuetify.lang_form_docker_build_env_build_arches_tip_1')}}</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_form_docker_build_env_build_arches_tip_2')}}</div>
                   </template>
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -237,7 +237,7 @@
             </div>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_mount_home_dir')"
                   v-model="addDockerBuildEnvsForm.mountHomeDir"
                   :items="[
@@ -247,10 +247,10 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_mount_home_dir_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_enable_proxy')"
                   v-model="addDockerBuildEnvsForm.enableProxy"
                   :items="[
@@ -260,7 +260,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_enable_proxy_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
                 <v-combobox
@@ -368,7 +368,7 @@
                 />
               </div>
               <div class="form-item-45 d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="updateDockerBuildEnvsForm.tenantCode"
                   :items="tenantCodes"
@@ -379,7 +379,7 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -403,7 +403,7 @@
                 </v-text-field>
               </div>
               <div class="form-item-45 d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_build_arches')"
                   v-model="updateDockerBuildEnvsForm.buildArches"
                   :items="archNames"
@@ -419,7 +419,7 @@
                     <div>{{$vuetify.lang.t('$vuetify.lang_form_docker_build_env_build_arches_tip_1')}}</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_form_docker_build_env_build_arches_tip_2')}}</div>
                   </template>
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -447,7 +447,7 @@
             </div>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_mount_home_dir')"
                   v-model="updateDockerBuildEnvsForm.mountHomeDir"
                   :items="[
@@ -457,10 +457,10 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_mount_home_dir_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_enable_proxy')"
                   v-model="updateDockerBuildEnvsForm.enableProxy"
                   :items="[
@@ -470,7 +470,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_enable_proxy_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
                 <v-combobox

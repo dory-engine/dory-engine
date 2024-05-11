@@ -177,25 +177,6 @@ export default {
             return <span>
               <div>
                 {config.item.projectInfo.projectNamespace} (<span>{config.item.projectInfo.shortName}</span>)
-                <v-tooltip
-                  bottom={true}
-                  scopedSlots={{
-                    activator: ({on, attrs}) => {
-                      return <v-icon
-                        color='orange'
-                        vShow={config.item.projectInfo.privileged}
-                        {...{
-                          props: attrs,
-                          on
-                        }}
-                      >
-                        mdi-security
-                      </v-icon>
-                    }
-                  }}
-                >
-                  <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_privileged')}</div>
-                </v-tooltip>
               </div>
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_team')}: {config.item.projectInfo.projectTeam}</div>
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_arch')}: {config.item.projectInfo.projectArch}</div>
@@ -243,7 +224,7 @@ export default {
                       </div>
                   })
                   return <div class="mt-4">
-                    <v-chip small>{item.envName}</v-chip>
+                    <v-chip small>{(item.privileged ? <v-icon>mdi-security</v-icon> : null)}{item.envName}</v-chip>
                     { envNodePorts }
                   </div>
                 })
@@ -306,7 +287,7 @@ export default {
         <SearchForm
           slot="top"
           formEls={[
-            <VSelect
+            <VAutocomplete
               v-model={vm.searchForm.projectNames}
               items={vm.projectNames}
               menu-props="{ maxHeight: '400' }"
@@ -329,7 +310,7 @@ export default {
                 'click:clear': (value) => {}
               }}
             >
-            </VSelect>,
+            </VAutocomplete>,
             <VTextField
               label={vuetify.preset.lang.t('$vuetify.lang_form_project_team')}
               v-model={vm.searchForm.projectTeam}

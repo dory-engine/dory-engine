@@ -38,6 +38,9 @@
             "dockerRunAsUid": 1000,
             "dockerBuildHomeDir": "/home/dory",
             "paramGitFileName": ".dory-git-param.yaml",
+            "disabledDefNames": [
+                "xxx",
+            ],
             "frontend": {
                 "appBackGroundImage": "/assets/frontend/default/background.jpg",
                 "appDesc": "Make DevOps Easy",
@@ -58,6 +61,7 @@
         "featuresAvailable": {
             "meshAvailable": true
         },
+        "freeTrial": false,
         "httpMethods": [
             "xxx",
         ]

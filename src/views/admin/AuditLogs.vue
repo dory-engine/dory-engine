@@ -18,7 +18,7 @@
                 ></v-autocomplete>
               </v-col>
               <v-col>
-                <v-select
+                <v-autocomplete
                   :items="projectNamesResponse.data.projectNames"
                   :label="$vuetify.lang.t('$vuetify.lang_form_project_name')"
                   dense
@@ -27,10 +27,10 @@
                   clearable
                   v-model="pageRequest.projectNames"
                   @change="$observables.queryPage$.next('projectNamesChange')"
-                ></v-select>
+                ></v-autocomplete>
               </v-col>
               <v-col cols="3">
-                <v-select
+                <v-autocomplete
                   :items="[ 'SUCCESS', 'FAIL' ]"
                   :label="$vuetify.lang.t('$vuetify.lang_form_status')"
                   dense
@@ -39,27 +39,27 @@
                   clearable
                   v-model="pageRequest.statusResults"
                   @change="$observables.queryPage$.next('statusResultsChange')"
-                ></v-select>
+                ></v-autocomplete>
               </v-col>
               <v-col cols="3">
-                <v-select
+                <v-autocomplete
                   :items="[ 'yes', 'no' ]"
                   :label="$vuetify.lang.t('$vuetify.lang_form_with_admin_log')"
                   dense
                   clearable
                   v-model="pageRequest.withAdminLog"
                   @change="$observables.queryPage$.next('withAdminLogChange')"
-                ></v-select>
+                ></v-autocomplete>
               </v-col>
               <v-col cols="3">
-                <v-select
+                <v-autocomplete
                   :items="[ 'yes', 'no' ]"
                   :label="$vuetify.lang.t('$vuetify.lang_form_with_apply_ticket')"
                   dense
                   clearable
                   v-model="pageRequest.withApplyTicket"
                   @change="$observables.queryPage$.next('withApplyTicketChange')"
-                ></v-select>
+                ></v-autocomplete>
               </v-col>
               <v-col cols="3">
                 <v-text-field

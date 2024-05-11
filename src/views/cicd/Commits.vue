@@ -5,7 +5,7 @@
         <v-card-title>
           <v-form ref="form">
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="projectItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_project_name')"
                 class="mr-8"
@@ -14,8 +14,8 @@
                 multiple
                 v-model="commitsForm.projectNames"
                 @blur="commitsSearch()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_pipeline_name')"
                 class="mr-8"
@@ -24,7 +24,7 @@
                 multiple
                 v-model="commitsForm.pipelineNames"
                 @blur="commitsSearch()"
-              ></v-select>
+              ></v-autocomplete>
               <v-combobox
                 :label="$vuetify.lang.t('$vuetify.lang_form_run_name')"
                 class="mr-8"
@@ -36,7 +36,7 @@
                 @blur="commitsSearch()"
               >
               </v-combobox>
-              <v-select
+              <v-autocomplete
                 :items="branchItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_branch_name')"
                 class="mr-8"
@@ -45,7 +45,7 @@
                 multiple
                 v-model="commitsForm.branchNames"
                 @blur="commitsSearch()"
-              ></v-select>
+              ></v-autocomplete>
               <v-combobox
                 :label="$vuetify.lang.t('$vuetify.lang_form_commit_hash')"
                 class="mr-8"

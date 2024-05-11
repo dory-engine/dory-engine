@@ -3,11 +3,13 @@ import { set } from 'lodash'
 import { get, cloneDeep } from 'lodash/fp'
 import { DateTime } from 'luxon'
 import DataTable from '@/lib/ui-lib/components/DataTable'
+import Operations from '@/lib/ui-lib/components/Operations'
 import request from '@/utils/request'
 import {vuetify} from '@/plugins/vuetify'
 export default {
   inject: ['successTip', 'errorTip', 'warnTip'],
   name: 'PipelinesDataTable',
+  components: { Operations },
   functional: true,
   props: ['projectName', 'pipelines', 'opsBatchDefs', 'goRun', 'openPipelineDef', 'goProjectDef'],
   render (createElement, context) {
@@ -82,38 +84,25 @@ export default {
       var opts = []
       context.props.opsBatchDefs.forEach((row, i) => {
         opts.push(
-          <v-list-item link dense>
-            <v-list-item-title
-              vOn:click={() => {
-                request.post(`/cicd/batch/${context.props.projectName}/${row.opsBatchName}`).then(response => {
-                  context.props.goRun(response.data.runName)
-                }).catch(_ => {})
-              }}
-            >
-              { row.opsBatchDesc }
-            </v-list-item-title>
-          </v-list-item>
+          {
+            text: row.opsBatchDesc,
+            onClick: () => {
+              request.post(`/cicd/batch/${context.props.projectName}/${row.opsBatchName}`).then(response => {
+                context.props.goRun(response.data.runName)
+              }).catch(_ => {})
+            }
+          }
         )
       })
       return <div>
         <span class="mr-2" vShow={config.item.branchName === ''}>
-          <v-menu offset-y={true} vShow={config.item.branchName === ''} scopedSlots={{ 
-              activator:({on, attrs}) =>{
-                return <v-btn color="green" dark small
-                {...{
-                  props: attrs,
-                  on: on,
-                }} 
-                >
-                  {vuetify.preset.lang.t('$vuetify.lang_menu_execute_batch')}
-                </v-btn>
-              } 
-            }}
+          <Operations
+            color={'green'}
+            dark={true}
+            operations={opts}
+            optButtonText={vuetify.preset.lang.t('$vuetify.lang_menu_execute_batch')}
           >
-            <v-list>
-              {opts}
-            </v-list>
-          </v-menu>
+          </Operations>
         </span>
         <VBtn color={config.item.errMsgPipelineDef === '' ? 'primary' : 'error'} small class="my-1 mr-2" vShow={config.item.branchName} vOn:click_stop={() => {
           context.props.openPipelineDef(context.props.projectName, config.item.branchName)

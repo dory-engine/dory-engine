@@ -81,7 +81,7 @@
           {{$vuetify.lang.t('$vuetify.lang_view_steps')}}
           <v-form>
             <v-container class="d-flex flex-wrap">
-              <v-select
+              <v-autocomplete
                 :items="pipelineItems"
                 :label="$vuetify.lang.t('$vuetify.lang_view_pipeline_name')"
                 class="mr-8"
@@ -90,8 +90,8 @@
                 multiple
                 v-model="stepsForm.pipelineNames"
                 @blur="stepsSearch()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="statusItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_status')"
                 class="mr-8"
@@ -100,8 +100,8 @@
                 multiple
                 v-model="stepsForm.statusResults"
                 @blur="stepsSearch()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="stepItems"
                 :label="$vuetify.lang.t('$vuetify.lang_view_step_action')"
                 class="mr-8"
@@ -110,8 +110,8 @@
                 multiple
                 v-model="stepsForm.stepActions"
                 @blur="stepsSearch()"
-              ></v-select>
-              <v-select
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="durationItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_duration')"
                 class="mr-8"
@@ -119,7 +119,7 @@
                 clearable
                 v-model="stepsForm.duration"
                 @change="stepsSearch()"
-              ></v-select>
+              ></v-autocomplete>
               <template>
                 <v-menu
                   v-model="menu2"

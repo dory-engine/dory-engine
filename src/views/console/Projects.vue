@@ -25,6 +25,7 @@ export default {
       tableLoading: true,
       repoNames: {},
       archNames: [],
+      disabledDefNames: [],
       disableBtn: false,
       projectAttachment: [],
       targetProjectName: '',
@@ -66,6 +67,7 @@ export default {
       newEnvSelectList: [],
       updateProjectDialog: false,
       deleteProjectDialog: false,
+      updateProjectEnvDialog: false,
       addUser: false,
       handleEnvType: '0',
       nodePortDeleteForm: {
@@ -102,7 +104,6 @@ export default {
       },
       deleteAttachment: [],
       updateProjectForm: {
-        privileged: '',
         projectDesc: '',
         projectTeam: '',
         projectArch: '',
@@ -141,6 +142,16 @@ export default {
         attachmentIDs: []
       },
       updateProjectAttachment: [],
+      updateProjectEnvForm: {
+        envName: '',
+        privileged: false,
+        disabledDefs: [],
+        disabledPatches: [],
+        title: '',
+        content: '',
+        attachmentIDs: []
+      },
+      updateProjectEnvAttachment: [],
       otherApplyForm: {
         title: '',
         content: '',
@@ -153,6 +164,11 @@ export default {
   created () {
     const vm = this
     vm.userToken = JSON.parse(localStorage.getItem('userObj')).userToken
+    request.get('/public/about').then(response => {
+      vm.disabledDefNames = response.data.config.disabledDefNames
+    }).catch(error => {
+      vm.errorTip(true, error.response.data.msg);
+    })
     request.get(`/console/archNames`).then(response => {
       vm.archNames = response.data.archNames
     }).catch(error => {
@@ -399,25 +415,6 @@ export default {
             return <span>
               <div>
                 {item.projectInfo.projectNamespace} (<span>{item.projectInfo.shortName}</span>)
-                <v-tooltip
-                  bottom={true}
-                  scopedSlots={{
-                    activator: ({on, attrs}) => {
-                      return <v-icon
-                        color='orange'
-                        vShow={item.projectInfo.privileged}
-                        {...{
-                          props: attrs,
-                          on
-                        }}
-                      >
-                        mdi-security
-                      </v-icon>
-                    }
-                  }}
-                >
-                  <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_privileged')}</div>
-                </v-tooltip>
               </div>
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_team')}: {item.projectInfo.projectTeam}</div>
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_arch')}: {item.projectInfo.projectArch}</div>
@@ -493,6 +490,22 @@ export default {
                           vm.targetProjectName = item.projectInfo.projectName
                           vm.nodePortAddForm.envName = i.envName
                         } }, 
+                        { text: vuetify.preset.lang.t('$vuetify.lang_menu_update_project_env'), onClick: () => {
+                          vm.targetProjectName = item.projectInfo.projectName
+                          item.projectAvailableEnvs.forEach(pae => {
+                          if (pae.envName === i.envName) {
+                              vm.updateProjectEnvForm.envName = pae.envName
+                              vm.updateProjectEnvForm.privileged = pae.privileged
+                              vm.updateProjectEnvForm.disabledDefs = pae.disabledDefs
+                              vm.updateProjectEnvForm.disabledPatches = pae.disabledPatches
+                            }
+                          })
+                          if (vm.updateProjectEnvForm.envName === '') {
+                            vm.errorTip(true, `envName ${i.envName} not exists`)
+                          } else {
+                            vm.updateProjectEnvDialog = true
+                          }
+                        } },
                         { text: vuetify.preset.lang.t('$vuetify.lang_menu_apply_delete_project_envs'), onClick: () => { 
                           vm.deleteEnvDialog = true
                           vm.confirmValue = ''
@@ -503,6 +516,7 @@ export default {
                       ]}
                       color="yellow"
                       optButtonText={i.envName}
+                      optButtonIcon={(i.privileged ? 'mdi-security' : '')}
                     >
                     </Operations>
                     { envNodePorts }
@@ -528,7 +542,6 @@ export default {
                     vm.updateProjectDialog = true
                     vm.targetProjectName = item.projectInfo.projectName
                     vm.targetProjectRepo = item.projectRepo
-                    vm.updateProjectForm.privileged = item.projectInfo.privileged
                     vm.updateProjectForm.projectDesc = item.projectInfo.projectDesc
                     vm.updateProjectForm.projectTeam = item.projectInfo.projectTeam
                     vm.updateProjectForm.projectArch = item.projectInfo.projectArch
@@ -558,7 +571,7 @@ export default {
             <VContainer fluid>
               <VRow class="flex-wrap">
                 <VCol cols="4">
-                  <VSelect
+                  <VAutocomplete
                     v-model={vm.projectsForm.projectNames}
                     items={vm.projectList}
                     label={vuetify.preset.lang.t('$vuetify.lang_form_project_name')}
@@ -1005,13 +1018,13 @@ export default {
             <VForm ref="envDeleteRef">
               <small>{vuetify.preset.lang.t('$vuetify.lang_form_required_tip')}</small>
               <VCol cols="12">
-                <v-select
+                <v-autocomplete
                   v-model={ vm.handleEnvType }
                   items={ [{text: vuetify.preset.lang.t('$vuetify.lang_menu_apply_delete_project_envs'), value: '0'}, {text: vuetify.preset.lang.t('$vuetify.lang_menu_apply_delete_project_envs_all'), value: '1'}] }                  
                   label={vuetify.preset.lang.t('$vuetify.lang_form_delete_project_envs_select')}
                   rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
                   dense
-                ></v-select>
+                ></v-autocomplete>
               </VCol>
               <VCol cols="12">
                 <VTextField
@@ -1129,6 +1142,135 @@ export default {
                     }
                   }
                 }
+              }}
+            >
+              {vuetify.preset.lang.t('$vuetify.lang_menu_confirm')}
+            </VBtn>
+          </VCardActions>
+        </VCard>
+      </VDialog>
+      <VDialog
+        v-model={vm.updateProjectEnvDialog}
+        max-width="600px"
+        persistent
+      >
+        <VCard>
+          <VCardTitle>
+            <span class="headline">{vuetify.preset.lang.t('$vuetify.lang_form_update_project_env', vm.updateProjectEnvForm.envName)}</span>
+          </VCardTitle>
+          <VCardText>
+            <v-form ref="updateProjectEnvRef">
+              <small>{vuetify.preset.lang.t('$vuetify.lang_form_required_tip')}</small>
+              <v-container>
+                <v-row>
+                  <v-col cols="12">
+                    <v-autocomplete
+                      v-model={vm.updateProjectEnvForm.privileged}
+                      items={[
+                        {text: vuetify.preset.lang.t('$vuetify.lang_form_yes'), value: true},
+                        {text: vuetify.preset.lang.t('$vuetify.lang_form_no'), value: false},
+                      ]}
+                      label={vuetify.preset.lang.t('$vuetify.lang_form_update_project_env_privileged')}
+                      hint={vuetify.preset.lang.t('$vuetify.lang_form_update_project_env_privileged_tip_1')}
+                      persistent-hint
+                      dense
+                    ></v-autocomplete>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-autocomplete
+                      v-model={vm.updateProjectEnvForm.disabledDefs}
+                      items={vm.disabledDefNames}
+                      label={vuetify.preset.lang.t('$vuetify.lang_form_update_project_env_disabled_defs')}
+                      dense
+                      multiple
+                      small-chips
+                      hint={vuetify.preset.lang.t('$vuetify.lang_form_update_project_env_disabled_defs_tip_1')}
+                      persistent-hint
+                    ></v-autocomplete>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-combobox
+                      label={vuetify.preset.lang.t('$vuetify.lang_form_update_project_env_disabled_patches')}
+                      dense
+                      multiple
+                      small-chips
+                      hide-selected
+                      v-model={vm.updateProjectEnvForm.disabledPatches}
+                      hint={vuetify.preset.lang.t('$vuetify.lang_form_update_project_env_disabled_patches_tip_1')}
+                      persistent-hint
+                      append-icon=""
+                    >
+                    </v-combobox>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      label={vuetify.preset.lang.t('$vuetify.lang_form_apply_title')}
+                      required
+                      dense
+                      v-model={vm.updateProjectEnvForm.title}
+                      rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
+                      hint={vuetify.preset.lang.t('$vuetify.lang_form_apply_title_tip_1')}
+                      persistent-hint
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-textarea
+                      label={vuetify.preset.lang.t('$vuetify.lang_form_apply_content')}
+                      required
+                      dense
+                      v-model={vm.updateProjectEnvForm.content}
+                      rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
+                      hint={vuetify.preset.lang.t('$vuetify.lang_form_apply_content_tip_1')}
+                      persistent-hint
+                    ></v-textarea>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-file-input
+                      label={vuetify.preset.lang.t('$vuetify.lang_form_apply_attachments')}
+                      required
+                      dense
+                      multiple
+                      small-chips
+                      show-size
+                      v-model={vm.updateProjectEnvAttachment}
+                      hint={vuetify.preset.lang.t('$vuetify.lang_form_apply_attachments_tip_1')}
+                      persistent-hint
+                    ></v-file-input>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
+          </VCardText>
+          <VCardActions>
+            <VSpacer></VSpacer>
+            <VBtn
+              color="blue darken-1"
+              text
+              vOn:click={() => {
+                vm.$refs.updateProjectEnvRef.resetValidation()
+                vm.updateProjectEnvDialog = false
+              }}
+            >
+              {vuetify.preset.lang.t('$vuetify.lang_menu_cancel')}
+            </VBtn>
+            <VBtn
+              color="blue darken-1"
+              text
+              vOn:click={() => {
+                vm.tableLoading = true
+                request.post(`/console/project/${vm.targetProjectName}/envUpdate`, vm.updateProjectEnvForm).then(response => {
+                  vm.updateProjectEnvDialog = false
+                  vm.updateProjectEnvForm.envName = ''
+                  vm.updateProjectEnvForm.privileged = false
+                  vm.updateProjectEnvForm.disabledDefs = []
+                  vm.updateProjectEnvForm.disabledPatches = []
+                  vm.successTip(true,response.msg)
+                  vm.showLog(response)
+                  vm.updateOptions()
+                }).catch(error => {
+                  vm.tableLoading = false
+                  vm.errorTip(true, error.response.data.msg)
+                })
               }}
             >
               {vuetify.preset.lang.t('$vuetify.lang_menu_confirm')}
@@ -1269,7 +1411,7 @@ export default {
               <VContainer>
                 <VRow>
                   <VCol cols="12">
-                    <v-select
+                    <v-autocomplete
                       label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_envs_env_names')}
                       items={ vm.newEnvSelectList }
                       multiple
@@ -1277,7 +1419,7 @@ export default {
                       dense
                       v-model={ vm.envAddForm.envNames }
                       rules={[v => v.length > 0 || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
-                    ></v-select>
+                    ></v-autocomplete>
                   </VCol>
                   <VCol cols="12">
                     <VTextField
@@ -1391,21 +1533,6 @@ export default {
               <VContainer>
                 <VRow>
                   <VCol cols="12">
-                    <VSelect
-                      label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_privileged')}
-                      dense
-                      vModel={vm.updateProjectForm.privileged}
-                      items={
-                        [
-                          {text: vuetify.preset.lang.t('$vuetify.lang_form_yes'), value: true},
-                          {text: vuetify.preset.lang.t('$vuetify.lang_form_no'), value: false},
-                        ]
-                      }
-                      hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_privileged_tip_1')}
-                      persistent-hint
-                    ></VSelect>
-                  </VCol>
-                  <VCol cols="12">
                     <VTextField
                       label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_desc')}
                       required
@@ -1428,7 +1555,7 @@ export default {
                     ></VTextField>
                   </VCol>
                   <VCol cols="12">
-                    <VSelect
+                    <VAutocomplete
                       label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_arch')}
                       required
                       dense
@@ -1437,7 +1564,7 @@ export default {
                       rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
                       hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_arch_tip_1')}
                       persistent-hint
-                    ></VSelect>
+                    ></VAutocomplete>
                   </VCol>
                   <VCol
                     cols="12"
@@ -1664,7 +1791,7 @@ export default {
                     cols="12"
                     v-show={vm.targetProjectRepo.artifactRepoType === 'http'}
                   >
-                    <VSelect
+                    <VAutocomplete
                       label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_artifact_repo_http_upload_method')}
                       dense
                       vModel={vm.updateProjectForm.artifactRepoHttpUpload.method}
@@ -1673,13 +1800,13 @@ export default {
                       }
                       hint={vuetify.preset.lang.t('$vuetify.lang_form_update_project_leave_it_empty')}
                       persistent-hint
-                    ></VSelect>
+                    ></VAutocomplete>
                   </VCol>
                   <VCol
                     cols="12"
                     v-show={vm.targetProjectRepo.artifactRepoType === 'http'}
                   >
-                    <VSelect
+                    <VAutocomplete
                       label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_artifact_repo_http_upload_insecure')}
                       dense
                       vModel={vm.updateProjectForm.artifactRepoHttpUpload.insecure}
@@ -1691,7 +1818,7 @@ export default {
                       }
                       hint={vuetify.preset.lang.t('$vuetify.lang_form_update_project_leave_it_empty')}
                       persistent-hint
-                    ></VSelect>
+                    ></VAutocomplete>
                   </VCol>
                   <VCol
                     cols="12"
@@ -1709,7 +1836,7 @@ export default {
                     cols="12"
                     v-show={vm.targetProjectRepo.artifactRepoType === 'http'}
                   >
-                    <VSelect
+                    <VAutocomplete
                       label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_artifact_repo_http_download_insecure')}
                       dense
                       vModel={vm.updateProjectForm.artifactRepoHttpDownload.insecure}
@@ -1721,7 +1848,7 @@ export default {
                       }
                       hint={vuetify.preset.lang.t('$vuetify.lang_form_update_project_leave_it_empty')}
                       persistent-hint
-                    ></VSelect>
+                    ></VAutocomplete>
                   </VCol>
                   <VCol cols="12">
                     <VTextField
@@ -1836,7 +1963,7 @@ export default {
               <VContainer>
                 <VRow>
                   <VCol cols="12">
-                    <VSelect
+                    <VAutocomplete
                       vModel={vm.deleteProjectForm.gitRepoDelete}
                       items={[
                         {text: vuetify.preset.lang.t('$vuetify.lang_form_yes'), value: true},
@@ -1844,10 +1971,10 @@ export default {
                       ]}
                       label={vuetify.preset.lang.t('$vuetify.lang_form_delete_project_git_repo_delete')}
                       dense
-                    ></VSelect>
+                    ></VAutocomplete>
                   </VCol>
                   <VCol cols="12">
-                    <VSelect
+                    <VAutocomplete
                       vModel={vm.deleteProjectForm.scanCodeRepoDelete}
                       items={[
                         {text: vuetify.preset.lang.t('$vuetify.lang_form_yes'), value: true},
@@ -1855,10 +1982,10 @@ export default {
                       ]}
                       label={vuetify.preset.lang.t('$vuetify.lang_form_delete_project_scan_code_repo_delete')}
                       dense
-                    ></VSelect>
+                    ></VAutocomplete>
                   </VCol>
                   <VCol cols="12">
-                    <VSelect
+                    <VAutocomplete
                       vModel={vm.deleteProjectForm.imageRepoDelete}
                       items={[
                         {text: vuetify.preset.lang.t('$vuetify.lang_form_yes'), value: true},
@@ -1866,10 +1993,10 @@ export default {
                       ]}
                       label={vuetify.preset.lang.t('$vuetify.lang_form_delete_project_image_repo_delete')}
                       dense
-                    ></VSelect>
+                    ></VAutocomplete>
                   </VCol>
                   <VCol cols="12">
-                    <VSelect
+                    <VAutocomplete
                       vModel={vm.deleteProjectForm.artifactRepoDelete}
                       items={[
                         {text: vuetify.preset.lang.t('$vuetify.lang_form_yes'), value: true},
@@ -1877,10 +2004,10 @@ export default {
                       ]}
                       label={vuetify.preset.lang.t('$vuetify.lang_form_delete_project_artifact_repo_delete')}
                       dense
-                    ></VSelect>
+                    ></VAutocomplete>
                   </VCol>
                   <VCol cols="12">
-                    <VSelect
+                    <VAutocomplete
                       vModel={vm.deleteProjectForm.namespaceDelete}
                       items={[
                         {text: vuetify.preset.lang.t('$vuetify.lang_form_yes'), value: true},
@@ -1888,7 +2015,7 @@ export default {
                       ]}
                       label={vuetify.preset.lang.t('$vuetify.lang_form_delete_project_namespace_delete')}
                       dense
-                    ></VSelect>
+                    ></VAutocomplete>
                   </VCol>
                   <VCol cols="12">
                     <VTextField

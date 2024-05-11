@@ -23,6 +23,7 @@
       - [\[POST\] api/admin/project/:projectName/envAdd admin为项目分配新环境接口](#post-apiadminprojectprojectnameenvadd-admin为项目分配新环境接口)
       - [\[POST\] api/admin/project/:projectName/envDelete admin为项目回收环境接口](#post-apiadminprojectprojectnameenvdelete-admin为项目回收环境接口)
       - [\[POST\] api/admin/project/:projectName/envDeleteAll admin为项目回收环境并清理名字空间接口](#post-apiadminprojectprojectnameenvdeleteall-admin为项目回收环境并清理名字空间接口)
+      - [\[POST\] api/admin/project/:projectName/envUpdate admin修改项目环境设置接口](#post-apiadminprojectprojectnameenvupdate-admin修改项目环境设置接口)
       - [\[POST\] api/admin/project/:projectName/refreshToken admin为项目更新所有密钥接口](#post-apiadminprojectprojectnamerefreshtoken-admin为项目更新所有密钥接口)
       - [\[POST\] api/admin/project/:projectName/reApply admin重新应用项目配置到所有可用环境](#post-apiadminprojectprojectnamereapply-admin重新应用项目配置到所有可用环境)
       - [\[POST\] api/admin/project/:projectName/cleanGitRepo admin清理临时代码仓库](#post-apiadminprojectprojectnamecleangitrepo-admin清理临时代码仓库)
@@ -351,7 +352,6 @@
                     "projectNamespace" : "test-project1",
                     "projectShortName" : "tp1",
                     "shortName" : "tp1",
-                    "privileged": false,
                     "projectDesc" : "测试-项目1",
                     "projectTeam" : "测试团队1",
                     "projectArch" : "amd64",
@@ -374,9 +374,18 @@
                     "scanCodeRepo": "http://vm.dory.cookeem.com:30009/projects",
                     "scanCodeRepoName": "xxx"
                 },
+                "projectAvailableEnvs": [
+                    {
+                        "envName" : "test",
+                        "privileged": false,
+                        "disabledDefs": [],
+                        "disabledPatches": [],
+                    }
+                ],
                 "projectNodePorts": [
                     {
                         "envName": "devops",
+                        "privileged": false,
                         "envNodePorts": [
                             {
                                 "isDefault": true,
@@ -444,7 +453,6 @@
         "projectTeam": "xxx",
         "projectArch": "xxx",
         "defaultPv": "xxx",
-        "privileged": false,
     },
     "gitRepoSetting": {
         "gitRepoType": "xxx",
@@ -532,7 +540,6 @@
                 "projectNamespace" : "test-project1",
                 "projectShortName" : "tp1",
                 "shortName" : "tp1",
-                "privileged": false,
                 "projectDesc" : "测试-项目1",
                 "projectTeam" : "测试团队1",
                 "projectArch" : "amd64",
@@ -558,6 +565,7 @@
             "projectNodePorts": [
                 {
                     "envName": "devops",
+                    "privileged": false,
                     "envNodePorts": [
                         {
                             "isDefault": true,
@@ -573,6 +581,9 @@
             "projectAvailableEnvs": [
                 {
                     "envName" : "test",
+                    "privileged": false,
+                    "disabledDefs": [],
+                    "disabledPatches": [],
                     "nodeNames": [
                         "vm-dory"
                     ],
@@ -958,7 +969,6 @@
     "projectDesc": "xxx",
     "projectTeam": "xxx",
     "projectArch": "xxx",
-    "privileged": false,
     "gitRepoUser": "xxx",
     "gitRepoToken": "xxx",
     "gitRepoPassword": "xxx",
@@ -1095,6 +1105,35 @@
 ```json
 {
     "envName": "xxx",
+}
+```
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {
+        "auditID": "xxx",
+        "withAdminLog": true,
+    }
+}
+```
+
+#### [POST] api/admin/project/:projectName/envUpdate admin修改项目环境设置接口
+
+- request请求内容
+```json
+{
+    "envName": "xxx",
+    "privileged": false,
+    "disabledDefs": [
+        "xxx",
+    ],
+    "disabledPatches": [
+        "xxx",
+    ],
 }
 ```
 
@@ -4137,6 +4176,12 @@ token: "xxx"
 				"envDesc": "prod",
                 "tenantCode": "xxx",
                 "isFromFile": false,
+                "disabledDefs": [
+                    "xxx",
+                ],
+                "disabledPatches": [
+                    "xxx",
+                ],
 				"host": "xxx",
 				"viewHost": "xxx",
 				"port": 6443,
@@ -4502,6 +4547,14 @@ quotaConfig:
     - name: nvidia.com/gpu
       # 参数值
       value: "1"
+# 禁止修改哪些容器部署设置
+disabledDefs:
+- nodeName
+- nodeSelector
+# 禁止通过patches设置哪些容器部署参数
+disabledPatches:
+- affinity
+- dnsConfig
 ```
 
 - response响应内容
@@ -4532,6 +4585,12 @@ quotaConfig:
 			"envDesc": "",
             "tenantCode": "xxx",
             "isFromFile": false,
+            "disabledDefs": [
+                "xxx",
+            ],
+            "disabledPatches": [
+                "xxx",
+            ],
 			"host": "xxx",
 			"viewHost": "xxx",
 			"port": 6443,
@@ -5264,6 +5323,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         - envAdd: 新增项目环境
         - envDelete: 删除项目环境
         - envDeleteAll: 删除项目环境并清理名字空间
+        - envUpdate: 更新项目环境
         - projectAdd: 新增项目
         - projectDelete: 删除项目
         - projectDeleteAll: 删除项目并清理名字空间
@@ -5449,6 +5509,11 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
             - envName: "test123"（不可修改）
         - envDeleteAll: 删除项目环境并清理名字空间
             - envName: "test123"（不可修改）
+        - envUpdate: 更新项目环境
+            - envName: "test123"（不可修改）
+            - privileged: false（可修改）
+            - disabledDefs: []（可修改）
+            - disabledPatches: []（可修改）
         - projectAdd: 新增项目
             - projectName: "test-project1"（可修改）
             - projectDesc: "测试-项目1"（可修改）

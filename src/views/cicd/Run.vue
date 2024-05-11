@@ -88,7 +88,7 @@
                   {{ inputConfigMap.data.desc }}
                 </v-col>
                 <v-col cols="12">
-                  <v-select
+                  <v-autocomplete
                     v-if="inputConfigMap.data.options.length > 0"
                     v-model="inputConfigMap.model"
                     :items="inputConfigMap.data.options"
@@ -97,7 +97,7 @@
                     item-text="name"
                     item-value="value"
                     dense
-                  ></v-select>
+                  ></v-autocomplete>
                   <v-alert type="error" v-if="inputConfigMap.data.isMultiple && inputConfigMap.data.options.length === 0">
                     {{ $vuetify.lang.t('$vuetify.lang_view_no_options_to_select') }}
                   </v-alert>
@@ -292,7 +292,7 @@
         </v-tab-item>
         <v-tab-item>
           <v-container class="d-flex flex-wrap" fluid>
-            <v-select
+            <v-autocomplete
               :items="statusItems"
               :label="$vuetify.lang.t('$vuetify.lang_form_status')"
               class="mr-8"
@@ -303,8 +303,8 @@
               @blur="() => {
                 $observables.queryStepsPage$.next('searchForm')
               }"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="stepItems"
               :label="$vuetify.lang.t('$vuetify.lang_form_step_action')"
               class="mr-8"
@@ -315,8 +315,8 @@
               @blur="() => {
                 $observables.queryStepsPage$.next('searchForm')
               }"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="moduleNames"
               :label="$vuetify.lang.t('$vuetify.lang_form_module_name')"
               class="mr-8"
@@ -326,8 +326,8 @@
               @change="() => {
                 $observables.queryStepsPage$.next('searchForm')
               }"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="moduleItems"
               :label="$vuetify.lang.t('$vuetify.lang_form_module_type')"
               class="mr-8"
@@ -338,7 +338,7 @@
               @blur="() => {
                 $observables.queryStepsPage$.next('searchForm')
               }"
-            ></v-select>
+            ></v-autocomplete>
           </v-container>
           <StepsDataTable
             :steps="stepsPageData.rows"

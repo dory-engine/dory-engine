@@ -4,7 +4,7 @@
       <v-card-title>
         <v-form>
           <v-container class="d-flex flex-wrap" fluid>
-            <v-select
+            <v-autocomplete
               :items="repoNames"
               :label="$vuetify.lang.t('$vuetify.lang_form_repo_names')"
               dense
@@ -13,8 +13,8 @@
               class="mr-8"
               v-model="pageRequest.repoNames"
               @change="getList(true)"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="tenantCodes"
               :label="$vuetify.lang.t('$vuetify.lang_form_tenant_codes')"
               dense
@@ -23,8 +23,8 @@
               class="mr-8"
               v-model="pageRequest.tenantCodes"
               @change="getList(true)"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="['yes', 'no']"
               :label="$vuetify.lang.t('$vuetify.lang_form_from_file')"
               dense
@@ -33,7 +33,7 @@
               clearable
               v-model="pageRequest.fromFile"
               @change="getList(true)"
-            ></v-select>
+            ></v-autocomplete>
             <Operations
               :operations="[
                 {
@@ -226,7 +226,7 @@
             </v-alert>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_git_repo_config_kind')"
                   v-model="addGitRepoConfigsForm.kind"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
@@ -234,7 +234,7 @@
                   dense
                   small-chips
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
                 <v-text-field
@@ -247,7 +247,7 @@
                 />
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="addGitRepoConfigsForm.tenantCode"
                   :items="tenantCodes"
@@ -258,7 +258,7 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -290,7 +290,7 @@
                 </v-text-field>
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_git_repo_config_insecure')"
                   v-model="addGitRepoConfigsForm.insecure"
                   :items="[
@@ -300,7 +300,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_git_repo_config_insecure_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -390,7 +390,7 @@
             </v-alert>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_git_repo_config_kind')"
                   v-model="updateGitRepoConfigsForm.kind"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
@@ -398,7 +398,7 @@
                   dense
                   small-chips
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
                 <v-text-field
@@ -412,7 +412,7 @@
                 />
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="updateGitRepoConfigsForm.tenantCode"
                   :items="tenantCodes"
@@ -423,7 +423,7 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -455,7 +455,7 @@
                 </v-text-field>
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_git_repo_config_insecure')"
                   v-model="updateGitRepoConfigsForm.insecure"
                   :items="[
@@ -465,7 +465,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_git_repo_config_insecure_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -607,7 +607,7 @@
             </v-alert>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_image_repo_config_kind')"
                   v-model="addImageRepoConfigsForm.kind"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
@@ -615,7 +615,7 @@
                   dense
                   small-chips
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
                 <v-text-field
@@ -628,7 +628,7 @@
                 />
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="addImageRepoConfigsForm.tenantCode"
                   :items="tenantCodes"
@@ -639,7 +639,7 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -699,7 +699,7 @@
                 />
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_image_repo_config_insecure')"
                   v-model="addImageRepoConfigsForm.insecure"
                   :items="[
@@ -709,7 +709,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_image_repo_config_insecure_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
             </div>
           </v-form>
@@ -753,7 +753,7 @@
             </v-alert>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_image_repo_config_kind')"
                   v-model="updateImageRepoConfigsForm.kind"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
@@ -761,7 +761,7 @@
                   dense
                   small-chips
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
                 <v-text-field
@@ -775,7 +775,7 @@
                 />
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="updateImageRepoConfigsForm.tenantCode"
                   :items="tenantCodes"
@@ -786,7 +786,7 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -846,7 +846,7 @@
                 />
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_image_repo_config_insecure')"
                   v-model="updateImageRepoConfigsForm.insecure"
                   :items="[
@@ -856,7 +856,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_image_repo_config_insecure_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
             </div>
           </v-form>
@@ -952,7 +952,7 @@
             </v-alert>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_artifact_repo_config_kind')"
                   v-model="addArtifactRepoConfigsForm.kind"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
@@ -960,7 +960,7 @@
                   dense
                   small-chips
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
                 <v-text-field
@@ -973,7 +973,7 @@
                 />
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="addArtifactRepoConfigsForm.tenantCode"
                   :items="tenantCodes"
@@ -984,7 +984,7 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -999,16 +999,16 @@
                 />
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_artifact_repo_config_schema_internal')"
                   v-model="addArtifactRepoConfigsForm.schemaInternal"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                   :items="['http', 'https']"
                   dense
-                ></v-select>
+                ></v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_artifact_repo_config_schema_external')"
                   v-model="addArtifactRepoConfigsForm.schemaExternal"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
@@ -1016,12 +1016,12 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_artifact_repo_config_schema_external_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_artifact_repo_config_insecure')"
                   v-model="addArtifactRepoConfigsForm.insecure"
                   :items="[
@@ -1031,7 +1031,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_artifact_repo_config_insecure_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
                 <v-text-field
@@ -1264,7 +1264,7 @@
             </v-alert>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_artifact_repo_config_kind')"
                   v-model="updateArtifactRepoConfigsForm.kind"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
@@ -1272,7 +1272,7 @@
                   dense
                   small-chips
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
                 <v-text-field
@@ -1286,7 +1286,7 @@
                 />
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="updateArtifactRepoConfigsForm.tenantCode"
                   :items="tenantCodes"
@@ -1297,7 +1297,7 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -1312,16 +1312,16 @@
                 />
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_artifact_repo_config_schema_internal')"
                   v-model="updateArtifactRepoConfigsForm.schemaInternal"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                   :items="['http', 'https']"
                   dense
-                ></v-select>
+                ></v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_artifact_repo_config_schema_external')"
                   v-model="updateArtifactRepoConfigsForm.schemaExternal"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
@@ -1329,12 +1329,12 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_artifact_repo_config_schema_external_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_artifact_repo_config_insecure')"
                   v-model="updateArtifactRepoConfigsForm.insecure"
                   :items="[
@@ -1344,7 +1344,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_artifact_repo_config_insecure_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
                 <v-text-field
@@ -1629,7 +1629,7 @@
             </v-alert>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_scan_code_repo_config_kind')"
                   v-model="addScanCodeRepoConfigsForm.kind"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
@@ -1637,7 +1637,7 @@
                   dense
                   small-chips
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
                 <v-text-field
@@ -1650,7 +1650,7 @@
                 />
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="addScanCodeRepoConfigsForm.tenantCode"
                   :items="tenantCodes"
@@ -1661,7 +1661,7 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -1703,7 +1703,7 @@
                 />
               </div>
               <div class="form-item-45 d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_scan_code_repo_config_insecure')"
                   v-model="addScanCodeRepoConfigsForm.insecure"
                   :items="[
@@ -1713,7 +1713,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_scan_code_repo_config_insecure_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
             </div>
           </v-form>
@@ -1757,7 +1757,7 @@
             </v-alert>
             <div class="d-flex mt-4 justify-space-between">
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_scan_code_repo_config_kind')"
                   v-model="updateScanCodeRepoConfigsForm.kind"
                   :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
@@ -1765,7 +1765,7 @@
                   dense
                   small-chips
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
               <div class="form-item d-flex align-center">
                 <v-text-field
@@ -1779,7 +1779,7 @@
                 />
               </div>
               <div class="form-item d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_tenant_code')"
                   v-model="updateScanCodeRepoConfigsForm.tenantCode"
                   :items="tenantCodes"
@@ -1790,7 +1790,7 @@
                   :hint="$vuetify.lang.t('$vuetify.lang_form_tenant_code_tip_1')"
                   persistent-hint
                 >
-                </v-select>
+                </v-autocomplete>
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
@@ -1832,7 +1832,7 @@
                 />
               </div>
               <div class="form-item-45 d-flex align-center">
-                <v-select
+                <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_scan_code_repo_config_insecure')"
                   v-model="updateScanCodeRepoConfigsForm.insecure"
                   :items="[
@@ -1842,7 +1842,7 @@
                   dense
                   :hint="$vuetify.lang.t('$vuetify.lang_form_scan_code_repo_config_insecure_tip_1')"
                   persistent-hint
-                ></v-select>
+                ></v-autocomplete>
               </div>
             </div>
           </v-form>

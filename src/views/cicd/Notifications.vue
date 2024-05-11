@@ -4,7 +4,7 @@
       <v-card-title>
         <v-form ref="form">
           <v-container class="d-flex flex-wrap">
-            <v-select
+            <v-autocomplete
               :items="[ 'yes', 'no' ]"
               :label="$vuetify.lang.t('$vuetify.lang_form_is_read')"
               class="mr-8"
@@ -12,8 +12,8 @@
               clearable
               v-model="notificationsForm.read"
               @change="getList(true)"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="options.projectNames || []"
               :label="$vuetify.lang.t('$vuetify.lang_form_project_name')"
               class="mr-8"
@@ -22,8 +22,8 @@
               multiple
               v-model="notificationsForm.projectNames"
               @blur="getList(true)"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="options.pipelineNames || []"
               :label="$vuetify.lang.t('$vuetify.lang_form_pipeline_name')"
               class="mr-8"
@@ -32,7 +32,7 @@
               multiple
               v-model="notificationsForm.pipelineNames"
               @blur="getList(true)"
-            ></v-select>
+            ></v-autocomplete>
             <v-combobox
               :label="$vuetify.lang.t('$vuetify.lang_form_run_name')"
               class="mr-8"
@@ -44,7 +44,7 @@
               @blur="getList(true)"
             >
             </v-combobox>
-            <v-select
+            <v-autocomplete
               :items="options.branchNames || []"
               :label="$vuetify.lang.t('$vuetify.lang_form_branch_name')"
               class="mr-8"
@@ -53,8 +53,8 @@
               multiple
               v-model="notificationsForm.branchNames"
               @blur="getList(true)"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="options.envNames || []"
               :label="$vuetify.lang.t('$vuetify.lang_form_env')"
               class="mr-8"
@@ -63,8 +63,8 @@
               multiple
               v-model="notificationsForm.envNames"
               @blur="getList(true)"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="options.stepActions || []"
               :label="$vuetify.lang.t('$vuetify.lang_form_step_action')"
               class="mr-8"
@@ -73,8 +73,8 @@
               multiple
               v-model="notificationsForm.stepActions"
               @blur="getList(true)"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="options.moduleTypes || []"
               :label="$vuetify.lang.t('$vuetify.lang_form_module_type')"
               class="mr-8"
@@ -83,8 +83,8 @@
               multiple
               v-model="notificationsForm.moduleTypes"
               @blur="getList(true)"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="[ 'SUCCESS', 'FAIL' ]"
               :label="$vuetify.lang.t('$vuetify.lang_form_status')"
               class="mr-8"
@@ -93,8 +93,8 @@
               multiple
               v-model="notificationsForm.stepResults"
               @blur="getList(true)"
-            ></v-select>
-            <v-select
+            ></v-autocomplete>
+            <v-autocomplete
               :items="[ 'yes', 'no' ]"
               :label="$vuetify.lang.t('$vuetify.lang_form_is_step')"
               class="mr-8"
@@ -103,7 +103,7 @@
               clearable
               v-model="notificationsForm.isStep"
               @change="getList(true)"
-            ></v-select>
+            ></v-autocomplete>
             <template>
               <v-menu
                 v-model="menu2"
