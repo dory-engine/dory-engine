@@ -171,6 +171,7 @@
                             small
                           >
                             {{$vuetify.lang.t('$vuetify.lang_menu_custom_step_def')}}
+                            <v-icon right dark>mdi-menu-down</v-icon>
                           </v-btn>
                         </template>
                         <v-list>
@@ -283,6 +284,7 @@
                             small
                           >
                             {{$vuetify.lang.t('$vuetify.lang_menu_env_custom_step_def')}}
+                            <v-icon right dark>mdi-menu-down</v-icon>
                           </v-btn>
                         </template>
                         <v-list>

@@ -40,6 +40,7 @@
             <Operations
               :operations="[
                 { text: $vuetify.lang.t('$vuetify.lang_menu_update_component_template'), onClick: () => {openUpdateComponent(item)} },
+                { text: $vuetify.lang.t('$vuetify.lang_menu_copy_component_template'), onClick: () => {openCopyComponent('add', item)} },
                 { text: $vuetify.lang.t('$vuetify.lang_menu_delete_component_template'), onClick: () => {openDeleteComponent(item)} }
               ]"
             />
@@ -2892,8 +2893,8 @@ export default {
         })
         if (response.data.deploySpecStatic.deployEnvs !== null) {
           response.data.deploySpecStatic.deployEnvs.forEach((row, rowIndex) => {
-            row = row.split("=");
-            response.data.deploySpecStatic.deployEnvs[rowIndex] = row;
+            let item = row.split("=")
+            response.data.deploySpecStatic.deployEnvs[rowIndex] = item
           });
         }
         vm.addComponentForm.deploySpecStatic = response.data.deploySpecStatic
@@ -3698,6 +3699,23 @@ export default {
         })
       }else{
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
+      }
+    },
+    openCopyComponent (flag, componentTemplate) {
+      const vm = this
+      vm.addComponentDialog = true
+      vm.targetIndex = flag
+      vm.addComponentForm = { ...componentTemplate }
+      if (!vm.userObj.isAdmin) {
+        vm.addComponentForm.tenantCode = vm.tenantCodes[0]
+        vm.addComponentForm.componentTemplateName = ''
+        vm.addComponentForm.componentTemplateDesc = ''
+      }
+      if (vm.addComponentForm.deploySpecStatic.deployEnvs !== null) {
+        vm.addComponentForm.deploySpecStatic.deployEnvs.forEach((row, rowIndex) => {
+          let item = row.split("=")
+          vm.addComponentForm.deploySpecStatic.deployEnvs[rowIndex] = item
+        });
       }
     },
     openUpdateComponent (item) {

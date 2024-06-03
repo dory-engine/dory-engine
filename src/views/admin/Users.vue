@@ -255,6 +255,7 @@
               :operations="[
                 { text: $vuetify.lang.t('$vuetify.lang_menu_edit_profile'), onClick: () => {openUpdateProfile(item.username)} },
                 { text: $vuetify.lang.t('$vuetify.lang_menu_change_password'), onClick: () => {openUpdatePassword(item.username)} },
+                { text: $vuetify.lang.t('$vuetify.lang_menu_copy_user'), onClick: () => {openCopyUser(item)} },
                 { text: $vuetify.lang.t('$vuetify.lang_menu_delete_user'), onClick: () => {openDeleteUser(item.username)} },
                 { text: $vuetify.lang.t('$vuetify.lang_menu_update_user_tenant_admins'), onClick: () => {openUpdateTenantAdmins(item)} },
               ]"
@@ -1160,6 +1161,14 @@ export default {
         }else{
           this.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_confirm_password_new_password_must_be_same'))
         }
+      }
+    },
+    openCopyUser(user) {
+      const vm = this
+      vm.addUserDialog = true
+      vm.addUserForm = { ...user }
+      if (!vm.userObj.isAdmin) {
+        vm.addUserForm.tenantCode = vm.tenantCodes[0]
       }
     },
     openDeleteUser (data) {

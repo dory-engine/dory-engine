@@ -18,7 +18,8 @@
             <template v-slot:item.handle="{ item }">
               <Operations
                 :operations="[
-                  { text: $vuetify.lang.t('$vuetify.lang_menu_update_admin_webhook'), onClick: () => {openAdminWebhookUpdate(item.adminWebhookID)} },
+                  { text: $vuetify.lang.t('$vuetify.lang_menu_update_admin_webhook'), onClick: () => {openAdminWebhookUpdate(item)} },
+                  { text: $vuetify.lang.t('$vuetify.lang_menu_copy_admin_webhook'), onClick: () => {openAdminWebhookCopy(item)} },
                   { text: $vuetify.lang.t('$vuetify.lang_menu_delete_admin_webhook'), onClick: () => {openAdminWebhookDelete(item.adminWebhookID)} }
                 ]"
               />
@@ -154,7 +155,6 @@
                   v-bind="attrs" 
                   v-on="on" 
                   @click="() => {
-                    $refs.addAdminWebhookRef.reset()
                     addAdminWebhookDialog = false
                   }"
                 >mdi-close</v-icon>
@@ -451,7 +451,6 @@
                   v-bind="attrs" 
                   v-on="on" 
                   @click="() => {
-                    $refs.updateAdminWebhookRef.reset()
                     updateAdminWebhookDialog = false
                   }"
                 >mdi-close</v-icon>
@@ -981,26 +980,21 @@ export default {
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
       }
     },
-    openAdminWebhookUpdate(adminWebhookID) {
+    openAdminWebhookCopy(adminWebhook) {
+      console.log(JSON.stringify(adminWebhook))
       const vm = this
-      vm.adminWebhookID = adminWebhookID
+      vm.addAdminWebhookDialog = true
+      vm.addAdminWebhookForm = { ...adminWebhook }
+      if (!vm.userObj.isAdmin) {
+        vm.addAdminWebhookForm.tenantCode = vm.tenantCodes[0]
+      }
+    },
+    openAdminWebhookUpdate(adminWebhook) {
+      console.log(JSON.stringify(adminWebhook))
+      const vm = this
+      vm.adminWebhookID = adminWebhook.adminWebhookID
       vm.updateAdminWebhookDialog = true
-      vm.adminWebhooksData.forEach(row => {
-        if (row.adminWebhookID === vm.adminWebhookID) {
-          vm.updateAdminWebhookForm = {
-            adminAction: row.adminAction,
-            enable: row.enable,
-            tenantCode: row.tenantCode,
-            webhookUrl: row.webhookUrl,
-            insecure: row.insecure,
-            webhookMethod: row.webhookMethod,
-            webhookHeaders: row.webhookHeaders,
-            webhookQueryParams: row.webhookQueryParams,
-            webhookForms: row.webhookForms,
-            webhookBody: row.webhookBody,
-          }
-        }
-      })
+      vm.updateAdminWebhookForm = { ...adminWebhook }
     },
     addWebhookHeadersUpdateForm() {
       const vm = this;

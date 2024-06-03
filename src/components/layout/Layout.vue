@@ -602,8 +602,10 @@ export default {
     request.get('/public/about').then(response => {
       vm.frontendInfo = response.data.config.frontend
       vm.version = response.data.version
-      if (response.data.freeTrial) {
-        vm.version = `${vm.version}/freeTrail`
+      if (response.data.community) {
+        vm.version = `${vm.version}-ce`
+      } else {
+        vm.version = `${vm.version}-ee`
       }
     }).catch(error => {
       vm.errorTip(true, error.response.data.msg);

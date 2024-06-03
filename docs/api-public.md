@@ -61,7 +61,7 @@
         "featuresAvailable": {
             "meshAvailable": true
         },
-        "freeTrial": false,
+        "community": false,
         "httpMethods": [
             "xxx",
         ]

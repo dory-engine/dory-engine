@@ -47,6 +47,13 @@
                     }
                   },
                   {
+                    key: 'copy',
+                    text: $vuetify.lang.t('$vuetify.lang_menu_copy_tenant'),
+                    onClick: () => {
+                      openCopyTenants(item)
+                    }
+                  },
+                  {
                     key: 'delete',
                     text: $vuetify.lang.t('$vuetify.lang_menu_delete_tenant'),
                     onClick: () => {
@@ -826,6 +833,12 @@ export default {
       }else{
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
       }
+    },
+    openCopyTenants(tenant) {
+      const vm = this
+      vm.addTenantsForm = { ...tenant }
+      vm.addTenantsForm.expiresDays = 0
+      vm.addTenantsDialog = true
     },
     openUpdateTenants(tenant) {
       const vm = this

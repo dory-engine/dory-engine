@@ -5821,7 +5821,7 @@ export default {
       stepInformation: null,
       textName: '',
       selectedStepIndex: -1,
-      freeTrial: false,
+      community: false,
       hostAliasesDisable: false,
       hpaConfigDisable: false,
       securityContextDisable: false,
@@ -5836,7 +5836,7 @@ export default {
     const vm = this;
     vm.targetProjectName = vm.projectName;
     request.get('/public/about').then(response => {
-      vm.freeTrial = response.data.freeTrial
+      vm.community = response.data.community
     }).catch(error => {
       vm.errorTip(true, error.response.data.msg);
     })
@@ -7560,35 +7560,37 @@ export default {
         })
         response.data.project.projectAvailableEnvs.map((item) => {
           if (item.envName === envName) {
-            item.disabledDefs.forEach(disabledDef => {
-              switch (disabledDef) {
-                case 'hostAliases':
-                  vm.hostAliasesDisable = true
-                  break
-                case 'hpaConfig':
-                  vm.hpaConfigDisable = true
-                  break
-                case 'securityContext':
-                  vm.securityContextDisable = true
-                  break
-                case 'patches':
-                  vm.patchesDisable = true
-                  break
-                case 'enableDownwardApi':
-                  vm.enableDownwardApiDisable = true
-                  break
-                case 'nodeName':
-                  vm.nodeNameDisable = true
-                  break
-                case 'nodeSelector':
-                  vm.nodeSelectorDisable = true
-                  break
-                case 'subdomain':
-                  vm.subdomainDisable = true
-                  break
-              }
-            })
-            if (vm.freeTrial) {
+            if (item.disabledDefs !== null) {
+              item.disabledDefs.forEach(disabledDef => {
+                switch (disabledDef) {
+                  case 'hostAliases':
+                    vm.hostAliasesDisable = true
+                    break
+                  case 'hpaConfig':
+                    vm.hpaConfigDisable = true
+                    break
+                  case 'securityContext':
+                    vm.securityContextDisable = true
+                    break
+                  case 'patches':
+                    vm.patchesDisable = true
+                    break
+                  case 'enableDownwardApi':
+                    vm.enableDownwardApiDisable = true
+                    break
+                  case 'nodeName':
+                    vm.nodeNameDisable = true
+                    break
+                  case 'nodeSelector':
+                    vm.nodeSelectorDisable = true
+                    break
+                  case 'subdomain':
+                    vm.subdomainDisable = true
+                    break
+                }
+              })
+            }
+            if (vm.community) {
               vm.patchesDisable = true
             }
             vm.deployContainerDefOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources'), value: 'deployResources' })

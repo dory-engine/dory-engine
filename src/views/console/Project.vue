@@ -366,7 +366,14 @@
                             <td>{{ translateWeek(i.crontabWeek) }}</td>
                             <td>
                               <template>
-                                <v-btn color="primary" small class="mr-1 my-1" @click="openCronDelete(item.branchName, i.crontabMinute+' '+i.crontabHour+' '+i.crontabDay+' '+i.crontabMonth+' '+i.crontabWeek)">{{$vuetify.lang.t('$vuetify.lang_menu_delete_pipeline_crontab')}}</v-btn>
+                                <Operations
+                                  :operations="[
+                                  { text: $vuetify.lang.t('$vuetify.lang_menu_copy_pipeline_crontab'), onClick: () => {openCronCopy(item.branchName, i)} },
+                                    { text: $vuetify.lang.t('$vuetify.lang_menu_delete_pipeline_crontab'), onClick: () => {openCronDelete(item.branchName, i.crontabMinute+' '+i.crontabHour+' '+i.crontabDay+' '+i.crontabMonth+' '+i.crontabWeek)} },
+                                  ]"
+                                  :opt-button-text="item.envName"
+                                  :opt-button-icon="(item.privileged ? 'mdi-security' : '')"
+                                />
                               </template>
                             </td>
                           </tr>
@@ -424,6 +431,7 @@
                         <Operations
                           :operations="[
                             { text: $vuetify.lang.t('$vuetify.lang_menu_update_pipeline_trigger'), onClick: () => {openTriggerUpdate($refs.triggerRef.$attrs.branchName, item.stepAction, item.beforeExecute)} },
+                            { text: $vuetify.lang.t('$vuetify.lang_menu_copy_pipeline_trigger'), onClick: () => {openTriggerCopy($refs.triggerRef.$attrs.branchName, item)} },
                             { text: $vuetify.lang.t('$vuetify.lang_menu_delete_pipeline_trigger'), onClick: () => {openTriggerDelete($refs.triggerRef.$attrs.branchName, item.stepAction, item.beforeExecute)} }
                           ]"
                         />
@@ -743,6 +751,7 @@
                           <Operations
                             :operations="[
                               { text: $vuetify.lang.t('$vuetify.lang_menu_update_host'), onClick: () => {openHostUpdate($refs.hostRef.$attrs.envname, item.hostName)} },
+                              { text: $vuetify.lang.t('$vuetify.lang_menu_copy_host'), onClick: () => {openHostCopy($refs.hostRef.$attrs.envname, item)} },
                               { text: $vuetify.lang.t('$vuetify.lang_menu_add_host_to_other_project'), onClick: () => {openHostJoin(item.hostName,$refs.hostRef.$attrs.envname)} },
                               { text: $vuetify.lang.t('$vuetify.lang_menu_remove_host_from_env'), onClick: () => {openHostLeave($refs.hostRef.$attrs.envname, item.hostName)} },
                               { text: $vuetify.lang.t('$vuetify.lang_menu_delete_host'), onClick: () => {openHostDelete($refs.hostRef.$attrs.envname, item.hostName)} }
@@ -791,6 +800,7 @@
                                   <Operations
                                     :operations="[
                                       { text: $vuetify.lang.t('$vuetify.lang_menu_update_database'), onClick: () => {openDbUpdate(item.envName, i.dbName)} },
+                                      { text: $vuetify.lang.t('$vuetify.lang_menu_copy_database'), onClick: () => {openDbCopy(item.envName, i)} },
                                       { text: $vuetify.lang.t('$vuetify.lang_menu_add_database_to_other_project'), onClick: () => {openDbJoin(i.dbName)} },
                                       { text: $vuetify.lang.t('$vuetify.lang_menu_remove_database_from_env'), onClick: () => {openDbLeave(item.envName, i.dbName)} },
                                       { text: $vuetify.lang.t('$vuetify.lang_menu_delete_database'), onClick: () => {openDeleteDB(item.envName, i.dbName)} }
@@ -942,6 +952,7 @@
                           <Operations
                             :operations="[
                               { text: $vuetify.lang.t('$vuetify.lang_menu_update_component'), onClick: () => {openUpdateComponent($refs.componentRef.$attrs.envname,item.componentName)} },
+                              { text: $vuetify.lang.t('$vuetify.lang_menu_copy_component'), onClick: () => {openCopyComponent($refs.componentRef.$attrs.envname,item)} },
                               { text: $vuetify.lang.t('$vuetify.lang_menu_delete_component'), onClick: () => {openDeleteComponent($refs.componentRef.$attrs.envname,item.componentName)} },
                             ]"
                           />
@@ -4497,7 +4508,7 @@
             {{$vuetify.lang.t('$vuetify.lang_form_new_network_policy')}}
           </v-card-title>
           <v-card-text>
-            <v-alert icon="mdi-alert-circle" prominent text type="info">
+            <v-alert icon="mdi-alert-circle" prominent text type="error">
               <small>{{$vuetify.lang.t('$vuetify.lang_form_new_network_policy_prompt', targetProjectName, targetEnvName)}}</small>
             </v-alert>
           </v-card-text>
@@ -4723,7 +4734,7 @@
                     <v-text-field
                       :label="$vuetify.lang.t('$vuetify.lang_form_new_host_host_become_user')"
                       dense
-                      v-model="updateHostForm.hostBecomeUser"
+                      v-model="addHostForm.hostBecomeUser"
                       :hint="$vuetify.lang.t('$vuetify.lang_form_new_host_host_become_user_tip_1')"
                       persistent-hint
                     >
@@ -6295,9 +6306,9 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-item-100 params-item">
+                  <div class="form-item-100 params-item" v-if="!nodeSelectorDisable || !nodeNameDisable">
                     <div class="params-content d-flex justify-space-between mt-4">
-                      <div class="form-item-45">
+                      <div class="form-item-45" v-if="!nodeSelectorDisable">
                         <v-autocomplete
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_node_selector')"
                           dense
@@ -6312,7 +6323,7 @@
                           v-model="addComponentForm.deploySpecStatic.nodeSelector"
                         ></v-autocomplete>
                       </div>
-                      <div class="form-item-45 d-flex align-center">
+                      <div class="form-item-45 d-flex align-center" v-if="!nodeNameDisable">
                         <v-autocomplete
                           :items="nodeNames"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_node_name')"
@@ -6351,7 +6362,7 @@
                       </div>
                     </div>
                     <div class="params-content d-flex justify-space-between mt-4">
-                      <div class="form-item-45 d-flex align-center">
+                      <div class="form-item-45 d-flex align-center" v-if="!subdomainDisable">
                         <v-text-field
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_subdomain')"
                           dense
@@ -6367,7 +6378,7 @@
                           </template>
                         </v-text-field>
                       </div>
-                      <div class="form-item-45 d-flex align-center">
+                      <div class="form-item-45 d-flex align-center" v-if="!enableDownwardApiDisable">
                         <v-autocomplete
                           :items="[
                             { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
@@ -7178,11 +7189,12 @@
                   </div>
                 </div>
                 <div class="form-item-100 params-item" v-if="
-                  addComponentForm.deploySpecStatic.hpaConfig.cpuAverageRequestPercent !== 0 || 
+                  !hpaConfigDisable &&
+                  (addComponentForm.deploySpecStatic.hpaConfig.cpuAverageRequestPercent !== 0 || 
                   addComponentForm.deploySpecStatic.hpaConfig.maxReplicas !== 0 || 
                   addComponentForm.deploySpecStatic.hpaConfig.memoryAverageRequestPercent !== 0 || 
                   addComponentForm.deploySpecStatic.hpaConfig.cpuAverageValue !== '' || 
-                  addComponentForm.deploySpecStatic.hpaConfig.memoryAverageValue !== ''
+                  addComponentForm.deploySpecStatic.hpaConfig.memoryAverageValue !== '')
                   " :id="'hpaConfig-add'">
                   <div>
                     {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_hpa_config')}}
@@ -7328,7 +7340,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.hostAliases !== null" :id="'hostAliases-add'">
+                <div class="form-item-100 params-item" v-if="!hostAliasesDisable && addComponentForm.deploySpecStatic.hostAliases !== null" :id="'hostAliases-add'">
                   <div>
                     {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_host_aliases')}}
                     <v-tooltip right max-width="250px">
@@ -7371,7 +7383,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.securityContext.runAsUser !== 0 || addComponentForm.deploySpecStatic.securityContext.runAsGroup !== 0" :id="'securityContext-add'">
+                <div class="form-item-100 params-item" v-if="!securityContextDisable && (addComponentForm.deploySpecStatic.securityContext.runAsUser !== 0 || addComponentForm.deploySpecStatic.securityContext.runAsGroup !== 0)" :id="'securityContext-add'">
                   <div>
                     {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_security_context')}}
                     <v-tooltip right max-width="250px">
@@ -7470,7 +7482,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.patches !== null" :id="'patches-add'">
+                <div class="form-item-100 params-item" v-if="!patchesDisable && addComponentForm.deploySpecStatic.patches !== null" :id="'patches-add'">
                   <div>
                     {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_patches')}}
                     <v-tooltip right max-width="250px">
@@ -7907,9 +7919,9 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-item-100 params-item">
+                  <div class="form-item-100 params-item" v-if="!nodeSelectorDisable || !nodeNameDisable">
                     <div class="params-content d-flex justify-space-between mt-4">
-                      <div class="form-item-45">
+                      <div class="form-item-45" v-if="!nodeSelectorDisable">
                         <v-autocomplete
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_node_selector')"
                           dense
@@ -7924,7 +7936,7 @@
                           v-model="addComponentForm.deploySpecStatic.nodeSelector"
                         ></v-autocomplete>
                       </div>
-                      <div class="form-item-45 d-flex align-center">
+                      <div class="form-item-45 d-flex align-center" v-if="!nodeNameDisable">
                         <v-autocomplete
                           :items="nodeNames"
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_node_name')"
@@ -7963,7 +7975,7 @@
                       </div>
                     </div>
                     <div class="params-content d-flex justify-space-between mt-4">
-                      <div class="form-item-45 d-flex align-center">
+                      <div class="form-item-45 d-flex align-center" v-if="!subdomainDisable">
                         <v-text-field
                           :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_subdomain')"
                           dense
@@ -7979,7 +7991,7 @@
                           </template>
                         </v-text-field>
                       </div>
-                      <div class="form-item-45 d-flex align-center">
+                      <div class="form-item-45 d-flex align-center" v-if="!enableDownwardApiDisable">
                         <v-autocomplete
                           :items="[
                             { text: $vuetify.lang.t('$vuetify.lang_form_yes'), value: true },
@@ -8790,11 +8802,12 @@
                   </div>
                 </div>
                 <div class="form-item-100 params-item" v-if="
-                  addComponentForm.deploySpecStatic.hpaConfig.cpuAverageRequestPercent !== 0 || 
+                  !hpaConfigDisable &&
+                  (addComponentForm.deploySpecStatic.hpaConfig.cpuAverageRequestPercent !== 0 || 
                   addComponentForm.deploySpecStatic.hpaConfig.maxReplicas !== 0 || 
                   addComponentForm.deploySpecStatic.hpaConfig.memoryAverageRequestPercent !== 0 || 
                   addComponentForm.deploySpecStatic.hpaConfig.cpuAverageValue !== '' || 
-                  addComponentForm.deploySpecStatic.hpaConfig.memoryAverageValue !== ''
+                  addComponentForm.deploySpecStatic.hpaConfig.memoryAverageValue !== '')
                   " :id="'hpaConfig-'+targetIndex">
                   <div>
                     {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_hpa_config')}}
@@ -8940,7 +8953,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.hostAliases !== null" :id="'hostAliases-'+targetIndex">
+                <div class="form-item-100 params-item" v-if="!hostAliasesDisable && addComponentForm.deploySpecStatic.hostAliases !== null" :id="'hostAliases-'+targetIndex">
                   <div>
                     {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_host_aliases')}}
                     <v-tooltip right max-width="250px">
@@ -8983,7 +8996,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.securityContext.runAsUser !== 0 || addComponentForm.deploySpecStatic.securityContext.runAsGroup !== 0" :id="'securityContext-'+targetIndex">
+                <div class="form-item-100 params-item" v-if="!securityContextDisable && (addComponentForm.deploySpecStatic.securityContext.runAsUser !== 0 || addComponentForm.deploySpecStatic.securityContext.runAsGroup !== 0)" :id="'securityContext-'+targetIndex">
                   <div>
                     {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_security_context')}}
                     <v-tooltip right max-width="250px">
@@ -9082,7 +9095,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.patches !== null" :id="'patches-'+targetIndex">
+                <div class="form-item-100 params-item" v-if="!patchesDisable && addComponentForm.deploySpecStatic.patches !== null" :id="'patches-'+targetIndex">
                   <div>
                     {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_patches')}}
                     <v-tooltip right max-width="250px">
@@ -9668,6 +9681,7 @@ export default {
       chooseComponent: '',
       addComponentForm: {
         arch: '',
+        componentTemplateDesc: '',
         deploySpecStatic: {
           deployName: "",
           deployImage: "",
@@ -9850,25 +9864,19 @@ export default {
       targetBranchName: '',
       httpMethods: [],
       disabledDefNames: [],
+      community: false,
+      hostAliasesDisable: false,
+      hpaConfigDisable: false,
+      securityContextDisable: false,
+      patchesDisable: false,
+      enableDownwardApiDisable: false,
+      nodeNameDisable: false,
+      nodeSelectorDisable: false,
+      subdomainDisable: false,
     }
   },
   created () {
     const vm = this
-    vm.componentOpts = [
-      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources'), value: 'deployResources' },
-      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_other'), value: 'deployOther' },
-      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_meta'), value: 'deployMeta' },
-      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_ports'), value: 'deployPorts' },
-      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_volumes'), value: 'deployVolumes' },
-      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check'), value: 'deployHealthCheck' },
-      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle'), value: 'lifecycle' },
-      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_hpa_config'), value: 'hpaConfig' },
-      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_depend_services'), value:'dependServices' },
-      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_host_aliases'), value: 'hostAliases' },
-      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_security_context'), value: 'securityContext' },
-      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_patches'), value: 'patches' },
-      { text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_settings'), value: 'deployConfigSettings' },
-    ]
     vm.userToken = JSON.parse(localStorage.getItem('userObj')).userToken
     const projectName = vm.$route.params.projectName
     vm.targetProjectName = projectName
@@ -9899,6 +9907,7 @@ export default {
     })
     request.get('/public/about').then(response => {
       vm.httpMethods = response.data.httpMethods
+      vm.community = response.data.community
       vm.disabledDefNames = response.data.config.disabledDefNames
     }).catch(error => {
       vm.errorTip(true, error.response.data.msg);
@@ -10471,9 +10480,9 @@ export default {
         vm.refreshList()
       })
     },
-    openCronAdd (data) {
+    openCronAdd (branchName) {
       this.addCrontabDialog = true
-      this.addCrontabForm.branchName = data
+      this.addCrontabForm.branchName = branchName
       this.addCrontabForm.branchNames = []
     },
     cronAdd () {
@@ -10490,6 +10499,12 @@ export default {
       }else{
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
       }
+    },
+    openCronCopy(branchName, pipelineCron) {
+      this.addCrontabDialog = true
+      this.addCrontabForm = { ...pipelineCron }
+      this.addCrontabForm.branchName = branchName
+      this.addCrontabForm.branchNames = []
     },
     openCopyToBranchCrontab () {
       const vm = this
@@ -10892,6 +10907,12 @@ export default {
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
       }
     },
+    openHostCopy (envName, host) {
+      this.addHostDialog = true
+      this.addHostForm = { ...host }
+      this.addHostForm.envName = envName
+      this.variableList = Object.entries(host.variables)
+    },
     openHostUpdate (envName,hostName) {
       const vm = this
       vm.updateHostDialog = true
@@ -11026,6 +11047,11 @@ export default {
       }else{
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
       }
+    },
+    openDbCopy (envName, database) {
+      this.addDbDialog = true
+      this.addDbForm = { ...database }
+      this.addDbForm.envName = envName
     },
     openDbUpdate (envName, dbName) {
       const vm = this
@@ -11401,10 +11427,76 @@ export default {
     },
     openAddComponent (envName) {
       const vm = this
+      vm.componentOpts = []
+      vm.hostAliasesDisable = false
+      vm.hpaConfigDisable = false
+      vm.securityContextDisable = false
+      vm.patchesDisable = false
+      vm.enableDownwardApiDisable = false
+      vm.nodeNameDisable = false
+      vm.nodeSelectorDisable = false
+      vm.subdomainDisable = false
+
       vm.targetEnvName = envName
       vm.targetIndex = 'add'
       vm.project.projectAvailableEnvs.map((item) => {
         if (item.envName === envName) {
+          if (item.disabledDefs !== null) {
+            item.disabledDefs.forEach(disabledDef => {
+              switch (disabledDef) {
+                case 'hostAliases':
+                  vm.hostAliasesDisable = true
+                  break
+                case 'hpaConfig':
+                  vm.hpaConfigDisable = true
+                  break
+                case 'securityContext':
+                  vm.securityContextDisable = true
+                  break
+                case 'patches':
+                  vm.patchesDisable = true
+                  break
+                case 'enableDownwardApi':
+                  vm.enableDownwardApiDisable = true
+                  break
+                case 'nodeName':
+                  vm.nodeNameDisable = true
+                  break
+                case 'nodeSelector':
+                  vm.nodeSelectorDisable = true
+                  break
+                case 'subdomain':
+                  vm.subdomainDisable = true
+                  break
+              }
+            })
+          }
+          if (vm.community) {
+            vm.patchesDisable = true
+          }
+
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources'), value: 'deployResources' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_other'), value: 'deployOther' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_meta'), value: 'deployMeta' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_ports'), value: 'deployPorts' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_volumes'), value: 'deployVolumes' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check'), value: 'deployHealthCheck' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle'), value: 'lifecycle' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_depend_services'), value:'dependServices' })
+          if (!vm.hpaConfigDisable) {
+            vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_hpa_config'), value: 'hpaConfig' })
+          }
+          if (!vm.hostAliasesDisable) {
+            vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_host_aliases'), value: 'hostAliases' })
+          }
+          if (!vm.securityContextDisable) {
+            vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_security_context'), value: 'securityContext' })
+          }
+          if (!vm.patchesDisable) {
+            vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_patches'), value: 'patches' })
+          }
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_settings'), value: 'deployConfigSettings' })
+          
           vm.nodeNames = item.nodeNames;
           vm.nodeLabels = item.nodeLabels;
           vm.pvs = item.pvs
@@ -12384,8 +12476,117 @@ export default {
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
       }
     },
+    openCopyComponent (envName, component) {
+      const vm = this
+      vm.componentOpts = []
+      vm.hostAliasesDisable = false
+      vm.hpaConfigDisable = false
+      vm.securityContextDisable = false
+      vm.patchesDisable = false
+      vm.enableDownwardApiDisable = false
+      vm.nodeNameDisable = false
+      vm.nodeSelectorDisable = false
+      vm.subdomainDisable = false
+
+      vm.targetEnvName = envName
+      vm.targetIndex = 'add'
+      vm.project.projectAvailableEnvs.map((item) => {
+        if (item.envName === envName) {
+          if (item.disabledDefs !== null) {
+            item.disabledDefs.forEach(disabledDef => {
+              switch (disabledDef) {
+                case 'hostAliases':
+                  vm.hostAliasesDisable = true
+                  break
+                case 'hpaConfig':
+                  vm.hpaConfigDisable = true
+                  break
+                case 'securityContext':
+                  vm.securityContextDisable = true
+                  break
+                case 'patches':
+                  vm.patchesDisable = true
+                  break
+                case 'enableDownwardApi':
+                  vm.enableDownwardApiDisable = true
+                  break
+                case 'nodeName':
+                  vm.nodeNameDisable = true
+                  break
+                case 'nodeSelector':
+                  vm.nodeSelectorDisable = true
+                  break
+                case 'subdomain':
+                  vm.subdomainDisable = true
+                  break
+              }
+            })
+          }
+          if (vm.community) {
+            vm.patchesDisable = true
+          }
+
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources'), value: 'deployResources' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_other'), value: 'deployOther' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_meta'), value: 'deployMeta' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_ports'), value: 'deployPorts' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_volumes'), value: 'deployVolumes' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check'), value: 'deployHealthCheck' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle'), value: 'lifecycle' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_depend_services'), value:'dependServices' })
+          if (!vm.hpaConfigDisable) {
+            vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_hpa_config'), value: 'hpaConfig' })
+          }
+          if (!vm.hostAliasesDisable) {
+            vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_host_aliases'), value: 'hostAliases' })
+          }
+          if (!vm.securityContextDisable) {
+            vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_security_context'), value: 'securityContext' })
+          }
+          if (!vm.patchesDisable) {
+            vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_patches'), value: 'patches' })
+          }
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_settings'), value: 'deployConfigSettings' })
+          
+          vm.nodeNames = item.nodeNames;
+          vm.nodeLabels = item.nodeLabels;
+          vm.pvs = item.pvs
+          vm.pvcNames = []
+          item.pvs.forEach(pv => {
+            vm.pvcNames.push(pv.pvcName)
+          })
+        }
+      })
+      vm.nodePorts = []
+      vm.project.projectNodePorts.map((item) => {
+        if (item.envName === envName) {
+          vm.nodePorts = item.nodePorts
+        }
+      })
+      vm.addComponentDialog = true
+      vm.addComponentForm.arch = component.arch
+      vm.addComponentForm.componentTemplateDesc = component.componentDesc
+      vm.addComponentForm.deploySpecStatic = { ...component.deploySpecStatic }
+      if (vm.addComponentForm.deploySpecStatic.deployEnvs !== null) {
+        vm.addComponentForm.deploySpecStatic.deployEnvs.forEach((row, rowIndex) => {
+          row = row.split("=");
+          vm.addComponentForm.deploySpecStatic.deployEnvs[rowIndex] = row;
+        });
+      }
+      vm.dialogLoading = false
+    },
     openUpdateComponent (envName, componentName) {
       const vm = this
+      vm.componentOpts = []
+      vm.hostAliasesDisable = false
+      vm.hpaConfigDisable = false
+      vm.securityContextDisable = false
+      vm.patchesDisable = false
+      vm.enableDownwardApiDisable = false
+      vm.nodeNameDisable = false
+      vm.nodeSelectorDisable = false
+      vm.subdomainDisable = false
+
       vm.dialogLoading = true
       vm.targetEnvName = envName
       vm.targetIndex = envName+componentName
@@ -12394,6 +12595,62 @@ export default {
       vm.addComponentForm.deploySpecStatic = {}
       vm.project.projectAvailableEnvs.map((item) => {
         if (item.envName === envName) {
+          if (item.disabledDefs !== null) {
+            item.disabledDefs.forEach(disabledDef => {
+              switch (disabledDef) {
+                case 'hostAliases':
+                  vm.hostAliasesDisable = true
+                  break
+                case 'hpaConfig':
+                  vm.hpaConfigDisable = true
+                  break
+                case 'securityContext':
+                  vm.securityContextDisable = true
+                  break
+                case 'patches':
+                  vm.patchesDisable = true
+                  break
+                case 'enableDownwardApi':
+                  vm.enableDownwardApiDisable = true
+                  break
+                case 'nodeName':
+                  vm.nodeNameDisable = true
+                  break
+                case 'nodeSelector':
+                  vm.nodeSelectorDisable = true
+                  break
+                case 'subdomain':
+                  vm.subdomainDisable = true
+                  break
+              }
+            })
+          }
+          if (vm.community) {
+            vm.patchesDisable = true
+          }
+
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources'), value: 'deployResources' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_other'), value: 'deployOther' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_meta'), value: 'deployMeta' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_ports'), value: 'deployPorts' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_volumes'), value: 'deployVolumes' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_health_check'), value: 'deployHealthCheck' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_lifecycle'), value: 'lifecycle' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_depend_services'), value:'dependServices' })
+          if (!vm.hpaConfigDisable) {
+            vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_hpa_config'), value: 'hpaConfig' })
+          }
+          if (!vm.hostAliasesDisable) {
+            vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_host_aliases'), value: 'hostAliases' })
+          }
+          if (!vm.securityContextDisable) {
+            vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_security_context'), value: 'securityContext' })
+          }
+          if (!vm.patchesDisable) {
+            vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_patches'), value: 'patches' })
+          }
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_settings'), value: 'deployConfigSettings' })
+          
           vm.nodeNames = item.nodeNames;
           vm.nodeLabels = item.nodeLabels;
           vm.pvs = item.pvs
@@ -12577,6 +12834,14 @@ export default {
       vm.addTriggerForm.mailCommittees = false
       vm.addTriggerForm.noticeCommittees = false
       vm.addTriggerForm.branchNames = []
+    },
+    openTriggerCopy (branchName, pipelineTrigger) {
+      const vm = this
+      vm.addTriggerDialog = true
+      vm.addTriggerForm = { ...pipelineTrigger }
+      vm.addTriggerForm.branchName = branchName
+      vm.addTriggerForm.branchNames = []
+      vm.addTriggerForm.stepActions = [pipelineTrigger.stepAction]
     },
     triggerAdd () {
       const vm = this

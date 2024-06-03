@@ -8,9 +8,9 @@ npm install && npm run build
 rm -rf docker-files/dist && mv dist docker-files
 
 cd /data/docker-vols/nodejs/root/dory-console/docker-files
-docker rmi doryengine/dory-console:v2.6.2
-docker build -t doryengine/dory-console:v2.6.2 . 
-docker push doryengine/dory-console:v2.6.2
+docker rmi doryengine/dory-console:v2.6.3
+docker build -t doryengine/dory-console:v2.6.3 . 
+docker push doryengine/dory-console:v2.6.3
 cd ..
 ```
 

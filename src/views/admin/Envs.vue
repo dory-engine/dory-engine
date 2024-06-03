@@ -62,6 +62,7 @@
               <Operations
                 :operations="[
                   { text: $vuetify.lang.t('$vuetify.lang_form_update_env'), onClick: () => {$observables.modifyEnvClick$.next(item)} },
+                  { text: $vuetify.lang.t('$vuetify.lang_form_copy_env'), onClick: () => {$observables.copyEnvClick$.next(item)} },
                   { text: $vuetify.lang.t('$vuetify.lang_form_delete_env'), onClick: () => {$observables.deleteEnvClick$.next(item)} }
                 ]"
               ></Operations>
@@ -2436,7 +2437,8 @@ export default {
       modifyPvClick$: new Subject(),
       addEnvClick$: new Subject(),
       deleteEnvClick$: new Subject(),
-      modifyEnvClick$: new Subject()
+      modifyEnvClick$: new Subject(),
+      copyEnvClick$: new Subject(),
     }
   },
   data () {
@@ -3189,6 +3191,157 @@ export default {
           }
           vm.operationCardConfig.attrs.formEls = ['addEnv']
         })
+        vm.operationCardConfig.listeners.top = true
+        vm.operationCardConfig.listeners.close = () => { vm.operationDialog = false }
+        vm.operationCardConfig.listeners.preview = () => { vm.previewEnv() }
+        vm.operationCardConfig.listeners.update = () => { vm.addEnv() }
+        // vm.operationCardConfig.listeners.cancel = () => { vm.operationDialog = false }
+        // vm.operationCardConfig.listeners.confirm = () => { next[1].next(true) }
+        vm.dialogWidth = '1200px'
+        vm.operationDialog = true
+      }),
+      mergeMap(next => {
+        return race([
+          next[1],
+          vm.$watchAsObservable('operationDialog').pipe(
+            pluck('newValue'),
+            filter(next => !next)
+          )
+        ]).pipe(
+          withLatestFrom(of(next[0]), of(next[2]))
+        )
+      }),
+      filter(next => next[0]),
+      tap(next => {
+        vm.operationCardConfig.listeners.cancel = null
+        vm.operationCardConfig.attrs.confirmLoading = true
+      }),
+      mergeMap(next => {
+        const envConfig = next[2]
+        // const envConfig = next[1]
+        return defer(() => {
+          return ENV_API.createEnv(envConfig)
+        }).pipe(
+          rtnRetryWhenOperator(),
+          catchError(next => {
+            vm.operationCardConfig.listeners.cancel = () => { vm.operationDialog = false }
+            vm.operationCardConfig.attrs.confirmLoading = false
+            vm.errorTip(true, next.response.data.msg)
+            return of(null)
+          })
+        )
+      }),
+      filter(next => next),
+      tap(next => {
+        vm.operationDialog = false
+        vm.operationCardConfig.attrs.confirmLoading = false
+        vm.successTip(true, next.msg)
+      }),
+      tap(next => {
+        vm.logDialog = true
+        vm.logCardConfig.listeners.confirm = () => { vm.logDialog = false }
+      }),
+      switchMap(next => {
+        return webSocket(`${vm.GLOBAL_WS_API}/ws/log/audit/admin/${next.data.auditID}?x-user-token=${User.getInstance().state.userObj.userToken}`).pipe(
+          catchError(error => {
+            console.log(error)
+            return of(null)
+          }),
+          finalize(() => {
+            console.log('final')
+          }),
+          filter(next => next),
+          takeUntil(vm.$watchAsObservable('logDialog').pipe(
+            pluck('newValue'),
+            filter(next => next === false),
+            take(1)
+          )),
+          scan((acc, next) => {
+            acc.push(next)
+            return acc
+          }, []),
+          tap(next => {
+            vm.logCardConfig.attrs.logList = next
+          })
+        )
+      }),
+      switchMap(next => {
+        return vm.$watchAsObservable('logDialog').pipe(
+          pluck('newValue'),
+          filter(next => next === false),
+          take(1)
+        )
+      }),
+      tap(next => {
+        vm.logCardConfig.attrs.logList = []
+        vm.$observables.queryPage$.next('envAdd')
+      })
+    ).subscribe(next => {})
+
+    vm.$observables.copyEnvClick$.pipe(
+      map(next => {
+        return [next, new Subject(), Vue.observable({
+          envK8s: next,
+        })]
+      }),
+      tap(next => {
+        const formValue = next[2]
+        vm.formValue = { ...formValue }
+        vm.operationCardConfig.attrs.confirmLoading = false
+        vm.operationCardConfig.attrs.title = vuetify.preset.lang.t('$vuetify.lang_form_new_env')
+        vm.operationCardConfig.attrs.formRef = 'addEnvForm'
+        vm.operationCardConfig.attrs.formInfo = <v-alert icon="mdi-alert-circle" prominent text type="info">
+          <small>{vuetify.preset.lang.t('$vuetify.lang_form_new_env_prompt')}</small>
+        </v-alert>
+        if (!vm.userObj.isAdmin) {
+          vm.formValue.envK8s.tenantCode = vm.tenantCodes[0]
+        }
+        if(vm.formValue.envK8s.pvConfigLocal.localPath === ''){
+          vm.formValue.envK8s.localFlag = false
+        }else{
+          vm.formValue.envK8s.localFlag = true
+        }
+        if(vm.formValue.envK8s.pvConfigCephfs.cephMonitors === null && vm.formValue.envK8s.pvConfigCephfs.cephPath === '' && vm.formValue.envK8s.pvConfigCephfs.cephSecret === '' && vm.formValue.envK8s.pvConfigCephfs.cephUser === ''){
+          vm.formValue.envK8s.cephfsFlag = false
+        }else{
+          vm.formValue.envK8s.cephfsFlag = true
+        }
+        // if(vm.formValue.envK8s.pvConfigGlusterfs.endpointIPs === null && vm.formValue.envK8s.pvConfigGlusterfs.endpointPort === 0 && vm.formValue.envK8s.pvConfigGlusterfs.path === ''){
+        //   vm.formValue.envK8s.glusterfsFlag = false
+        // }else{
+        //   vm.formValue.envK8s.glusterfsFlag = true
+        // }
+        if(vm.formValue.envK8s.pvConfigNfs.nfsPath === '' && vm.formValue.envK8s.pvConfigNfs.nfsServer === ''){
+          vm.formValue.envK8s.nfsFlag = false
+        }else{
+          vm.formValue.envK8s.nfsFlag = true
+        }
+        if(vm.formValue.envK8s.projectNodeSelector !== null){
+          var projectNodeSelectorList = []
+          Object.keys(vm.formValue.envK8s.projectNodeSelector).map(item => {
+            let obj = []
+            obj[0] = item
+            obj[1] = vm.formValue.envK8s.projectNodeSelector[item]
+            projectNodeSelectorList.push(obj)
+          })
+          vm.formValue.envK8s.projectNodeSelector = projectNodeSelectorList
+        }
+        if(vm.formValue.envK8s.archSettings !== null){
+          var archSettingsList = []
+          vm.formValue.envK8s.archSettings.map(archSetting => {
+            var nodeSelectorList = []
+            Object.keys(archSetting.nodeSelector).map(item => {
+              let obj = []
+              obj[0] = item
+              obj[1] = archSetting.nodeSelector[item]
+              nodeSelectorList.push(obj)
+            })
+            archSetting.nodeSelector = nodeSelectorList
+            archSettingsList.push(archSetting)
+          })
+          vm.formValue.envK8s.archSettings = archSettingsList
+        }
+        vm.operationCardConfig.attrs.formEls = ['addEnv']
         vm.operationCardConfig.listeners.top = true
         vm.operationCardConfig.listeners.close = () => { vm.operationDialog = false }
         vm.operationCardConfig.listeners.preview = () => { vm.previewEnv() }

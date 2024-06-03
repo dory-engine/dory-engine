@@ -95,6 +95,13 @@
                   }
                 },
                 {
+                  key: 'copy',
+                  text: $vuetify.lang.t('$vuetify.lang_menu_copy_git_repo_config'),
+                  onClick: () => {
+                    openCopyGitRepoConfigs(item)
+                  }
+                },
+                {
                   key: 'delete',
                   text: $vuetify.lang.t('$vuetify.lang_menu_delete_git_repo_config'),
                   onClick: () => {
@@ -110,6 +117,13 @@
                   text: $vuetify.lang.t('$vuetify.lang_menu_update_image_repo_config'),
                   onClick: () => {
                     openUpdateImageRepoConfigs(item)
+                  }
+                },
+                {
+                  key: 'copy',
+                  text: $vuetify.lang.t('$vuetify.lang_menu_copy_image_repo_config'),
+                  onClick: () => {
+                    openCopyImageRepoConfigs(item)
                   }
                 },
                 {
@@ -131,6 +145,13 @@
                   }
                 },
                 {
+                  key: 'copy',
+                  text: $vuetify.lang.t('$vuetify.lang_menu_copy_artifact_repo_config'),
+                  onClick: () => {
+                    openCopyArtifactRepoConfigs(item)
+                  }
+                },
+                {
                   key: 'delete',
                   text: $vuetify.lang.t('$vuetify.lang_menu_delete_artifact_repo_config'),
                   onClick: () => {
@@ -146,6 +167,13 @@
                   text: $vuetify.lang.t('$vuetify.lang_menu_update_scan_code_repo_config'),
                   onClick: () => {
                     openUpdateScanCodeRepoConfigs(item)
+                  }
+                },
+                {
+                  key: 'copy',
+                  text: $vuetify.lang.t('$vuetify.lang_menu_copy_scan_code_repo_config'),
+                  onClick: () => {
+                    openCopyScanCodeRepoConfigs(item)
                   }
                 },
                 {
@@ -2228,6 +2256,14 @@ export default {
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
       }
     },
+    openCopyGitRepoConfigs(repoConfig) {
+      const vm = this
+      vm.addGitRepoConfigsDialog = true
+      vm.addGitRepoConfigsForm = { ...repoConfig }
+      if (!vm.userObj.isAdmin) {
+        vm.addGitRepoConfigsForm.tenantCode = vm.tenantCodes[0]
+      }
+    },
     openUpdateGitRepoConfigs(gitRepoConfig) {
       const vm = this
       vm.updateGitRepoConfigsForm = gitRepoConfig
@@ -2314,6 +2350,14 @@ export default {
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
       }
     },
+    openCopyImageRepoConfigs(repoConfig) {
+      const vm = this
+      vm.addImageRepoConfigsDialog = true
+      vm.addImageRepoConfigsForm = { ...repoConfig }
+      if (!vm.userObj.isAdmin) {
+        vm.addImageRepoConfigsForm.tenantCode = vm.tenantCodes[0]
+      }
+    },
     openUpdateImageRepoConfigs(imageRepoConfig) {
       const vm = this
       vm.updateImageRepoConfigsForm = imageRepoConfig
@@ -2398,6 +2442,14 @@ export default {
         vm.YAMLDialog =true
       }else{
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
+      }
+    },
+    openCopyArtifactRepoConfigs(repoConfig) {
+      const vm = this
+      vm.addArtifactRepoConfigsDialog = true
+      vm.addArtifactRepoConfigsForm = { ...repoConfig }
+      if (!vm.userObj.isAdmin) {
+        vm.addArtifactRepoConfigsForm.tenantCode = vm.tenantCodes[0]
       }
     },
     openUpdateArtifactRepoConfigs(artifactRepoConfig) {
@@ -2564,6 +2616,14 @@ export default {
         vm.YAMLDialog =true
       }else{
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
+      }
+    },
+    openCopyScanCodeRepoConfigs(repoConfig) {
+      const vm = this
+      vm.addScanCodeRepoConfigsDialog = true
+      vm.addScanCodeRepoConfigsForm = { ...repoConfig }
+      if (!vm.userObj.isAdmin) {
+        vm.addScanCodeRepoConfigsForm.tenantCode = vm.tenantCodes[0]
       }
     },
     openUpdateScanCodeRepoConfigs(scanCodeRepoConfig) {

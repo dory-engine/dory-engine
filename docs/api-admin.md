@@ -3519,7 +3519,16 @@ patches:
                 "pwd",
                 "ls -al"
             ],
-            "commandsAfterCheck": []
+            "commandsAfterCheck": [],
+            "dockerEnvs": [
+                "xxx=yyy",
+            ],
+            "dockerExtraHosts": [
+                {
+                    "hostname": "xxx",
+                    "ip": "192.168.0.1",
+                },
+            ],
         }
     ],
 		"totalCount": 4,
@@ -3578,6 +3587,17 @@ mountExtraCacheDirs: []
 commandsBeforeBuild: ["pwd", "ls -al"]
 # 执行检查命令后执行什么命令
 commandsAfterCheck: []
+# 容器环境变量设置
+# ++ 容器中的环境变量设置
+# @@ 分为两个部分: key=value
+# @@ key：变量名
+# @@ value：变量值
+dockerEnvs:
+- "KEY1=VAL1"
+# 容器主机名解析设置
+dockerExtraHosts:
+- hostname: xxx
+  ip: 192.168.0.1
 ```
 
 - response响应内容
@@ -6621,6 +6641,12 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
                     "dockerEnvs": [
                         "xxx",
                     ],
+                    "dockerExtraHosts": [
+                        {
+                            "hostname": "xxx",
+                            "ip": "192.168.0.1",
+                        },
+                    ],
                     "dockerWorkDir": "xxx",
                     "paramInputFormat": "yaml",
                     "paramOutputFormat": "yaml"
@@ -6732,6 +6758,10 @@ customStepDockerConf:
   # @@ value：变量值
   dockerEnvs:
   - "KEY1=VAL1"
+  # 容器主机名解析设置
+  dockerExtraHosts:
+  - hostname: xxx
+    ip: 192.168.0.1
   # 容器的工作目录
   # ++ 请填写容器中的绝对路径，必须以/开头
   # ++ 支持使用变量，变量对应paramInputYamlDef的输入参数设置，例如paramInputYamlDef中设置了buildPath参数

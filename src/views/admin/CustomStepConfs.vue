@@ -54,6 +54,13 @@
                     }
                   },
                   {
+                    key: 'copy',
+                    text: $vuetify.lang.t('$vuetify.lang_menu_copy_custom_step'),
+                    onClick: () => {
+                      openCopyCustomSteps(item)
+                    }
+                  },
+                  {
                     key: 'delete',
                     text: $vuetify.lang.t('$vuetify.lang_menu_delete_custom_step'),
                     onClick: () => {
@@ -469,6 +476,13 @@
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_4')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_5')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_6')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_7')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_8')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_9')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_10')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_11')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_12')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_13')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_pipeline_variables_tip_1')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_pipeline_variables_tip_2')}}</div>
                     </div>
@@ -529,7 +543,7 @@
               <div class="d-flex mt-4 justify-space-between">
                 <div class="form-item-45">
                   <small>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_volumes')}}</small>
-                  <v-icon color="success" class="ml-4" @click="addDockerVolumes()">mdi-table-plus</v-icon>
+                  <v-icon color="success" class="ml-4" @click="addDockerVolumes('add')">mdi-table-plus</v-icon>
                   <v-tooltip right max-width="350px">
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
@@ -581,19 +595,31 @@
                       </v-text-field>
                     </div>
                     <div>
-                      <v-icon color="error" class="mt-4" @click="deleteDockerVolumes(i)">mdi-trash-can-outline</v-icon>
+                      <v-icon color="error" class="mt-4" @click="deleteDockerVolumes('add', i)">mdi-trash-can-outline</v-icon>
                     </div>
                   </div>
                 </div>
                 <div class="form-item-45">
                   <small>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_envs')}}</small>
-                  <v-icon color="success" class="ml-4" @click="addDockerEnvs()">mdi-table-plus</v-icon>
+                  <v-icon color="success" class="ml-4" @click="addDockerEnvs('add')">mdi-table-plus</v-icon>
                   <v-tooltip right max-width="350px">
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                     </template>
                     <div style="font-size: 12px;">
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_envs_tip_1')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_2')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_3')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_4')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_5')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_6')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_7')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_8')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_9')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_10')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_11')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_12')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_13')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_pipeline_variables_tip_1')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_pipeline_variables_tip_2')}}</div>
                     </div>
@@ -634,7 +660,44 @@
                       </v-text-field>
                     </div>
                     <div>
-                      <v-icon color="error" class="mt-4" @click="deleteDockerEnvs(i)">mdi-trash-can-outline</v-icon>
+                      <v-icon color="error" class="mt-4" @click="deleteDockerEnvs('add', i)">mdi-trash-can-outline</v-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex mt-4 justify-space-between">
+                <div class="form-item-45">
+                  <small>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts')}}</small>
+                  <v-icon color="success" class="ml-4" @click="addDockerExtraHosts('add')">mdi-table-plus</v-icon>
+                  <v-tooltip right max-width="350px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                    </template>
+                    <div style="font-size: 12px;">
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts_tip_1')}}</div>
+                    </div>
+                  </v-tooltip>
+                  <div class="env-item d-flex justify-space-between" v-for="(row, i) in addCustomStepsForm.customStepDockerConf.dockerExtraHosts" :key="i" v-if="addCustomStepsForm.customStepDockerConf.dockerExtraHosts">
+                    <div class="form-item-45 mt-4">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts_hostname')"
+                        dense
+                        v-model="row.hostname"
+                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      >
+                      </v-text-field>
+                    </div>
+                    <div class="form-item-45 mt-4">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts_ip')"
+                        dense
+                        v-model="row.ip"
+                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      >
+                      </v-text-field>
+                    </div>
+                    <div>
+                      <v-icon color="error" class="mt-4" @click="deleteDockerExtraHosts('add', i)">mdi-trash-can-outline</v-icon>
                     </div>
                   </div>
                 </div>
@@ -1023,6 +1086,13 @@
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_4')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_5')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_6')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_7')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_8')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_9')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_10')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_11')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_12')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_13')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_pipeline_variables_tip_1')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_pipeline_variables_tip_2')}}</div>
                     </div>
@@ -1083,7 +1153,7 @@
               <div class="d-flex mt-4 justify-space-between">
                 <div class="form-item-45">
                   <small>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_volumes')}}</small>
-                  <v-icon color="success" class="ml-4" @click="addDockerVolumes()">mdi-table-plus</v-icon>
+                  <v-icon color="success" class="ml-4" @click="addDockerVolumes('update')">mdi-table-plus</v-icon>
                   <v-tooltip right max-width="350px">
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
@@ -1135,19 +1205,31 @@
                       </v-text-field>
                     </div>
                     <div>
-                      <v-icon color="error" class="mt-4" @click="deleteDockerVolumes(i)">mdi-trash-can-outline</v-icon>
+                      <v-icon color="error" class="mt-4" @click="deleteDockerVolumes('update', i)">mdi-trash-can-outline</v-icon>
                     </div>
                   </div>
                 </div>
                 <div class="form-item-45">
                   <small>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_envs')}}</small>
-                  <v-icon color="success" class="ml-4" @click="addDockerEnvs()">mdi-table-plus</v-icon>
+                  <v-icon color="success" class="ml-4" @click="addDockerEnvs('update')">mdi-table-plus</v-icon>
                   <v-tooltip right max-width="350px">
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
                     </template>
                     <div style="font-size: 12px;">
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_envs_tip_1')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_2')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_3')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_4')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_5')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_6')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_7')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_8')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_9')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_10')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_11')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_12')}}</div>
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_commands_tip_13')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_pipeline_variables_tip_1')}}</div>
                       <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_pipeline_variables_tip_2')}}</div>
                     </div>
@@ -1188,7 +1270,44 @@
                       </v-text-field>
                     </div>
                     <div>
-                      <v-icon color="error" class="mt-4" @click="deleteDockerEnvs(i)">mdi-trash-can-outline</v-icon>
+                      <v-icon color="error" class="mt-4" @click="deleteDockerEnvs('update', i)">mdi-trash-can-outline</v-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex mt-4 justify-space-between">
+                <div class="form-item-45">
+                  <small>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts')}}</small>
+                  <v-icon color="success" class="ml-4" @click="addDockerExtraHosts('update')">mdi-table-plus</v-icon>
+                  <v-tooltip right max-width="350px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                    </template>
+                    <div style="font-size: 12px;">
+                      <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts_tip_1')}}</div>
+                    </div>
+                  </v-tooltip>
+                  <div class="env-item d-flex justify-space-between" v-for="(row, i) in updateCustomStepsForm.customStepDockerConf.dockerExtraHosts" :key="i" v-if="updateCustomStepsForm.customStepDockerConf.dockerExtraHosts">
+                    <div class="form-item-45 mt-4">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts_hostname')"
+                        dense
+                        v-model="row.hostname"
+                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      >
+                      </v-text-field>
+                    </div>
+                    <div class="form-item-45 mt-4">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts_ip')"
+                        dense
+                        v-model="row.ip"
+                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      >
+                      </v-text-field>
+                    </div>
+                    <div>
+                      <v-icon color="error" class="mt-4" @click="deleteDockerExtraHosts('update', i)">mdi-trash-can-outline</v-icon>
                     </div>
                   </div>
                 </div>
@@ -1327,8 +1446,9 @@ export default {
           dockerCommands: '',
           dockerShowCommands: false,
           dockerRunAsRoot: false,
-          dockerVolumes: null,
-          dockerEnvs: null,
+          dockerVolumes: [],
+          dockerEnvs: [],
+          dockerExtraHosts: [],
           dockerWorkDir: '',
           paramInputFormat: '',
           paramOutputFormat: ''
@@ -1353,8 +1473,9 @@ export default {
           dockerCommands: '',
           dockerShowCommands: false,
           dockerRunAsRoot: false,
-          dockerVolumes: null,
-          dockerEnvs: null,
+          dockerVolumes: [],
+          dockerEnvs: [],
+          dockerExtraHosts: [],
           dockerWorkDir: '',
           paramInputFormat: '',
           paramOutputFormat: ''
@@ -1485,33 +1606,86 @@ export default {
         vm.addCustomStepsForm.tenantCode = vm.tenantCodes[0]
       }
     },
-    addDockerVolumes() {
+    addDockerVolumes(mode) {
       const vm = this;
       let addItem = ["", ""];
-      if (vm.addCustomStepsForm.customStepDockerConf.dockerVolumes === null) {
-        vm.addCustomStepsForm.customStepDockerConf.dockerVolumes = [];
-        vm.addCustomStepsForm.customStepDockerConf.dockerVolumes.push(addItem);
-      } else {
-        vm.addCustomStepsForm.customStepDockerConf.dockerVolumes.push(addItem);
+      if (mode === 'add') {
+        if (vm.addCustomStepsForm.customStepDockerConf.dockerVolumes === null) {
+          vm.addCustomStepsForm.customStepDockerConf.dockerVolumes = [];
+          vm.addCustomStepsForm.customStepDockerConf.dockerVolumes.push(addItem);
+        } else {
+          vm.addCustomStepsForm.customStepDockerConf.dockerVolumes.push(addItem);
+        }
+      } else if (mode === 'update') {
+        if (vm.updateCustomStepsForm.customStepDockerConf.dockerVolumes === null) {
+          vm.updateCustomStepsForm.customStepDockerConf.dockerVolumes = [];
+          vm.updateCustomStepsForm.customStepDockerConf.dockerVolumes.push(addItem);
+        } else {
+          vm.updateCustomStepsForm.customStepDockerConf.dockerVolumes.push(addItem);
+        }
       }
     },
-    deleteDockerVolumes(j) {
+    deleteDockerVolumes(mode, j) {
       const vm = this;
-      vm.addCustomStepsForm.customStepDockerConf.dockerVolumes.splice(j, 1);
+      if (mode === 'add') {
+        vm.addCustomStepsForm.customStepDockerConf.dockerVolumes.splice(j, 1);
+      } else if (mode === 'update') {
+        vm.updateCustomStepsForm.customStepDockerConf.dockerVolumes.splice(j, 1);
+      }
     },
-    addDockerEnvs() {
+    addDockerEnvs(mode) {
       const vm = this;
       let addItem = ["", ""];
-      if (vm.addCustomStepsForm.customStepDockerConf.dockerEnvs === null) {
-        vm.addCustomStepsForm.customStepDockerConf.dockerEnvs = [];
-        vm.addCustomStepsForm.customStepDockerConf.dockerEnvs.push(addItem);
-      } else {
-        vm.addCustomStepsForm.customStepDockerConf.dockerEnvs.push(addItem);
+      if (mode === 'add') {
+        if (vm.addCustomStepsForm.customStepDockerConf.dockerEnvs === null) {
+          vm.addCustomStepsForm.customStepDockerConf.dockerEnvs = [];
+          vm.addCustomStepsForm.customStepDockerConf.dockerEnvs.push(addItem);
+        } else {
+          vm.addCustomStepsForm.customStepDockerConf.dockerEnvs.push(addItem);
+        }
+      } else if (mode === 'update') {
+        if (vm.updateCustomStepsForm.customStepDockerConf.dockerEnvs === null) {
+          vm.updateCustomStepsForm.customStepDockerConf.dockerEnvs = [];
+          vm.updateCustomStepsForm.customStepDockerConf.dockerEnvs.push(addItem);
+        } else {
+          vm.updateCustomStepsForm.customStepDockerConf.dockerEnvs.push(addItem);
+        }
       }
     },
-    deleteDockerEnvs(j) {
+    deleteDockerEnvs(mode, j) {
       const vm = this;
-      vm.addCustomStepsForm.customStepDockerConf.dockerEnvs.splice(j, 1);
+      if (mode === 'add') {
+        vm.addCustomStepsForm.customStepDockerConf.dockerEnvs.splice(j, 1);
+      } else if (mode === 'update') {
+        vm.updateCustomStepsForm.customStepDockerConf.dockerEnvs.splice(j, 1);
+      }
+    },
+    addDockerExtraHosts(mode) {
+      const vm = this;
+      let addItem = {"hostname": "", "ip": ""}
+      if (mode === 'add') {
+        if (vm.addCustomStepsForm.customStepDockerConf.dockerExtraHosts === null) {
+        vm.addCustomStepsForm.customStepDockerConf.dockerExtraHosts = [];
+        vm.addCustomStepsForm.customStepDockerConf.dockerExtraHosts.push(addItem);
+        } else {
+        vm.addCustomStepsForm.customStepDockerConf.dockerExtraHosts.push(addItem);
+        }
+      } else if (mode === 'update') {
+        if (vm.updateCustomStepsForm.customStepDockerConf.dockerExtraHosts === null) {
+        vm.updateCustomStepsForm.customStepDockerConf.dockerExtraHosts = [];
+        vm.updateCustomStepsForm.customStepDockerConf.dockerExtraHosts.push(addItem);
+        } else {
+        vm.updateCustomStepsForm.customStepDockerConf.dockerExtraHosts.push(addItem);
+        }
+      }
+    },
+    deleteDockerExtraHosts(mode, j) {
+      const vm = this;
+      if (mode === 'add') {
+        vm.addCustomStepsForm.customStepDockerConf.dockerExtraHosts.splice(j, 1);
+      } else if (mode === 'update') {
+        vm.updateCustomStepsForm.customStepDockerConf.dockerExtraHosts.splice(j, 1);
+      }
     },
     previewAddCustomSteps() {
       const vm = this
@@ -1572,6 +1746,14 @@ export default {
         })
       }else{
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
+      }
+    },
+    openCopyCustomSteps(customStep) {
+      const vm = this
+      vm.addCustomStepsDialog = true
+      vm.addCustomStepsForm = { ... customStep }
+      if (!vm.userObj.isAdmin) {
+        vm.addCustomStepsForm.tenantCode = vm.tenantCodes[0]
       }
     },
     openUpdateCustomSteps(customStepConf) {

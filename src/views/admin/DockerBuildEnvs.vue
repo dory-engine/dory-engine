@@ -71,6 +71,13 @@
                     }
                   },
                   {
+                    key: 'copy',
+                    text: $vuetify.lang.t('$vuetify.lang_menu_copy_docker_build_env'),
+                    onClick: () => {
+                      openCopyDockerBuildEnvs(item)
+                    }
+                  },
+                  {
                     key: 'delete',
                     text: $vuetify.lang.t('$vuetify.lang_menu_delete_docker_build_env'),
                     onClick: () => {
@@ -236,7 +243,7 @@
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
-              <div class="form-item d-flex align-center">
+              <div class="form-item-45 d-flex align-center">
                 <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_mount_home_dir')"
                   v-model="addDockerBuildEnvsForm.mountHomeDir"
@@ -249,7 +256,7 @@
                   persistent-hint
                 ></v-autocomplete>
               </div>
-              <div class="form-item d-flex align-center">
+              <div class="form-item-45 d-flex align-center">
                 <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_enable_proxy')"
                   v-model="addDockerBuildEnvsForm.enableProxy"
@@ -262,7 +269,9 @@
                   persistent-hint
                 ></v-autocomplete>
               </div>
-              <div class="form-item d-flex align-center">
+            </div>
+            <div class="d-flex mt-4 justify-space-between">
+              <div class="form-item-45 d-flex align-center">
                 <v-combobox
                   :label="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_mount_extra_cache_dirs')"
                   v-model="addDockerBuildEnvsForm.mountExtraCacheDirs"
@@ -314,6 +323,78 @@
                   persistent-hint
                 >
                 </v-textarea>
+              </div>
+            </div>
+            <div class="d-flex mt-4 justify-space-between">
+              <div class="form-item-45">
+                <small>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_envs')}}</small>
+                <v-icon color="success" class="ml-4" @click="addDockerEnvs('add')">mdi-table-plus</v-icon>
+                <v-tooltip right max-width="350px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                  </template>
+                  <div style="font-size: 12px;">
+                    <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_envs_tip_1')}}</div>
+                  </div>
+                </v-tooltip>
+                <div class="env-item d-flex justify-space-between" v-for="(row, i) in addDockerBuildEnvsForm.dockerEnvs" :key="i" v-if="addDockerBuildEnvsForm.dockerEnvs">
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_envs_name')"
+                      dense
+                      v-model="row[0]"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                    >
+                    </v-text-field>
+                  </div>
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_envs_value')"
+                      dense
+                      v-model="row[1]"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                    >
+                    </v-text-field>
+                  </div>
+                  <div>
+                    <v-icon color="error" class="mt-4" @click="deleteDockerEnvs('add', i)">mdi-trash-can-outline</v-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="form-item-45">
+                <small>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts')}}</small>
+                <v-icon color="success" class="ml-4" @click="addDockerExtraHosts('add')">mdi-table-plus</v-icon>
+                <v-tooltip right max-width="350px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                  </template>
+                  <div style="font-size: 12px;">
+                    <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts_tip_1')}}</div>
+                  </div>
+                </v-tooltip>
+                <div class="env-item d-flex justify-space-between" v-for="(row, i) in addDockerBuildEnvsForm.dockerExtraHosts" :key="i" v-if="addDockerBuildEnvsForm.dockerExtraHosts">
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts_hostname')"
+                      dense
+                      v-model="row.hostname"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                    >
+                    </v-text-field>
+                  </div>
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts_ip')"
+                      dense
+                      v-model="row.ip"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                    >
+                    </v-text-field>
+                  </div>
+                  <div>
+                    <v-icon color="error" class="mt-4" @click="deleteDockerExtraHosts('add', i)">mdi-trash-can-outline</v-icon>
+                  </div>
+                </div>
               </div>
             </div>
           </v-form>
@@ -446,7 +527,7 @@
               </div>
             </div>
             <div class="d-flex mt-4 justify-space-between">
-              <div class="form-item d-flex align-center">
+              <div class="form-item-45 d-flex align-center">
                 <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_mount_home_dir')"
                   v-model="updateDockerBuildEnvsForm.mountHomeDir"
@@ -459,7 +540,7 @@
                   persistent-hint
                 ></v-autocomplete>
               </div>
-              <div class="form-item d-flex align-center">
+              <div class="form-item-45 d-flex align-center">
                 <v-autocomplete
                   :label="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_enable_proxy')"
                   v-model="updateDockerBuildEnvsForm.enableProxy"
@@ -472,7 +553,9 @@
                   persistent-hint
                 ></v-autocomplete>
               </div>
-              <div class="form-item d-flex align-center">
+            </div>
+            <div class="d-flex mt-4 justify-space-between">
+              <div class="form-item-45 d-flex align-center">
                 <v-combobox
                   :label="$vuetify.lang.t('$vuetify.lang_form_docker_build_env_mount_extra_cache_dirs')"
                   v-model="updateDockerBuildEnvsForm.mountExtraCacheDirs"
@@ -524,6 +607,78 @@
                   persistent-hint
                 >
                 </v-textarea>
+              </div>
+            </div>
+            <div class="d-flex mt-4 justify-space-between">
+              <div class="form-item-45">
+                <small>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_envs')}}</small>
+                <v-icon color="success" class="ml-4" @click="addDockerEnvs('update')">mdi-table-plus</v-icon>
+                <v-tooltip right max-width="350px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                  </template>
+                  <div style="font-size: 12px;">
+                    <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_envs_tip_1')}}</div>
+                  </div>
+                </v-tooltip>
+                <div class="env-item d-flex justify-space-between" v-for="(row, i) in updateDockerBuildEnvsForm.dockerEnvs" :key="i" v-if="updateDockerBuildEnvsForm.dockerEnvs">
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_envs_name')"
+                      dense
+                      v-model="row[0]"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                    >
+                    </v-text-field>
+                  </div>
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_envs_value')"
+                      dense
+                      v-model="row[1]"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                    >
+                    </v-text-field>
+                  </div>
+                  <div>
+                    <v-icon color="error" class="mt-4" @click="deleteDockerEnvs('update', i)">mdi-trash-can-outline</v-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="form-item-45">
+                <small>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts')}}</small>
+                <v-icon color="success" class="ml-4" @click="addDockerExtraHosts('update')">mdi-table-plus</v-icon>
+                <v-tooltip right max-width="350px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                  </template>
+                  <div style="font-size: 12px;">
+                    <div>{{$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts_tip_1')}}</div>
+                  </div>
+                </v-tooltip>
+                <div class="env-item d-flex justify-space-between" v-for="(row, i) in updateDockerBuildEnvsForm.dockerExtraHosts" :key="i" v-if="updateDockerBuildEnvsForm.dockerExtraHosts">
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts_hostname')"
+                      dense
+                      v-model="row.hostname"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                    >
+                    </v-text-field>
+                  </div>
+                  <div class="form-item-45 mt-4">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_custom_step_conf_docker_extra_hosts_ip')"
+                      dense
+                      v-model="row.ip"
+                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                    >
+                    </v-text-field>
+                  </div>
+                  <div>
+                    <v-icon color="error" class="mt-4" @click="deleteDockerExtraHosts('update', i)">mdi-trash-can-outline</v-icon>
+                  </div>
+                </div>
               </div>
             </div>
           </v-form>
@@ -668,6 +823,8 @@ export default {
         mountHomeDir: true,
         enableProxy: false,
         mountExtraCacheDirs: [],
+        dockerEnvs: [],
+        dockerExtraHosts: [],
         commandsBeforeBuild: '',
         commandsAfterCheck: '',
       },
@@ -681,6 +838,8 @@ export default {
         mountHomeDir: true,
         enableProxy: false,
         mountExtraCacheDirs: [],
+        dockerEnvs: [],
+        dockerExtraHosts: [],
         commandsBeforeBuild: '',
         commandsAfterCheck: '',
       },
@@ -745,6 +904,12 @@ export default {
         vm.pageData.dockerBuildEnvs.forEach(item => {
           item.commandsBeforeBuild = vm.formateText(item.commandsBeforeBuild)
           item.commandsAfterCheck = vm.formateText(item.commandsAfterCheck)
+          if (item.dockerEnvs !== null) {
+            item.dockerEnvs.forEach((row, rowIndex) => {
+              row = row.split("=");
+              item.dockerEnvs[rowIndex] = row;
+            });
+          }
         })
         vm.pageData.totalCount = response.data.totalCount
         vm.tableLoading = false
@@ -781,12 +946,72 @@ export default {
         return value;
       }
     },
+    addDockerEnvs(mode) {
+      const vm = this;
+      let addItem = ["", ""];
+      if (mode === 'add') {
+        if (vm.addDockerBuildEnvsForm.dockerEnvs === null) {
+          vm.addDockerBuildEnvsForm.dockerEnvs = [];
+          vm.addDockerBuildEnvsForm.dockerEnvs.push(addItem);
+        } else {
+          vm.addDockerBuildEnvsForm.dockerEnvs.push(addItem);
+        }
+      } else if (mode === 'update') {
+        if (vm.updateDockerBuildEnvsForm.dockerEnvs === null) {
+          vm.updateDockerBuildEnvsForm.dockerEnvs = [];
+          vm.updateDockerBuildEnvsForm.dockerEnvs.push(addItem);
+        } else {
+          vm.updateDockerBuildEnvsForm.dockerEnvs.push(addItem);
+        }
+      }
+    },
+    deleteDockerEnvs(mode, j) {
+      const vm = this;
+      if (mode === 'add') {
+        vm.addDockerBuildEnvsForm.dockerEnvs.splice(j, 1);
+      } else if (mode === 'update') {
+        vm.updateDockerBuildEnvsForm.dockerEnvs.splice(j, 1);
+      }
+    },
+    addDockerExtraHosts(mode) {
+      const vm = this;
+      let addItem = {"hostname": "", "ip": ""}
+      if (mode === 'add') {
+        if (vm.addDockerBuildEnvsForm.dockerExtraHosts === null) {
+        vm.addDockerBuildEnvsForm.dockerExtraHosts = [];
+        vm.addDockerBuildEnvsForm.dockerExtraHosts.push(addItem);
+        } else {
+        vm.addDockerBuildEnvsForm.dockerExtraHosts.push(addItem);
+        }
+      } else if (mode === 'update') {
+        if (vm.updateDockerBuildEnvsForm.dockerExtraHosts === null) {
+        vm.updateDockerBuildEnvsForm.dockerExtraHosts = [];
+        vm.updateDockerBuildEnvsForm.dockerExtraHosts.push(addItem);
+        } else {
+        vm.updateDockerBuildEnvsForm.dockerExtraHosts.push(addItem);
+        }
+      }
+    },
+    deleteDockerExtraHosts(mode, j) {
+      const vm = this;
+      if (mode === 'add') {
+        vm.addDockerBuildEnvsForm.dockerExtraHosts.splice(j, 1);
+      } else if (mode === 'update') {
+        vm.updateDockerBuildEnvsForm.dockerExtraHosts.splice(j, 1);
+      }
+    },
     previewAddDockerBuildEnvs() {
       const vm = this
       if(vm.$refs.addDockerBuildEnvsRef.validate()){
         let copyData = JSON.parse(JSON.stringify(vm.addDockerBuildEnvsForm))
         copyData.commandsBeforeBuild = vm.formateText(copyData.commandsBeforeBuild)
         copyData.commandsAfterCheck = vm.formateText(copyData.commandsAfterCheck)
+        if (copyData.dockerEnvs !== null && copyData.dockerEnvs.length > 0) {
+          copyData.dockerEnvs.map((row, rowIndex) => {
+            row = row.join("=");
+            copyData.dockerEnvs[rowIndex] = row;
+          });
+        }
         vm.yamlText = YAML.stringify(copyData, 4)
         vm.$refs.monaco.monacoEditor.setValue(vm.yamlText)
         vm.YAMLDialog =true
@@ -807,6 +1032,12 @@ export default {
         let copyData = JSON.parse(JSON.stringify(vm.addDockerBuildEnvsForm))
         copyData.commandsBeforeBuild = vm.formateText(copyData.commandsBeforeBuild)
         copyData.commandsAfterCheck = vm.formateText(copyData.commandsAfterCheck)
+        if (copyData.dockerEnvs !== null && copyData.dockerEnvs.length > 0) {
+          copyData.dockerEnvs.map((row, rowIndex) => {
+            row = row.join("=");
+            copyData.dockerEnvs[rowIndex] = row;
+          });
+        }
         let dockerBuildEnvYaml = YAML.stringify(copyData, 4)
         request.post('/admin/dockerBuildEnv', {dockerBuildEnvYaml: dockerBuildEnvYaml}).then(response => {
           vm.successTip(true,response.msg)
@@ -825,11 +1056,25 @@ export default {
         let copyData = JSON.parse(JSON.stringify(vm.updateDockerBuildEnvsForm))
         copyData.commandsBeforeBuild = vm.formateText(copyData.commandsBeforeBuild)
         copyData.commandsAfterCheck = vm.formateText(copyData.commandsAfterCheck)
+        if (copyData.dockerEnvs !== null && copyData.dockerEnvs.length > 0) {
+          copyData.dockerEnvs.map((row, rowIndex) => {
+            row = row.join("=");
+            copyData.dockerEnvs[rowIndex] = row;
+          });
+        }
         vm.yamlText = YAML.stringify(copyData, 4)
         vm.$refs.monaco.monacoEditor.setValue(vm.yamlText)
         vm.YAMLDialog =true
       }else{
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
+      }
+    },
+    openCopyDockerBuildEnvs(dockerBuildEnv) {
+      const vm = this
+      vm.addDockerBuildEnvsDialog = true
+      vm.addDockerBuildEnvsForm = { ...dockerBuildEnv }
+      if (!vm.userObj.isAdmin) {
+        vm.addDockerBuildEnvsForm.tenantCode = vm.tenantCodes[0]
       }
     },
     openUpdateDockerBuildEnvs(dockerBuildEnv) {
@@ -844,6 +1089,12 @@ export default {
         let copyData = JSON.parse(JSON.stringify(vm.updateDockerBuildEnvsForm))
         copyData.commandsBeforeBuild = vm.formateText(copyData.commandsBeforeBuild)
         copyData.commandsAfterCheck = vm.formateText(copyData.commandsAfterCheck)
+        if (copyData.dockerEnvs !== null && copyData.dockerEnvs.length > 0) {
+          copyData.dockerEnvs.map((row, rowIndex) => {
+            row = row.join("=");
+            copyData.dockerEnvs[rowIndex] = row;
+          });
+        }
         let dockerBuildEnvYaml = YAML.stringify(copyData, 4)
         request.post(`/admin/dockerBuildEnv/${vm.updateDockerBuildEnvsForm.buildEnvName}`, {dockerBuildEnvYaml: dockerBuildEnvYaml}).then(response => {
           vm.successTip(true,response.msg)
