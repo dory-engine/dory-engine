@@ -109,13 +109,13 @@
                   <th class="text-left" v-if="project.projectSecret.harborPassword">
                     {{$vuetify.lang.t('$vuetify.lang_view_project_image_repo_password')}}
                   </th>
-                  <th class="text-left" v-if="project.projectRepo.artifactRepo">
+                  <th class="text-left" v-if="project.projectSecret.nexusPassword">
                     {{$vuetify.lang.t('$vuetify.lang_view_project_artifact_repo_password')}}
                   </th>
-                  <th class="text-left" v-if="project.projectRepo.scanCodeRepo">
+                  <th class="text-left" v-if="project.projectSecret.sonarPassword">
                     {{$vuetify.lang.t('$vuetify.lang_view_project_scan_code_repo_password')}}
                   </th>
-                  <th class="text-left" v-if="project.projectRepo.scanCodeRepo">
+                  <th class="text-left" v-if="project.projectSecret.sonarToken">
                     {{$vuetify.lang.t('$vuetify.lang_view_project_scan_code_repo_token')}}
                   </th>
                   <th class="text-left">
@@ -139,7 +139,7 @@
                       </v-tooltip>
                     </div>
                   </td>
-                  <td v-if="project.projectRepo.artifactRepo">
+                  <td v-if="project.projectSecret.nexusPassword">
                     <div class="repo-wrap">
                       <a target="_Blank" :href="project.projectRepo.artifactRepo"><v-chip outlined small color="success" class="mr-1 my-1">{{$vuetify.lang.t('$vuetify.lang_menu_open')}}</v-chip></a>
                       <v-tooltip bottom>
@@ -150,7 +150,7 @@
                       </v-tooltip>
                     </div>
                   </td>
-                  <td v-if="project.projectRepo.scanCodeRepo">
+                  <td v-if="project.projectSecret.sonarPassword">
                     <div class="repo-wrap">
                       <a target="_Blank" :href="project.projectRepo.scanCodeRepo"><v-chip outlined small color="success" class="mr-1 my-1">{{$vuetify.lang.t('$vuetify.lang_menu_open')}}</v-chip></a>
                       <v-tooltip bottom>
@@ -161,7 +161,7 @@
                       </v-tooltip>
                     </div>
                   </td>
-                  <td v-if="project.projectRepo.scanCodeRepo">
+                  <td v-if="project.projectSecret.sonarToken">
                     <div class="repo-wrap">
                       <a target="_Blank" :href="project.projectRepo.scanCodeRepo"><v-chip outlined small color="success" class="mr-1 my-1">{{$vuetify.lang.t('$vuetify.lang_menu_open')}}</v-chip></a>
                       <v-chip outlined small color="primary" class="ml-1" v-clipboard:copy="project.projectSecret.sonarToken" v-clipboard:success="onCopy" v-clipboard:error="onError">{{$vuetify.lang.t('$vuetify.lang_menu_copy')}}</v-chip>
@@ -170,8 +170,10 @@
                   <td>
                     <template>
                       <div v-for="(item,index) in project.projectAvailableEnvs" :key="index" class="repo-wrap">
-                        <a target="_Blank" :href="item.dashboardUrl"><v-chip outlined small color="success" class="mr-1 my-1">{{ item.envName }}</v-chip></a>
-                        <v-chip outlined small color="primary" class="ml-1 my-1" v-clipboard:copy="item.k8sToken" v-clipboard:success="onCopy" v-clipboard:error="onError">{{$vuetify.lang.t('$vuetify.lang_menu_copy')}}</v-chip>
+                        <div v-if="item.k8sToken">
+                          <a target="_Blank" :href="item.dashboardUrl"><v-chip outlined small color="success" class="mr-1 my-1">{{ item.envName }}</v-chip></a>
+                          <v-chip outlined small color="primary" class="ml-1 my-1" v-clipboard:copy="item.k8sToken" v-clipboard:success="onCopy" v-clipboard:error="onError">{{$vuetify.lang.t('$vuetify.lang_menu_copy')}}</v-chip>
+                        </div>
                       </div>
                     </template>
                   </td>

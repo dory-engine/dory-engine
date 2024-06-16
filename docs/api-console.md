@@ -646,6 +646,15 @@
                 {
                     "username": "xxx",
                     "accessLevel": "developer",
+                    "disableProjectDefs": [
+                        "xxx",
+                    ],
+                    "disableRepoSecrets": [
+                        "xxx",
+                    ],
+                    "disablePipelines": [
+                        "xxx",
+                    ],
                 }
             ],
         }
@@ -988,6 +997,15 @@
                 "isAdmin": false,
                 "isActive": false,
                 "accessLevel": "xxx",
+                "disableProjectDefs": [
+                    "xxx",
+                ],
+                "disableRepoSecrets": [
+                    "xxx",
+                ],
+                "disablePipelines": [
+                    "xxx",
+                ],
                 "updateTime": "xxx",
             }
         ]
@@ -1001,11 +1019,22 @@
 ```json
 {
     "username": "xxx",
-    "accessLevel": "xxx"
+    "accessLevel": "xxx",
+    "disableProjectDefs": [
+        "xxx",
+    ],
+    "disableRepoSecrets": [
+        "xxx",
+    ],
+    "disablePipelines": [
+        "xxx",
+    ],
 }
 ```
 
     - accessLevel: 角色 maintainer / developer / runner
+    - disableProjectDefs: pipelineDef / buildDef / packageDef / artifactDef / dockerIgnoreDef / customStepDef / customOpsDef / opsBatchDef / deployContainerDef / deployArtifactDef / istioDef / istioGatewayDef
+    - disableRepoSecrets: image / artifact / scanCode / k8s
 
 - response响应内容
 ```json
@@ -1048,11 +1077,22 @@
 ```json
 {
     "username": "xxx",
-    "accessLevel": "xxx"
+    "accessLevel": "xxx",
+    "disableProjectDefs": [
+        "xxx",
+    ],
+    "disableRepoSecrets": [
+        "xxx",
+    ],
+    "disablePipelines": [
+        "xxx",
+    ],
 }
 ```
 
     - accessLevel: 角色 maintainer / developer / runner
+    - disableProjectDefs: pipelineDef / buildDef / packageDef / artifactDef / dockerIgnoreDef / customStepDef / customOpsDef / opsBatchDef / deployContainerDef / deployArtifactDef / istioDef / istioGatewayDef
+    - disableRepoSecrets: image / artifact / scanCode / k8s
 
 - response响应内容
 ```json

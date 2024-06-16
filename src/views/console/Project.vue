@@ -230,22 +230,22 @@
                   <th class="text-center">
                     {{$vuetify.lang.t('$vuetify.lang_view_avatar')}}
                   </th>
-                  <th class="text-left">
+                  <th>
                     {{$vuetify.lang.t('$vuetify.lang_view_username')}}
                   </th>
-                  <th class="text-left">
-                    {{$vuetify.lang.t('$vuetify.lang_view_is_active')}}
-                  </th>
-                  <th class="text-left">
-                    {{$vuetify.lang.t('$vuetify.lang_view_is_admin')}}
-                  </th>
-                  <th class="text-left">
+                  <th>
                     {{$vuetify.lang.t('$vuetify.lang_view_project_role')}}
                   </th>
-                  <th class="text-left">
-                    {{$vuetify.lang.t('$vuetify.lang_view_update_time')}}
+                  <th>
+                    {{$vuetify.lang.t('$vuetify.lang_view_disable_project_defs')}}
                   </th>
-                  <th class="text-left">
+                  <th>
+                    {{$vuetify.lang.t('$vuetify.lang_view_disable_repo_secrets')}}
+                  </th>
+                  <th>
+                    {{$vuetify.lang.t('$vuetify.lang_view_disable_pipelines')}}
+                  </th>
+                  <th>
                     {{$vuetify.lang.t('$vuetify.lang_view_operations')}}
                   </th>
                 </tr>
@@ -256,15 +256,17 @@
                     <img :src="item.avatarUrl" alt="" class="user-avatar">
                   </td>
                   <td>{{ item.username }}</td>
-                  <td>{{ item.isActive }}</td>
-                  <td>{{ item.isAdmin }}</td>
                   <td>{{ item.accessLevel }}</td>
-                  <td>{{ item.updateTime | dateFormat }}</td>
+                  <td><v-chip small v-for="(str,j) in item.disableProjectDefs" :key="j">{{str}}</v-chip></td>
+                  <td><v-chip small v-for="(str,j) in item.disableRepoSecrets" :key="j">{{str}}</v-chip></td>
+                  <td><v-chip small v-for="(str,j) in item.disablePipelines" :key="j">{{str}}</v-chip></td>
                   <td>
-                    <template>
-                      <v-btn color="primary" small class="my-1 mr-1" @click="openUpdateMember(item.username, project.tenantCode)">{{ $vuetify.lang.t('$vuetify.lang_menu_change_permissions') }}</v-btn>
-                      <v-btn color="primary" small class="my-1" @click="deletePermissions(item.username)">{{ $vuetify.lang.t('$vuetify.lang_menu_delete_permissions') }}</v-btn>
-                    </template>
+                    <Operations
+                      :operations="[
+                        { text: $vuetify.lang.t('$vuetify.lang_menu_change_permissions'), onClick: () => {openUpdateMember(item, project.tenantCode)} },
+                        { text: $vuetify.lang.t('$vuetify.lang_menu_delete_permissions'), onClick: () => {deletePermissions(item.username)} },
+                      ]"
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -2223,6 +2225,60 @@
                       </template>
                     </v-autocomplete>
                   </v-col>
+                  <v-col cols="12">
+                    <v-autocomplete
+                      :items="[
+                        {text: $vuetify.lang.t('$vuetify.lang_menu_pipeline_def'), value: 'pipelineDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_build_def'), value: 'buildDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_package_def'), value: 'packageDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_artifact_def'), value: 'artifactDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_docker_ignore_def'), value: 'dockerIgnoreDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_custom_step_def'), value: 'customStepDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_ops_def'), value: 'customOpsDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_ops_batch_def'), value: 'opsBatchDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_deploy_container_def'), value: 'deployContainerDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_deploy_artifact_def'), value: 'deployArtifactDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_istio_def'), value: 'istioDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_istio_gateway_def'), value: 'istioGatewayDef'},
+                      ]"
+                      :label="$vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_project_defs')"
+                      multiple
+                      small-chips
+                      dense
+                      v-model="memberAddForm.disableProjectDefs"
+                    >
+                    </v-autocomplete>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-autocomplete
+                      :items="[
+                        {text: $vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_repo_secrets_image'), value: 'image'},
+                        {text: $vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_repo_secrets_artifact'), value: 'artifact'},
+                        {text: $vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_repo_secrets_scan_code'), value: 'scanCode'},
+                        {text: $vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_repo_secrets_k8s'), value: 'k8s'},
+                      ]"
+                      :label="$vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_repo_secrets')"
+                      multiple
+                      small-chips
+                      dense
+                      v-model="memberAddForm.disableRepoSecrets"
+                    >
+                    </v-autocomplete>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-combobox
+                      :label="$vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_pipelines')"
+                      dense
+                      multiple
+                      small-chips
+                      hide-selected
+                      v-model="memberAddForm.disablePipelines"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_pipelines_tip_1')"
+                      persistent-hint
+                      append-icon=""
+                    >
+                    </v-combobox>
+                  </v-col>
                 </v-row>
               </v-container>
             </v-form>
@@ -2283,6 +2339,60 @@
                         <div>{{$vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_3')}}</div>
                       </template>
                     </v-autocomplete>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-autocomplete
+                      :items="[
+                        {text: $vuetify.lang.t('$vuetify.lang_menu_pipeline_def'), value: 'pipelineDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_build_def'), value: 'buildDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_package_def'), value: 'packageDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_artifact_def'), value: 'artifactDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_docker_ignore_def'), value: 'dockerIgnoreDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_custom_step_def'), value: 'customStepDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_ops_def'), value: 'customOpsDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_ops_batch_def'), value: 'opsBatchDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_deploy_container_def'), value: 'deployContainerDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_deploy_artifact_def'), value: 'deployArtifactDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_istio_def'), value: 'istioDef'},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_istio_gateway_def'), value: 'istioGatewayDef'},
+                      ]"
+                      :label="$vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_project_defs')"
+                      multiple
+                      small-chips
+                      dense
+                      v-model="memberAddForm.disableProjectDefs"
+                    >
+                    </v-autocomplete>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-autocomplete
+                      :items="[
+                        {text: $vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_repo_secrets_image'), value: 'image'},
+                        {text: $vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_repo_secrets_artifact'), value: 'artifact'},
+                        {text: $vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_repo_secrets_scan_code'), value: 'scanCode'},
+                        {text: $vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_repo_secrets_k8s'), value: 'k8s'},
+                      ]"
+                      :label="$vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_repo_secrets')"
+                      multiple
+                      small-chips
+                      dense
+                      v-model="memberAddForm.disableRepoSecrets"
+                    >
+                    </v-autocomplete>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-combobox
+                      :label="$vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_pipelines')"
+                      dense
+                      multiple
+                      small-chips
+                      hide-selected
+                      v-model="memberAddForm.disablePipelines"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_assign_permissions_disable_pipelines_tip_1')"
+                      persistent-hint
+                      append-icon=""
+                    >
+                    </v-combobox>
                   </v-col>
                 </v-row>
               </v-container>
@@ -9476,7 +9586,10 @@ export default {
       updateProjectEnvAttachment: [],
       memberAddForm: {
         username: '',
-        accessLevel: ''
+        accessLevel: '',
+        disableProjectDefs: [],
+        disableRepoSecrets: [],
+        disablePipelines: [],
       },
       addPipelineForm: {
         branchName: '',
@@ -10361,10 +10474,16 @@ export default {
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
       }
     },
-    openUpdateMember(username, tenantCode) {
+    openUpdateMember(projectMember, tenantCode) {
       const vm = this
       vm.updatePermissionDialog = true
-      vm.memberAddForm.username = username
+      vm.memberAddForm = {
+        username: projectMember.username,
+        accessLevel: projectMember.accessLevel,
+        disableProjectDefs: projectMember.disableProjectDefs,
+        disableRepoSecrets: projectMember.disableRepoSecrets,
+        disablePipelines: projectMember.disablePipelines,
+      }
       request.post('/console/userNames/tenantCode', {tenantCode: tenantCode}).then(response => {
         vm.userNames = response.data.userNames
       }).catch(error => {

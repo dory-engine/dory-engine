@@ -89,7 +89,7 @@ export default {
             onClick: () => {
               request.post(`/cicd/batch/${context.props.projectName}/${row.opsBatchName}`).then(response => {
                 context.props.goRun(response.data.runName)
-              }).catch(_ => {})
+              }).catch(error => {context.injections.errorTip(true,error.response.data.msg)})
             }
           }
         )
