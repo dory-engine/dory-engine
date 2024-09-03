@@ -9,6 +9,9 @@ export default {
   getEnvPvs (envName) {
     return request.get(`/admin/env/${envName}/pvs`)
   },
+  getEnvScs (envName) {
+    return request.get(`/admin/env/${envName}/scs`)
+  },
   createPv (envName, pvConfig) {
     return request.post(`/admin/env/${envName}/pvAdd`, pvConfig)
   },

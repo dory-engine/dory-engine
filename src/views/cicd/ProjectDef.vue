@@ -208,7 +208,9 @@
         </v-card-title>
         <v-card-text>
           <DefsPipelinesTable
+            :projectName="targetProjectName"
             :pipelines="project.pipelines"
+            :opsBatchDefs="project.projectDef.opsBatchDefs"
             hideDefaultFooter
             disablePagination
             :goRun="goRun"

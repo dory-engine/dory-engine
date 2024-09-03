@@ -127,13 +127,13 @@
                   <th class="text-left" v-if="project.projectSecret.harborPassword">
                     {{$vuetify.lang.t('$vuetify.lang_view_project_image_repo_password')}}
                   </th>
-                  <th class="text-left" v-if="project.projectRepo.artifactRepo">
+                  <th class="text-left" v-if="project.projectSecret.nexusPassword">
                     {{$vuetify.lang.t('$vuetify.lang_view_project_artifact_repo_password')}}
                   </th>
-                  <th class="text-left" v-if="project.projectRepo.scanCodeRepo">
+                  <th class="text-left" v-if="project.projectSecret.sonarPassword">
                     {{$vuetify.lang.t('$vuetify.lang_view_project_scan_code_repo_password')}}
                   </th>
-                  <th class="text-left" v-if="project.projectRepo.scanCodeRepo">
+                  <th class="text-left" v-if="project.projectSecret.sonarToken">
                     {{$vuetify.lang.t('$vuetify.lang_view_project_scan_code_repo_token')}}
                   </th>
                   <th class="text-left">
@@ -160,7 +160,7 @@
                       </v-tooltip>
                     </div>
                   </td>
-                  <td v-if="project.projectRepo.artifactRepo">
+                  <td v-if="project.projectSecret.nexusPassword">
                     <div class="repo-wrap">
                       <a target="_Blank" :href="project.projectRepo.artifactRepo"><v-chip outlined small color="success" class="mr-1 my-1">{{$vuetify.lang.t('$vuetify.lang_menu_open')}}</v-chip></a>
                       <v-tooltip bottom>
@@ -171,7 +171,7 @@
                       </v-tooltip>
                     </div>
                   </td>
-                  <td v-if="project.projectRepo.scanCodeRepo">
+                  <td v-if="project.projectSecret.sonarPassword">
                     <div class="repo-wrap">
                       <a target="_Blank" :href="project.projectRepo.scanCodeRepo"><v-chip outlined small color="success" class="mr-1 my-1">{{$vuetify.lang.t('$vuetify.lang_menu_open')}}</v-chip></a>
                       <v-tooltip bottom>
@@ -182,7 +182,7 @@
                       </v-tooltip>
                     </div>
                   </td>
-                  <td v-if="project.projectRepo.scanCodeRepo">
+                  <td v-if="project.projectSecret.sonarToken">
                     <div class="repo-wrap">
                       <a target="_Blank" :href="project.projectRepo.scanCodeRepo"><v-chip outlined small color="success" class="mr-1 my-1">{{$vuetify.lang.t('$vuetify.lang_menu_open')}}</v-chip></a>
                       <v-chip outlined small color="primary" class="ml-1" v-clipboard:copy="project.projectSecret.sonarToken" v-clipboard:success="onCopy" v-clipboard:error="onError">{{$vuetify.lang.t('$vuetify.lang_menu_copy')}}</v-chip>
@@ -586,6 +586,7 @@
                       {{$vuetify.lang.t('$vuetify.lang_view_env_pvs_settings')}}
                       <v-spacer></v-spacer>
                       <v-btn color="primary" small class="my-1 mr-1" @click="openAllotPV(item.envName)">{{ $vuetify.lang.t('$vuetify.lang_menu_assign_pv') }}</v-btn>
+                      <v-btn color="primary" small class="my-1 mr-1" @click="openAllotSC(item.envName)">{{ $vuetify.lang.t('$vuetify.lang_menu_assign_storage_class_pv') }}</v-btn>
                     </v-card-title>
                     <v-card-text>
                       <v-simple-table dense>
@@ -617,7 +618,7 @@
                               <td>{{ i.pvcName }}</td>
                               <td>
                                 <template>
-                                  <v-btn color="primary" small class="my-1 mr-1" @click="openDeletePV(item.envName,i.pvName)">{{ $vuetify.lang.t('$vuetify.lang_menu_remove_pv') }}</v-btn>
+                                  <v-btn color="primary" small class="my-1 mr-1" @click="openDeletePV(item.envName,i.pvcName)">{{ $vuetify.lang.t('$vuetify.lang_menu_remove_pv') }}</v-btn>
                                 </template>
                               </td>
                             </tr>
@@ -4175,6 +4176,55 @@
         </v-card>
       </v-dialog>
       <v-dialog
+        v-model="addSCDialog"
+        max-width="600"
+        @input="() => {this.$refs.allotSCRef.reset()}"
+      >
+        <v-card :loading="dialogLoading">
+          <v-card-title>
+            {{$vuetify.lang.t('$vuetify.lang_form_assign_storage_class_pv')}}
+          </v-card-title>
+          <v-card-text>
+            <v-alert icon="mdi-alert-circle" prominent text type="info">
+                <small>{{$vuetify.lang.t('$vuetify.lang_form_assign_storage_class_pv_prompt', targetProjectName, targetEnvName)}}</small>
+            </v-alert>
+            <v-form ref="allotSCRef">
+              <v-autocomplete
+                v-model="addSCForm.scNames"
+                :items="scNames"
+                multiple
+                dense
+                small-chips
+                :label="$vuetify.lang.t('$vuetify.lang_form_assign_storage_class_pv_pv_names')"
+                :rules="[v => v.length>0 || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                :hint="$vuetify.lang.t('$vuetify.lang_form_assign_storage_class_pv_pv_names_tip_1')"
+                persistent-hint
+              ></v-autocomplete>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              text
+              @click="() => {
+                this.addSCDialog = false
+                this.$refs.allotSCRef.reset()
+              }"
+            >
+              {{ $vuetify.lang.t('$vuetify.lang_menu_cancel') }}
+            </v-btn>
+            <v-btn
+              color="primary"
+              text
+              @click="allotSC()"
+            >
+              {{ $vuetify.lang.t('$vuetify.lang_menu_confirm') }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog
         v-model="deletePVDialog"
         max-width="600px"
         persistent
@@ -4185,10 +4235,10 @@
           </v-card-title>
           <v-card-text>
             <v-alert icon="mdi-alert-circle" prominent text type="error">
-              <small>{{$vuetify.lang.t('$vuetify.lang_form_remove_pv_prompt', targetProjectName, deletePVForm.envName, deletePVForm.pvName)}}<v-chip small color="red">{{$vuetify.lang.t('$vuetify.lang_form_dangerous_operation')}}</v-chip></small>
+              <small>{{$vuetify.lang.t('$vuetify.lang_form_remove_pv_prompt', targetProjectName, deletePVForm.envName, deletePVForm.pvcName)}}<v-chip small color="red">{{$vuetify.lang.t('$vuetify.lang_form_dangerous_operation')}}</v-chip></small>
             </v-alert>
             <div>
-              {{$vuetify.lang.t('$vuetify.lang_form_remove_pv_tip_1', targetProjectName, deletePVForm.envName, deletePVForm.pvName)}}
+              {{$vuetify.lang.t('$vuetify.lang_form_remove_pv_tip_1', targetProjectName, deletePVForm.envName, deletePVForm.pvcName)}}
             </div>
             <v-form ref="deletePVRef">
               <v-container>
@@ -4200,7 +4250,7 @@
                       dense
                       v-model="confirmValue"
                       :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                      :hint="$vuetify.lang.t('$vuetify.lang_form_delete_pv_pv_name_tip_1', deletePVForm.pvName)"
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_delete_pv_pv_name_tip_1', deletePVForm.pvcName)"
                       persistent-hint
                     ></v-text-field>
                   </v-col>
@@ -9268,7 +9318,7 @@ export default {
       dbPasswordDisplay: false,
       deletePVForm: {
         envName: '',
-        pvName: ''
+        pvcName: ''
       },
       deleteNetworkPolicyForm: {
         envName: '',
@@ -9320,6 +9370,7 @@ export default {
       copyToBranchTriggerDialog: false,
       deleteCrontabDialog: false,
       addPVDialog: false,
+      addSCDialog: false,
       addNetworkPolicyDialog: false,
       addHostDialog: false,
       addDbDialog: false,
@@ -9332,6 +9383,11 @@ export default {
       deletePipelineEnvDialog: false,
       pvList: [],
       pvNames: [],
+      scNames: [],
+      addSCForm: {
+        envName: '',
+        scNames: [],
+      },
       userNames: [],
       accessLevel: [ 'runner', 'developer', 'maintainer' ],
       gitPush: [ {text: vuetify.preset.lang.t('$vuetify.lang_form_yes'), value: true}, {text: vuetify.preset.lang.t('$vuetify.lang_form_no'), value: false} ],
@@ -10307,7 +10363,7 @@ export default {
     allotPV () {
       const vm = this
       if(vm.$refs.allotPVRef.validate()){
-        request.post(`/admin/project/${vm.targetProjectName}/envPvAdd`,{
+        request.post(`/admin/project/${vm.targetProjectName}/envPvcAdd`,{
           envName: vm.targetEnvName,
           pvNames: vm.pvNames
         }).then(response => {
@@ -10321,17 +10377,44 @@ export default {
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
       }
     },
-    openDeletePV (envName, pvName) {
+    openAllotSC (envName) {
+      const vm = this
+      vm.addSCDialog = true
+      vm.targetEnvName = envName
+      vm.dialogLoading = true
+      vm.addSCForm.envName = envName
+      request.get(`/admin/env/${envName}/scNames`).then(response => {
+        vm.scNames = response.data.scNames
+        vm.dialogLoading = false
+      }).catch(error => {
+        vm.errorTip(true,error.response.data.msg)
+      })      
+    },
+    allotSC () {
+      const vm = this
+      if(vm.$refs.allotSCRef.validate()){
+        request.post(`/admin/project/${vm.targetProjectName}/envPvcScAdd`, vm.addSCForm).then(response => {
+          vm.successTip(true,response.msg)
+          vm.showLog(response)
+          vm.addSCDialog = false
+        }).catch(error => {
+          vm.errorTip(true,error.response.data.msg)
+        })
+      }else{
+        vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
+      }
+    },
+    openDeletePV (envName, pvcName) {
       this.confirmValue = ''
       this.deletePVDialog = true
       this.deletePVForm.envName = envName
-      this.deletePVForm.pvName = pvName
+      this.deletePVForm.pvcName = pvcName
     },
     deletePV () {
       const vm = this
       if(vm.$refs.deletePVRef.validate()){
-        if(vm.deletePVForm.pvName == vm.confirmValue){
-          request.post(`/admin/project/${vm.targetProjectName}/envPvDelete`, vm.deletePVForm).then(response => {
+        if(vm.deletePVForm.pvcName == vm.confirmValue){
+          request.post(`/admin/project/${vm.targetProjectName}/envPvcDelete`, vm.deletePVForm).then(response => {
             vm.deletePVDialog = false
             vm.showLog(response)
             vm.successTip(true,response.msg)
@@ -10339,7 +10422,7 @@ export default {
             vm.errorTip(true, error.response.data.msg)
           })
         }else{
-          vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_form_input_value_to_confirm', vm.deletePVForm.pvName))
+          vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_form_input_value_to_confirm', vm.deletePVForm.pvcName))
         }
       }else{
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))

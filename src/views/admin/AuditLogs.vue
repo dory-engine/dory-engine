@@ -121,6 +121,20 @@
                   </v-menu>
                 </template>
               </v-col>
+              <v-col cols="3">
+                <v-autocomplete
+                  :items="[
+                    { value: 'startTimeDesc', text: $vuetify.lang.t('$vuetify.lang_form_sort_start_time_desc') },
+                    { value: 'startTimeAsc', text: $vuetify.lang.t('$vuetify.lang_form_sort_start_time_asc') },
+                  ]"
+                  :label="$vuetify.lang.t('$vuetify.lang_form_sort_type')"
+                  class="mr-8"
+                  clearable
+                  dense
+                  v-model="pageRequest.sortMode"
+                  @change="$observables.queryPage$.next('sortModeChange')"
+                ></v-autocomplete>
+              </v-col>
             </v-row>
           </v-container>
         </v-form>
@@ -336,6 +350,7 @@ export default {
           startDate: '',
           endDate: ''
         },
+        sortMode: '',
         page: 1,
         perPage: 10
       },

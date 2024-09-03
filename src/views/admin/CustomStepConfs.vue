@@ -42,7 +42,8 @@
           }"
           :loading="tableLoading"
           @update:options="changeOptions($event)"
-          >
+          show-expand
+        >
           <template v-slot:item.handle="{item}">
             <Operations
                 :operations="[
@@ -69,6 +70,20 @@
                   },
                 ]"
               ></Operations>
+          </template>
+          <template v-slot:expanded-item="{ headers, item }">
+            <td :colspan="headers.length" class="pa-1">
+              <v-card class="rounded-0">
+                <v-card-text>
+                  <div>{{$vuetify.lang.t('$vuetify.lang_view_related_project_names')}}</div>
+                  <div>
+                    <v-chip outlined v-for="(row,index) in item.projectNames" :key="index" color="primary" small class="ma-1" :to="{ name: 'CicdProject', params: { projectName: row }}">
+                      {{ row }}
+                    </v-chip>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </td>
           </template>
         </v-data-table>
       </v-card-text>

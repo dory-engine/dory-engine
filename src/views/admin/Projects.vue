@@ -14,7 +14,11 @@ export default {
       userObj: {},
       projectsForm: {
         projectNames: [],
+        envNames: [],
+        projectArches: [],
+        tenantCodes: [],
         projectTeam: '',
+        sortMode: '',
         page: 1,
         perPage: 10
       },
@@ -48,6 +52,7 @@ export default {
         },
         imageRepoSetting: {
           imageRepoName: '',
+          storageLimit: 20,
           imageRepoHostName: '',
           imageRepoGroupName: '',
           imageRepoUserName: '',
@@ -111,7 +116,7 @@ export default {
       projectNamespaceList: [],
       newEnvDialog: false,
       newEnvSelect: [],
-      newEnvSelectList: [],
+      envNames: [],
       assignEnvSelectList: [],
       updateProjectDialog: false,
       deleteProjectDialog: false,
@@ -522,7 +527,7 @@ export default {
       vm.errorTip(true, error.response.data.msg)
     })
     request.get('/admin/envNames').then(response => {
-      vm.newEnvSelectList = response.data.envNames
+      vm.envNames = response.data.envNames
       response.data.envNames.forEach(envName => {
         request.get(`/admin/env/${envName}/pvNames`).then(resp => {
           let envPv = {
@@ -602,6 +607,7 @@ export default {
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_team')}: {item.projectInfo.projectTeam}</div>
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_arch')}: {item.projectInfo.projectArch}</div>
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_tenant_code')}: {item.tenantCode}</div>
+              <div>{vuetify.preset.lang.t('$vuetify.lang_view_create_time')}: {item.createTime}</div>
             </span>
           },
           'item.projectGit': ({item}) => {
@@ -738,7 +744,7 @@ export default {
             <VContainer fluid>
               <VRow class="flex-wrap">
                 <VCol
-                  cols="4"
+                  cols="3"
                 >
                   <VAutocomplete
                     v-model={vm.projectsForm.projectNames}
@@ -752,15 +758,79 @@ export default {
                     }}
                   />
                 </VCol>
-
                 <VCol
-                  cols="4"
+                  cols="3"
+                >
+                  <VAutocomplete
+                    v-model={vm.projectsForm.envNames}
+                    items={vm.envNames}
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_env_name')}
+                    multiple
+                    dense
+                    small-chips
+                    vOn:blur={() => {
+                      vm.getProjects()
+                    }}
+                  />
+                </VCol>
+                <VCol
+                  cols="3"
+                >
+                  <VAutocomplete
+                    v-model={vm.projectsForm.projectArches}
+                    items={vm.archNames}
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_project_arches')}
+                    multiple
+                    dense
+                    small-chips
+                    vOn:blur={() => {
+                      vm.getProjects()
+                    }}
+                  />
+                </VCol>
+                <VCol
+                  cols="3"
+                >
+                  <VAutocomplete
+                    v-model={vm.projectsForm.tenantCodes}
+                    items={vm.tenantCodes}
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_tenant_codes')}
+                    multiple
+                    dense
+                    small-chips
+                    vOn:blur={() => {
+                      vm.getProjects()
+                    }}
+                  />
+                </VCol>
+                <VCol
+                  cols="3"
                 >
                   <VTextField
                     label={vuetify.preset.lang.t('$vuetify.lang_form_project_team')}
                     dense
                     v-model={vm.projectsForm.projectTeam}
                     vOn:keydown_enter={() => {
+                      vm.getProjects()
+                    }}
+                  />
+                </VCol>
+                <VCol
+                  cols="3"
+                >
+                  <VAutocomplete
+                    v-model={vm.projectsForm.sortMode}
+                    items={[
+                      {text: vuetify.preset.lang.t('$vuetify.lang_form_sort_create_time_desc'), value: 'createTimeDesc'},
+                      {text: vuetify.preset.lang.t('$vuetify.lang_form_sort_create_time_asc'), value: 'createTimeAsc'},
+                      {text: vuetify.preset.lang.t('$vuetify.lang_form_sort_project_name_asc'), value: 'projectNameAsc'},
+                      {text: vuetify.preset.lang.t('$vuetify.lang_form_sort_project_team_asc'), value: 'projectTeamAsc'},
+                    ]}
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_sort_type')}
+                    dense
+                    small-chips
+                    clearable
+                    vOn:change={() => {
                       vm.getProjects()
                     }}
                   />
@@ -1081,6 +1151,20 @@ export default {
                         persistent-hint
                       />
                     </VCol>
+                    <VCol 
+                      cols="12"
+                      v-show={vm.addProjectForm.imageRepoSetting.imageRepoName !== '' && vm.addProjectForm.imageRepoSetting.imageRepoName.value !== ''}
+                    >
+                      <VTextField
+                        label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_storage_limit')}
+                        required
+                        dense
+                        type="number"
+                        v-model={vm.addProjectForm.imageRepoSetting.storageLimit}
+                        hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_storage_limit_tip_1')}
+                        persistent-hint
+                      ></VTextField>
+                    </VCol>
                     <VCol
                       cols="12"
                       v-show={vm.addProjectForm.imageRepoSetting.imageRepoName === '' || vm.addProjectForm.imageRepoSetting.imageRepoName.value === ''}
@@ -1323,7 +1407,7 @@ export default {
                   <VCol cols="12">
                     <VAutocomplete
                       v-model={vm.addProjectForm.envName}
-                      items={vm.newEnvSelectList}
+                      items={vm.envNames}
                       label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_env_name')}
                       rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
                       dense

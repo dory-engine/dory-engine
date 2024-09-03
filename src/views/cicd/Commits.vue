@@ -108,6 +108,18 @@
                 v-model="commitsForm.committerEmail"
                 @keydown.enter="commitsSearch()"
               />
+              <v-autocomplete
+                :items="[
+                  { value: 'commitTimeDesc', text: $vuetify.lang.t('$vuetify.lang_form_sort_commit_time_desc') },
+                  { value: 'commitTimeAsc', text: $vuetify.lang.t('$vuetify.lang_form_sort_commit_time_asc') },
+                ]"
+                :label="$vuetify.lang.t('$vuetify.lang_form_sort_type')"
+                class="mr-8"
+                clearable
+                dense
+                v-model="commitsForm.sortMode"
+                @change="commitsSearch()"
+              ></v-autocomplete>
             </v-container>
           </v-form>
         </v-card-title>
@@ -165,6 +177,7 @@ export default {
               endDate: ''
             },
             runNames: [],
+            sortMode: '',
             page: 1,
             perPage: 10
           },
@@ -206,7 +219,6 @@ export default {
       commitsSearch() {
         this.commitsForm.createTimeRange.startDate = this.dates[0]
         this.commitsForm.createTimeRange.endDate = this.dates[1]
-        console.log(this.commitsForm)
         COMMITS_API.getCommits(this.commitsForm).then(response => {
           this.successTip(true, response.msg)
           response.data.commits.forEach((row, index) => {

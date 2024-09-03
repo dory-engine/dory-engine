@@ -18,7 +18,9 @@ export default {
       },
       projectsForm: {
         projectNames: [],
+        projectArches: [],
         projectTeam: '',
+        sortMode: '',
         page: 1,
         perPage: 10
       },
@@ -419,6 +421,7 @@ export default {
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_team')}: {item.projectInfo.projectTeam}</div>
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_arch')}: {item.projectInfo.projectArch}</div>
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_tenant_code')}: {item.tenantCode}</div>
+              <div>{vuetify.preset.lang.t('$vuetify.lang_view_create_time')}: {item.createTime}</div>
             </span>
           },
           'item.projectGit': ({item}) => {
@@ -570,11 +573,26 @@ export default {
           <VForm>
             <VContainer fluid>
               <VRow class="flex-wrap">
-                <VCol cols="4">
+                <VCol cols="3">
                   <VAutocomplete
                     v-model={vm.projectsForm.projectNames}
                     items={vm.projectList}
                     label={vuetify.preset.lang.t('$vuetify.lang_form_project_name')}
+                    multiple
+                    dense
+                    small-chips
+                    vOn:blur={() => {
+                      vm.getProjects()
+                    }}
+                  />
+                </VCol>
+                <VCol
+                  cols="3"
+                >
+                  <VAutocomplete
+                    v-model={vm.projectsForm.projectArches}
+                    items={vm.archNames}
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_project_arches')}
                     multiple
                     dense
                     small-chips
@@ -593,7 +611,27 @@ export default {
                     }}
                   />
                 </VCol>
-                <VCol cols="5">
+                <VCol
+                  cols="3"
+                >
+                  <VAutocomplete
+                    v-model={vm.projectsForm.sortMode}
+                    items={[
+                      {text: vuetify.preset.lang.t('$vuetify.lang_form_sort_create_time_desc'), value: 'createTimeDesc'},
+                      {text: vuetify.preset.lang.t('$vuetify.lang_form_sort_create_time_asc'), value: 'createTimeAsc'},
+                      {text: vuetify.preset.lang.t('$vuetify.lang_form_sort_project_name_asc'), value: 'projectNameAsc'},
+                      {text: vuetify.preset.lang.t('$vuetify.lang_form_sort_project_team_asc'), value: 'projectTeamAsc'},
+                    ]}
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_sort_type')}
+                    dense
+                    small-chips
+                    clearable
+                    vOn:change={() => {
+                      vm.getProjects()
+                    }}
+                  />
+                </VCol>
+                <VCol cols="3">
                   <VBtn color="yellow" class="mr-4" vOn:click_stop={ ()=> {
                     vm.addUser = true
                   } }>{vuetify.preset.lang.t('$vuetify.lang_menu_apply_new_user')}</VBtn>

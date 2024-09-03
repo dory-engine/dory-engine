@@ -9,6 +9,7 @@ import {vuetify} from '@/plugins/vuetify'
 
 const stepsDetailMap = {
   gitPull: 'gitPull',
+  gitPullCustomStep: 'gitPull',
   getRunSettings: 'getRunSettings',
   build: 'build',
   scanCode: 'scanCode',

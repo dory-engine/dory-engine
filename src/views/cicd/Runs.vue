@@ -128,6 +128,18 @@
                 v-model="runsForm.startUser"
                 @keydown.enter="getRuns()"
               />
+              <v-autocomplete
+                :items="[
+                  { value: 'createTimeDesc', text: $vuetify.lang.t('$vuetify.lang_form_sort_create_time_desc') },
+                  { value: 'createTimeAsc', text: $vuetify.lang.t('$vuetify.lang_form_sort_create_time_asc') },
+                ]"
+                :label="$vuetify.lang.t('$vuetify.lang_form_sort_type')"
+                class="mr-8"
+                clearable
+                dense
+                v-model="runsForm.sortMode"
+                @change="getRuns()"
+              ></v-autocomplete>
             </v-container>
           </v-form>
         </v-card-title>
@@ -169,6 +181,7 @@ export default {
         tagName: '',
         startUser: '',
         abortUser: '',
+        sortMode: '',
         page: 1,
         perPage: 10
       },

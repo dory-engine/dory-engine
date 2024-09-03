@@ -42,10 +42,22 @@
           <template v-slot:opt>
             <v-btn class="mr-2 my-1" small color="primary" @click="goProjectDef(run.projectName)">{{$vuetify.lang.t('$vuetify.lang_menu_project_def')}}</v-btn>
             <v-btn v-if="run.branchName" small :color="errMsgPipelineDef === '' ? 'primary' : 'error'" class="mr-2 my-1" @click="openPipelineDef(run.projectName, run.branchName)">{{$vuetify.lang.t('$vuetify.lang_menu_pipeline_def')}}</v-btn>
-            <v-btn v-if="run.status.result == 'INPUT' || run.status.result == 'RUNNING' || run.status.result == 'PAUSE'" small color="primary" class="mr-2 my-1" @click="abortRun(run.runName)">{{$vuetify.lang.t('$vuetify.lang_menu_abort_run')}}</v-btn>
-            <v-btn v-else small color="primary" class="mr-2" @click="reRun(run.pipelineName)">{{$vuetify.lang.t('$vuetify.lang_menu_redo_run')}}</v-btn>
-            <v-btn v-if="run.status.result == 'PAUSE'" color="primary" small @click="topRun(run.runName)">{{$vuetify.lang.t('$vuetify.lang_menu_run_queue_top')}}</v-btn>
             <v-btn v-if="run.pipelineDefYaml != ''" color="primary" small @click="openRunDef()">{{$vuetify.lang.t('$vuetify.lang_menu_view_run_def')}}</v-btn>
+            <br/>
+            <v-btn v-if="run.status.result == 'INPUT' || run.status.result == 'RUNNING' || run.status.result == 'PAUSE'" small color="primary" class="mr-2 my-1" @click="abortRun(run.runName)">{{$vuetify.lang.t('$vuetify.lang_menu_abort_run')}}</v-btn>
+            <span 
+              class="mr-2"
+              v-if="!(run.status.result == 'INPUT' || run.status.result == 'RUNNING' || run.status.result == 'PAUSE')" 
+            >
+              <Operations
+                color="green"
+                dark
+                :operations="opts"
+                :opt-button-text="$vuetify.lang.t('$vuetify.lang_menu_execute_batch')"
+              />
+            </span>
+            <v-btn v-if="!(run.status.result == 'INPUT' || run.status.result == 'RUNNING' || run.status.result == 'PAUSE')" small color="primary" class="mr-2" @click="reRun(run.pipelineName)">{{$vuetify.lang.t('$vuetify.lang_menu_redo_run')}}</v-btn>
+            <v-btn v-if="run.status.result == 'PAUSE'" color="primary" small @click="topRun(run.runName)">{{$vuetify.lang.t('$vuetify.lang_menu_run_queue_top')}}</v-btn>
           </template>
         </info-single-table>
       </InfoCard>
@@ -339,6 +351,20 @@
                 $observables.queryStepsPage$.next('searchForm')
               }"
             ></v-autocomplete>
+            <v-autocomplete
+              :items="[
+                { value: 'createTimeDesc', text: $vuetify.lang.t('$vuetify.lang_form_sort_create_time_desc') },
+                { value: 'createTimeAsc', text: $vuetify.lang.t('$vuetify.lang_form_sort_create_time_asc') },
+              ]"
+              :label="$vuetify.lang.t('$vuetify.lang_form_sort_type')"
+              class="mr-8"
+              clearable
+              dense
+              v-model="stepsForm.sortMode"
+              @change="() => {
+                $observables.queryStepsPage$.next('searchForm')
+              }"
+            ></v-autocomplete>
           </v-container>
           <StepsDataTable
             :steps="stepsPageData.rows"
@@ -459,6 +485,7 @@ import {
 } from 'rxjs/operators'
 import InfoCard from '@/lib/ui-lib/components/InfoCard'
 import PageCard from '@/lib/ui-lib/page-templates/PageCard'
+import Operations from '@/lib/ui-lib/components/Operations'
 import InfoSingleTable from '@/lib/ui-lib/components/InfoSingleTable'
 import StepsDataTable from '@/components/StepsDataTable'
 import CommitsDataTable from '@/components/CommitsDataTable'
@@ -500,6 +527,7 @@ export default {
     InfoCard,
     DialogDefs,
     Monaco,
+    Operations,
   },
   subscriptions () {
     const vm = this
@@ -580,6 +608,7 @@ export default {
         stepActions: [],
         moduleTypes: [],
         moduleName: '',
+        sortMode: '',
       },
       statusItems: [],
       stepItems: [],
@@ -695,6 +724,7 @@ export default {
       originLogWebsocket$: null,
       originDirectiveWebsocket$: null,
       stepLog: true,
+      opts: [],      
     }
   },
   methods: {
@@ -709,8 +739,18 @@ export default {
           params: {
             runName: response.data.runName
           }
-        })
+        }).catch(error => {this.errorTip(true, error.response.data.msg)})
       })
+    },
+    batchRun (projectName, opsBatchName) {
+      request.post(`/cicd/batch/${projectName}/${opsBatchName}`).then(response => {
+        this.$router.push({
+          name: 'CicdRun',
+          params: {
+            runName: response.data.runName
+          }
+        })
+      }).catch(error => {this.errorTip(true, error.response.data.msg)})
     },
     topRun (runName) {
       const vm = this
@@ -789,6 +829,17 @@ export default {
       } else if (next === 2) {
         RUNS_API.getRun(vm.run.runName).then(response => {
           vm.run = response.data.run
+          vm.opts = []
+          vm.run.opsBatchDefs.forEach((row, i) => {
+            vm.opts.push(
+              {
+                text: row.opsBatchDesc,
+                onClick: () => {
+                  vm.batchRun(vm.targetProjectName, row.opsBatchName)
+                }
+              }
+            )
+          })
         }).catch(error => {
           this.errorTip(true, error.response.data.msg)
         })
@@ -802,6 +853,17 @@ export default {
         vm.cardLoading = false
         vm.copyBranchList = next.data.branchNames
         vm.run = next.data.run
+        vm.opts = []
+        vm.run.opsBatchDefs.forEach((row, i) => {
+          vm.opts.push(
+            {
+              text: row.opsBatchDesc,
+              onClick: () => {
+                vm.batchRun(vm.targetProjectName, row.opsBatchName)
+              }
+            }
+          )
+        })
         vm.errMsgPipelineDef = next.data.errMsgPipelineDef
         if(next.data.errMsgPipelineDef === undefined){
           vm.errMsgPipelineDef = ''
@@ -1275,11 +1337,14 @@ export default {
         )
       })
     ), next => {
-      if (['SUCCESS', 'INPUT', 'FAIL'].includes(next.logType)) {
+      if (['SUCCESS', 'FAIL', 'ABORT'].includes(next.logType)) {
+        RUNS_API.getRun(vm.run.runName).then(response => {
+          vm.run = response.data.run
+        }).catch(error => {
+          this.errorTip(true, error.response.data.msg)
+        })
+      } else if (next.logType === 'INPUT') {
         vm.run.status.result = next.logType
-      } else if (next.logType === 'ABORT') {
-        vm.run.status.result = 'ABORT'
-        vm.run.abortUser = User.getInstance().state.userObj.username
       } else {
         vm.run.status.result = 'RUNNING'
       }

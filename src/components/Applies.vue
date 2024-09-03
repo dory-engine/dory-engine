@@ -18,7 +18,6 @@
               clearable
               v-model="appliesForm.projectNames"
               @change="$observables.queryPage$.next('')"
-              :key="projectNameShow"
             ></v-autocomplete>
             <v-autocomplete
               :items="[
@@ -31,8 +30,9 @@
                 {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_delete_project'), value: 'projectDelete'},
                 {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_update_project'), value: 'projectUpdate'},
                 {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_update_resource_quota'), value: 'envQuotaConfigUpdate'},
-                {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_assign_pv'), value: 'envPvAdd'},
-                {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_remove_pv'), value: 'envPvDelete'},
+                {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_assign_pv'), value: 'envPvcAdd'},
+                {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_assign_storage_class_pv'), value: 'envPvcScAdd'},
+                {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_remove_pv'), value: 'envPvcDelete'},
                 {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_new_user'), value: 'userAdd'},
                 {text: $vuetify.lang.t('$vuetify.lang_form_search_apply_other'), value: 'other'},
               ]"
@@ -175,6 +175,21 @@
                 </v-date-picker>
               </v-menu>
             </template>
+            <v-autocomplete
+              :items="[
+                { value: 0, text: $vuetify.lang.t('$vuetify.lang_form_sort_create_time_desc') },
+                { value: 1, text: $vuetify.lang.t('$vuetify.lang_form_sort_update_time_desc') },
+                { value: 2, text: $vuetify.lang.t('$vuetify.lang_form_sort_create_time_asc') },
+                { value: 3, text: $vuetify.lang.t('$vuetify.lang_form_sort_update_time_asc') },
+                { value: 4, text: $vuetify.lang.t('$vuetify.lang_form_sort_apply_ticket_asc') },
+              ]"
+              :label="$vuetify.lang.t('$vuetify.lang_form_sort_type')"
+              class="mr-8"
+              clearable
+              dense
+              v-model="appliesForm.sortMode"
+              @change="$observables.queryPage$.next('')"
+            ></v-autocomplete>
           </search-form>
         </v-card-title>
         <v-card-text>
@@ -198,8 +213,6 @@
               $observables.pageOptionsChange$.next(value)
             }"
             :loading="pageLoading"
-            :sort-by="rtnTableSort(appliesForm.sortMode).sortBy"
-            :sort-desc="rtnTableSort(appliesForm.sortMode).sortDesc"
           >
             <template v-slot:item.applyTicket="{ item }">
               <span>{{item.applyTicket}}</span>
@@ -496,7 +509,6 @@ export default {
     return {
       archNames: [],
       disabledDefNames: [],
-      projectNameShow: 'hidden',
       projectItems: [],
       projectForm: '',
       appliesForm: {
@@ -559,8 +571,9 @@ export default {
         projectDelete: vuetify.preset.lang.t('$vuetify.lang_menu_apply_delete_project'),
         projectUpdate: vuetify.preset.lang.t('$vuetify.lang_menu_apply_update_project'),
         envQuotaConfigUpdate: vuetify.preset.lang.t('$vuetify.lang_menu_apply_update_resource_quota'),
-        envPvAdd: vuetify.preset.lang.t('$vuetify.lang_menu_apply_assign_pv'),
-        envPvDelete: vuetify.preset.lang.t('$vuetify.lang_menu_apply_remove_pv'),
+        envPvcAdd: vuetify.preset.lang.t('$vuetify.lang_menu_apply_assign_pv'),
+        envPvcScAdd: vuetify.preset.lang.t('$vuetify.lang_menu_apply_assign_storage_class_pv'),
+        envPvcDelete: vuetify.preset.lang.t('$vuetify.lang_menu_apply_remove_pv'),
         userAdd: vuetify.preset.lang.t('$vuetify.lang_menu_apply_new_user'),
         other: vuetify.preset.lang.t('$vuetify.lang_menu_apply_other'),
       },
@@ -627,8 +640,9 @@ export default {
           'envAdd',
           'envDelete',
           'envDeleteAll',
-          'envPvAdd',
-          'envPvDelete',
+          'envPvcAdd',
+          'envPvcScAdd',
+          'envPvcDelete',
           'other'
         ].includes(kind)
       ) {
@@ -1305,9 +1319,6 @@ export default {
           })()
           return forkJoin([...(next).map(row => of(row)), attachmentIdsObservable])
         }),
-        tap(next => {
-          console.log(next)
-        }),
         filter(next => next[3]),
         mergeMap(next => {
           // const envConfig = next[2]
@@ -1427,12 +1438,6 @@ export default {
     vm.$observables.queryPage$.pipe(
       tap(next => {
         vm.pageLoading = true
-        if(vm.appliesForm.mode === 2){
-          vm.projectNameShow = ''
-        }else{
-          vm.appliesForm.projectNames = []
-          vm.projectNameShow = 'hidden'
-        }
       }),
       mergeMap(next => {
         const dates = [...vm.createDates].sort()
@@ -1471,26 +1476,8 @@ export default {
     ).subscribe(() => {})
     vm.$observables.pageOptionsChange$.pipe(
       tap(value => {
-        const sortMode = (() => {
-          if (!value.sortBy && value.sortBy.length === 0) {
-            return null
-          } else if (value.sortBy[0] === 'applyTicket' && value.sortDesc[0] === false) {
-            return 4
-          } else if (value.sortBy[0] === 'updateTime' && value.sortDesc[0] === true) {
-            return 0
-          } else if (value.sortBy[0] === 'createTime' && value.sortDesc[0] === true) {
-            return 1
-          } else if (value.sortBy[0] === 'updateTime' && value.sortDesc[0] === false) {
-            return 2
-          } else if (value.sortBy[0] === 'createTime' && value.sortDesc[0] === false) {
-            return 3
-          } else {
-            return null
-          }
-        })()
         vm.appliesForm.page = value.page
         vm.appliesForm.perPage = value.itemsPerPage
-        vm.appliesForm.sortMode = sortMode
       }),
       skip(1),
       tap(next => {
@@ -1621,30 +1608,6 @@ export default {
         return 'light-blue'
       }
     },
-    rtnTableSort (sortMode) {
-      let sortBy = []
-      let sortDesc = []
-      if (sortMode === 4) {
-        sortBy = 'applyTicket'
-        sortDesc = false
-      } else if (sortMode === 0) {
-        sortBy = 'updateTime'
-        sortDesc = true
-      } else if (sortMode === 1) {
-        sortBy = 'createTime'
-        sortDesc = true
-      } else if (sortMode === 2) {
-        sortBy = 'updateTime'
-        sortDesc = false
-      } else if (sortMode === 3) {
-        sortBy = 'createTime'
-        sortDesc = false
-      }
-      return {
-        sortBy,
-        sortDesc
-      }
-    }
   },
   filters: {
     changeColor: function (value) {

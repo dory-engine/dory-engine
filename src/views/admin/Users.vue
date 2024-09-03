@@ -66,7 +66,6 @@
               dense
               v-model="usersForm.admin"
               @change="getUsers()"
-              @click:clear="getUsers()"
             ></v-autocomplete>
             <v-autocomplete
               :items="isAdmin"
@@ -76,7 +75,6 @@
               dense
               v-model="usersForm.tenantAdmin"
               @change="getUsers()"
-              @click:clear="getUsers()"
             ></v-autocomplete>
             <v-autocomplete
               :items="isActive"
@@ -86,7 +84,15 @@
               dense
               v-model="usersForm.active"
               @change="getUsers()"
-              @click:clear="getUsers()"
+            ></v-autocomplete>
+            <v-autocomplete
+              :items="isMember"
+              :label="$vuetify.lang.t('$vuetify.lang_form_is_member')"
+              class="mr-8"
+              clearable
+              dense
+              v-model="usersForm.isMember"
+              @change="getUsers()"
             ></v-autocomplete>
             <v-autocomplete
               :items="[
@@ -1008,6 +1014,7 @@ export default {
         active: '',
         admin: '',
         tenantAdmin: '',
+        isMember: '',
         sortMode: 'username',
         createTimeRange: {
           startDate: '',
@@ -1035,6 +1042,7 @@ export default {
       },
       isAdmin: [ 'yes', 'no' ],
       isActive: [ 'yes', 'no' ],
+      isMember: [ 'yes', 'no' ],
       userNames: [],
       addUserDialog: false,
       updateProfileDialog: false,

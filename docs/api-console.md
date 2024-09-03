@@ -10,6 +10,7 @@
       - [\[GET\] api/console/projectEnvs console项目与可用环境列表接口，用于把主机/数据库加入到项目环境](#get-apiconsoleprojectenvs-console项目与可用环境列表接口用于把主机数据库加入到项目环境)
       - [\[POST\] api/console/projects console项目列表与搜索接口](#post-apiconsoleprojects-console项目列表与搜索接口)
       - [\[GET\] api/console/project/:projectName console项目查看接口](#get-apiconsoleprojectprojectname-console项目查看接口)
+      - [\[GET\] api/console/project/:projectName/minimal console项目查看接口精简](#get-apiconsoleprojectprojectnameminimal-console项目查看接口精简)
       - [\[POST\] api/console/project/:projectName/nodePortAdd console\[申请\]为项目分配NodePort接口](#post-apiconsoleprojectprojectnamenodeportadd-console申请为项目分配nodeport接口)
       - [\[POST\] api/console/project/:projectName/nodePortDelete console\[申请\]为项目回收NodePort接口](#post-apiconsoleprojectprojectnamenodeportdelete-console申请为项目回收nodeport接口)
       - [\[POST\] api/console/project/:projectName/envAdd console\[申请\]为项目分配新环境接口](#post-apiconsoleprojectprojectnameenvadd-console申请为项目分配新环境接口)
@@ -40,8 +41,9 @@
       - [\[POST\] api/console/project/:projectName/pipelineTriggerCopy console为项目流水线复制触发器接口](#post-apiconsoleprojectprojectnamepipelinetriggercopy-console为项目流水线复制触发器接口)
       - [\[POST\] api/console/project/:projectName/pipelineTriggerDelete console为项目流水线移除触发器接口](#post-apiconsoleprojectprojectnamepipelinetriggerdelete-console为项目流水线移除触发器接口)
       - [\[POST\] api/console/project/:projectName/envQuotaConfigUpdate console\[申请\]为项目环境设置quotaConfig接口](#post-apiconsoleprojectprojectnameenvquotaconfigupdate-console申请为项目环境设置quotaconfig接口)
-      - [\[POST\] api/console/project/:projectName/envPvAdd console\[申请\]为项目环境分配pv接口](#post-apiconsoleprojectprojectnameenvpvadd-console申请为项目环境分配pv接口)
-      - [\[POST\] api/console/project/:projectName/envPvDelete console\[申请\]为项目环境回收pv接口](#post-apiconsoleprojectprojectnameenvpvdelete-console申请为项目环境回收pv接口)
+      - [\[POST\] api/console/project/:projectName/envPvcAdd console\[申请\]为项目环境分配pvc接口](#post-apiconsoleprojectprojectnameenvpvcadd-console申请为项目环境分配pvc接口)
+      - [\[POST\] api/console/project/:projectName/envPvcDelete console\[申请\]为项目环境回收pvc接口](#post-apiconsoleprojectprojectnameenvpvcdelete-console申请为项目环境回收pvc接口)
+      - [\[POST\] api/console/project/:projectName/envPvcScAdd console\[申请\]为项目环境分配存储类pvc接口](#post-apiconsoleprojectprojectnameenvpvcscadd-console申请为项目环境分配存储类pvc接口)
       - [\[POST\] api/console/project/:projectName/envNetworkPolicyAdd console为项目新增网络策略接口](#post-apiconsoleprojectprojectnameenvnetworkpolicyadd-console为项目新增网络策略接口)
       - [\[POST\] api/console/project/:projectName/envNetworkPolicyDelete console为项目环境删除网络策略接口](#post-apiconsoleprojectprojectnameenvnetworkpolicydelete-console为项目环境删除网络策略接口)
       - [\[POST\] api/console/project/:projectName/envHostAdd console为项目环境分配主机接口](#post-apiconsoleprojectprojectnameenvhostadd-console为项目环境分配主机接口)
@@ -61,6 +63,7 @@
       - [\[POST\] api/console/project/:projectName/envComponentUpdate console在项目环境调整组件接口](#post-apiconsoleprojectprojectnameenvcomponentupdate-console在项目环境调整组件接口)
       - [\[POST\] api/console/project/:projectName/envComponentDelete console在项目环境删除组件接口](#post-apiconsoleprojectprojectnameenvcomponentdelete-console在项目环境删除组件接口)
       - [\[GET\] api/console/env/:envName/pvNames console获取环境可用pv列表接口](#get-apiconsoleenvenvnamepvnames-console获取环境可用pv列表接口)
+      - [\[GET\] api/console/env/:envName/scNames console获取环境所有storageclass名字列表接口](#get-apiconsoleenvenvnamescnames-console获取环境所有storageclass名字列表接口)
       - [\[POST\] api/console/user console\[申请\]新用户接口](#post-apiconsoleuser-console申请新用户接口)
       - [\[POST\] api/console/userNames/tenantCode console用户名列表接口，用于项目查看页项目member设置选择用户用途](#post-apiconsoleusernamestenantcode-console用户名列表接口用于项目查看页项目member设置选择用户用途)
       - [\[POST\] api/console/envNames/tenantCode console环境名列表接口，用于项目查看页项目为项目分配新环境用途](#post-apiconsoleenvnamestenantcode-console环境名列表接口用于项目查看页项目为项目分配新环境用途)
@@ -135,11 +138,26 @@
         "xxx",
         "xxx"
     ],
+    "envNames": [
+        "xxx",
+        "xxx"
+    ],
+    "projectArches": [
+        "xxx",
+        "xxx"
+    ],
+    "tenantCodes": [
+        "xxx",
+        "xxx"
+    ],
     "projectTeam": "xxx",
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
 ```
+
+- sortMode: createTimeDesc, createTimeAsc, projectNameAsc, projectTeamAsc
 
 - response响应内容
 ```json
@@ -153,6 +171,7 @@
         "projects": [
             {
                 "tenantCode": "xxx",
+                "createTime": "xxx",
                 "projectInfo" : {
                     "projectName" : "test-project1",
                     "projectNamespace" : "test-project1",
@@ -658,6 +677,290 @@
                 }
             ],
         }
+    }
+}
+```
+
+#### [GET] api/console/project/:projectName/minimal console项目查看接口精简
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "get project test-project1 success",
+    "duration": "92.190143ms",
+    "data": {
+        "auditID": "66cc46e1d5f01d23bd8e2128",
+        "project": {
+            "pipelines": [
+                {
+                    "branchName": "develop",
+                    "envProductions": [],
+                    "envs": [
+                        "devops"
+                    ],
+                    "errMsgPipelineDef": "",
+                    "isDefault": true,
+                    "pipelineCrons": [
+                        {
+                            "crontabDay": -1,
+                            "crontabHour": -1,
+                            "crontabMinute": 5,
+                            "crontabMonth": -1,
+                            "crontabWeek": -1
+                        }
+                    ],
+                    "pipelineTriggers": [
+                        {
+                            "beforeExecute": false,
+                            "checkVarToIgnore": "",
+                            "enable": true,
+                            "insecure": false,
+                            "mailAttachmentFormat": "yaml",
+                            "mailCommittees": true,
+                            "mailContent": "{{ .runName }} {{ .status.result }}",
+                            "mailReceivers": [],
+                            "mailTitle": "{{ .runName }}",
+                            "noticeCommittees": true,
+                            "noticeUsernames": [],
+                            "statusResults": [
+                                "FAIL"
+                            ],
+                            "stepAction": "artifact",
+                            "webhookBody": "",
+                            "webhookForms": [],
+                            "webhookHeaders": [],
+                            "webhookMethod": "GET",
+                            "webhookQueryParams": [],
+                            "webhookUrl": "https://www.baidu.com"
+                        }
+                    ],
+                    "sourceBranch": "",
+                    "webhookPushEvent": true
+                },
+                {
+                    "branchName": "xxx",
+                    "envProductions": [],
+                    "envs": [
+                        "uat"
+                    ],
+                    "errMsgPipelineDef": "",
+                    "isDefault": false,
+                    "pipelineCrons": [],
+                    "pipelineTriggers": [],
+                    "sourceBranch": "develop",
+                    "webhookPushEvent": false
+                }
+            ],
+            "projectAvailableEnvs": [
+                {
+                    "envName": "test",
+                    "componentDebug": {
+                        "arch": "amd64",
+                        "deploySpecDebug": {
+                            "debugQuota": {
+                                "cpuLimit": "800m",
+                                "cpuRequest": "50m",
+                                "extraLimit": null,
+                                "extraRequest": null,
+                                "memoryLimit": "800Mi",
+                                "memoryRequest": "50Mi"
+                            },
+                            "ingress": {
+                                "certBranch": "",
+                                "certPath": "",
+                                "certSelfSigned": false,
+                                "domainName": "",
+                                "pathPrefix": ""
+                            }
+                        },
+                        "projectNamespace": "test-project1"
+                    },
+                    "components": [
+                        {
+                            "arch": "amd64",
+                            "componentDesc": "tp1-mysql",
+                            "componentName": "tp1-mysql",
+                            "deploySpecStatic": {
+                                "dependServices": null,
+                                "deployArgs": [
+                                    "--max-allowed-packet=268435456",
+                                    "--character-set-server=utf8mb4",
+                                    "--collation-server=utf8mb4_unicode_ci"
+                                ],
+                                "deployCmds": null,
+                                "deployCommand": "",
+                                "deployConfigBranch": "",
+                                "deployConfigSettings": null,
+                                "deployEnvs": [
+                                    "MYSQL_ROOT_PASSWORD=YOUR_ROOT_PASSWORD",
+                                    "MYSQL_DATABASE=YOUR_DATABASE_NAME",
+                                    "MYSQL_USER=YOUR_DATABASE_USERNAME",
+                                    "MYSQL_PASSWORD=YOUR_USER_PASSWORD"
+                                ],
+                                "deployHeadless": false,
+                                "deployHealthCheck": {
+                                    "checkPort": 3306,
+                                    "exec": "",
+                                    "execCmds": null,
+                                    "httpGet": {
+                                        "httpHeaders": null,
+                                        "path": "",
+                                        "port": 0,
+                                        "scheme": ""
+                                    },
+                                    "livenessDelaySeconds": 60,
+                                    "livenessPeriodSeconds": 30,
+                                    "readinessDelaySeconds": 15,
+                                    "readinessPeriodSeconds": 5,
+                                    "startupDelaySeconds": 15,
+                                    "startupPeriodSeconds": 5
+                                },
+                                "deployImage": "mysql:8.0.23",
+                                "deployLocalPorts": [
+                                    {
+                                        "ingress": {
+                                            "certBranch": "",
+                                            "certPath": "",
+                                            "certSelfSigned": false,
+                                            "domainName": "",
+                                            "pathPrefix": ""
+                                        },
+                                        "port": 3306,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "deployMeta": {
+                                    "annotations": null,
+                                    "labels": null
+                                },
+                                "deployName": "tp1-mysql",
+                                "deployNodePorts": null,
+                                "deployReplicas": 1,
+                                "deployResources": {
+                                    "cpuLimit": "1",
+                                    "cpuRequest": "0.2",
+                                    "extraLimit": null,
+                                    "extraRequest": null,
+                                    "memoryLimit": "400Mi",
+                                    "memoryRequest": "20Mi"
+                                },
+                                "deploySessionAffinityTimeoutSeconds": 0,
+                                "deployType": "statefulset",
+                                "deployVolumes": [
+                                    {
+                                        "pathInPod": "/var/lib/mysql",
+                                        "pathInPv": "mysql",
+                                        "pvc": ""
+                                    }
+                                ],
+                                "enableDownwardApi": false,
+                                "hostAliases": null,
+                                "hpaConfig": {
+                                    "cpuAverageRequestPercent": 0,
+                                    "cpuAverageValue": "",
+                                    "maxReplicas": 0,
+                                    "memoryAverageRequestPercent": 0,
+                                    "memoryAverageValue": ""
+                                },
+                                "ingressDef": {
+                                    "certBranch": "",
+                                    "certPath": "",
+                                    "certSelfSigned": false,
+                                    "ingressAnnotations": [],
+                                    "ingressDomainNamePaths": []
+                                },
+                                "lifecycle": {
+                                    "postStart": {
+                                        "exec": "",
+                                        "execCmds": null,
+                                        "httpGet": {
+                                            "httpHeaders": null,
+                                            "path": "",
+                                            "port": 0,
+                                            "scheme": ""
+                                        }
+                                    },
+                                    "preStop": {
+                                        "exec": "",
+                                        "execCmds": null,
+                                        "httpGet": {
+                                            "httpHeaders": null,
+                                            "path": "",
+                                            "port": 0,
+                                            "scheme": ""
+                                        }
+                                    }
+                                },
+                                "nodeName": "",
+                                "nodeSelector": null,
+                                "patches": null,
+                                "podManagementPolicy": "OrderedReady",
+                                "securityContext": {
+                                    "runAsGroup": 0,
+                                    "runAsUser": 0
+                                },
+                                "subdomain": "",
+                                "terminationGracePeriodSeconds": 0,
+                                "workingDir": ""
+                            },
+                            "projectNamespace": "test-project1"
+                        }
+                    ],
+                    "databases": [
+                        {
+                            "createUser": "dory-admin",
+                            "dbName": "test-project1-mysql01",
+                            "dbPassword": "xxx",
+                            "dbUrl": "xxx",
+                            "dbUser": "testuser"
+                        }
+                    ],
+                    "hosts": [
+                        {
+                            "groups": [
+                                "group_demo"
+                            ],
+                            "hostAddr": "10.1.0.2",
+                            "hostBecome": false,
+                            "hostBecomePassword": "",
+                            "hostBecomeUser": "",
+                            "hostName": "test-project1-node01",
+                            "hostPassword": "xxx",
+                            "hostPort": 30012,
+                            "hostUser": "root",
+                            "updateTime": "04-03 00:25:37",
+                            "variables": {
+                                "backup_dir": "/backup",
+                                "base_dir": "/app",
+                                "service_port": "8000"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "projectInfo": {
+                "projectName": "test-project1",
+                "projectNamespace": "test-project1",
+                "projectShortName": "tp1",
+                "shortName": "tp1",
+                "projectArch": "amd64",
+                "defaultPv": "",
+                "projectDesc": "test-project1",
+                "projectTeam": "TP"
+            },
+            "projectMembers": [
+                {
+                    "accessLevel": "developer",
+                    "disablePipelines": [],
+                    "disableProjectDefs": [],
+                    "disableRepoSecrets": [],
+                    "username": "test-user01"
+                }
+            ],
+            "tenantCode": ""
+        },
+        "withAdminLog": false
     }
 }
 ```
@@ -1573,7 +1876,7 @@
 }
 ```
 
-#### [POST] api/console/project/:projectName/envPvAdd console[申请]为项目环境分配pv接口
+#### [POST] api/console/project/:projectName/envPvcAdd console[申请]为项目环境分配pvc接口
 
 - request请求内容
 ```json
@@ -1604,13 +1907,13 @@
 }
 ```
 
-#### [POST] api/console/project/:projectName/envPvDelete console[申请]为项目环境回收pv接口
+#### [POST] api/console/project/:projectName/envPvcDelete console[申请]为项目环境回收pvc接口
 
 - request请求内容
 ```json
 {
     "envName": "xxx",
-    "pvName": "xxx",
+    "pvcName": "xxx",
     "title": "xxx",
     "content": "xxx",
     "attachmentIDs": [
@@ -1629,6 +1932,36 @@
         "auditID": "xxx",
         "withAdminLog": true,
         "applyTicket": "xxx",
+    }
+}
+```
+
+#### [POST] api/console/project/:projectName/envPvcScAdd console[申请]为项目环境分配存储类pvc接口
+
+- request请求内容
+```json
+{
+    "envName": "xxx",
+    "scNames": [
+        "xxx"
+    ],
+    "title": "xxx",
+    "content": "xxx",
+    "attachmentIDs": [
+        "xxx"
+    ],
+}
+```
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {
+        "auditID": "xxx",
+        "withAdminLog": true,
     }
 }
 ```
@@ -1996,6 +2329,7 @@
 ```json
 {
     "envName": "xxx",
+    "arch": "xxx",
     "componentDebugYaml": "xxx",
 }
 ```
@@ -2256,6 +2590,7 @@ ingress:
 ```json
 {
     "envName": "xxx",
+    "arch": "xxx",
     "componentDesc": "xxx",
     "componentYaml": "xxx",
 }
@@ -2668,6 +3003,24 @@ patches:
 }
 ```
 
+#### [GET] api/console/env/:envName/scNames console获取环境所有storageclass名字列表接口
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {
+        "auditID": "66b490d5b354cfa7eed6e537",
+        "scNames": [
+            "xxx",
+        ],
+        "withAdminLog": false
+    }
+}
+```
+
 #### [POST] api/console/user console[申请]新用户接口
 
 - request请求内容
@@ -2859,8 +3212,9 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         - projectDeleteAll: 删除项目并清理名字空间
         - projectUpdate: 修改项目
         - envQuotaConfigUpdate: 设置项目环境的quotaConfig
-        - envPvAdd: 新增环境pv
-        - envPvDelete: 删除环境pv
+        - envPvcAdd: 新增环境pvc
+        - envPvcDelete: 删除环境pvc
+        - envPvcScAdd: 新增环境存储类pvc
         - userAdd: 新增用户
         - other: 其他类型申请
 
@@ -3075,12 +3429,15 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
                 extraRequest: [{"name": "xxx", "value": "xxx"}],（可修改）
                 extraLimit: [{"name": "xxx", "value": "xxx"}],（可修改）
             }
-        - envPvAdd: 新增环境pv
+        - envPvcAdd: 新增环境pvc
             - envName: "test1"（不可修改）
             - pvNames: ["xxx-pvx"]（不可修改）
-        - envPvDelete: 删除环境pv
+        - envPvcDelete: 删除环境pvc
             - envName: "test1"（不可修改）
-            - pvName: "xxx-pvx"（不可修改）
+            - pvcName: "xxx-pvx"（不可修改）
+        - envPvcScAdd: 新增环境存储类pvc
+            - envName: "test1"（不可修改）
+            - scName: "xxx"（不可修改）
         - userAdd: 新增用户
             - username: "xxx"（可修改）
             - name: "xxx"（可修改）
@@ -3180,6 +3537,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         "startDate": "2021-02-01",
         "endDate": "2021-02-02"
     },
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
@@ -3190,6 +3548,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
     - stepResults/statusResults: 步骤状态/webhook状态
         - SUCCESS
         - FAIL
+    - sortMode: createTimeDesc, createTimeAsc
 
 - response响应内容
 ```json
@@ -3377,6 +3736,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         "startDate": "2021-02-01",
         "endDate": "2021-02-02"
     },
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
@@ -3386,6 +3746,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
     - stepResults/mailResults: 步骤状态/状态
         - SUCCESS
         - FAIL
+    - sortMode: createTimeDesc, createTimeAsc
 
 - response响应内容
 ```json
@@ -3543,6 +3904,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         "startDate": "2021-02-01",
         "endDate": "2021-02-02"
     },
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
@@ -3553,6 +3915,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
     - stepResults: 步骤状态
         - SUCCESS
         - FAIL
+    - sortMode: createTimeDesc, createTimeAsc
 
 - response响应内容
 ```json

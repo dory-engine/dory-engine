@@ -738,6 +738,7 @@
     "startUser": "xxx",
     "abortUser": "xxx",
     "runNumber": 1,
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
@@ -746,6 +747,7 @@
     - duration: 0（不选择）、1（0-2分钟）、2（2-5分钟）、3（5-15分钟）、4（15-30分钟）、5（30分钟以上）
     - statusResults: SUCCESS FAIL ABORT RUNNING INPUT
     - triggerKinds: manual webhook crontab
+    - sortMode: createTimeDesc, createTimeAsc
 
 - response响应内容
 ```json
@@ -1179,10 +1181,13 @@
         "startDate": "2021-02-01",
         "endDate": "2021-02-02"
     },
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
 ```
+
+    - sortMode: commitTimeDesc, commitTimeAsc
 
 - response响应内容
 ```json
@@ -1272,12 +1277,14 @@
         "endDate": "2021-02-02"
     },
     "runNumber": 1,
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
 ```
     - statusResults: SUCCESS, FAIL, ABORT, RUNNING
     - moduleTypes: build, package, artifact, deploy, deployArtifact
+    - sortMode: createTimeDesc, createTimeAsc
 
 - response响应内容
 ```json
@@ -1489,6 +1496,7 @@
                         "imageRepoGroupName": "",
                         "imageRepoUserName": "",
                         "imageRepoPassword": "",
+                        "storageLimit": 0,
                     },
                     "imageURL": "https://registry.dory.cookeem.com/harbor/projects/16/repositories/tp1-gin-demo/artifacts/v0.0.0-release-1",
                     "moduleName": "tp1-gin-demo",
@@ -1600,6 +1608,7 @@
                         "imageRepoGroupName": "",
                         "imageRepoUserName": "",
                         "imageRepoPassword": "",
+                        "storageLimit": 0,
                     },
                     "moduleName": "tp1-gin-demo",
                     "scanImageStatus": "FAIL",
@@ -1665,6 +1674,7 @@
                         "imageRepoGroupName": "",
                         "imageRepoUserName": "",
                         "imageRepoPassword": "",
+                        "storageLimit": 0,
                     },
                     "isMeshEnable": false,
                     "k8sConfigMapYaml": "xxx",
@@ -1710,6 +1720,7 @@
                         "imageRepoGroupName": "",
                         "imageRepoUserName": "",
                         "imageRepoPassword": "",
+                        "storageLimit": 0,
                     },
                     "isMeshEnable": false,
                     "moduleName": "tp1-gin-demo",
@@ -1761,6 +1772,7 @@
                         "imageRepoGroupName": "",
                         "imageRepoUserName": "",
                         "imageRepoPassword": "",
+                        "storageLimit": 0,
                     },
                     "isMeshEnable": true,
                     "isMeshEnableProd": true,
@@ -1842,6 +1854,7 @@
                         "imageRepoGroupName": "",
                         "imageRepoUserName": "",
                         "imageRepoPassword": "",
+                        "storageLimit": 0,
                     },
                     "moduleName": "tp1-spring-demo"
                 },
@@ -2408,6 +2421,7 @@
                         "imageRepoGroupName": "",
                         "imageRepoUserName": "",
                         "imageRepoPassword": "",
+                        "storageLimit": 0,
                     },
                     "imageURL": "https://registry.dory.cookeem.com/harbor/projects/16/repositories/tp1-gin-demo/artifacts/v0.0.0-release-1",
                     "moduleName": "tp1-gin-demo",
@@ -2658,6 +2672,12 @@
         ],
         "run": {
             "projectName": "test-project1",
+            "opsBatchDefs": [
+                {
+                    "opsBatchName": "xxx",
+                    "opsBatchDesc": "xxx",
+                },
+            ],
             "branchName": "develop",
             "pipelineName": "test-project1-develop",
             "runName": "test-project1-develop-17",
@@ -2896,6 +2916,7 @@
         "startDate": "2021-02-01",
         "endDate": "2021-02-02"
     },
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
@@ -2906,6 +2927,7 @@
     - stepResults: 步骤状态
         - SUCCESS
         - FAIL
+    - sortMode: createTimeDesc, createTimeAsc
 
 - response响应内容
 ```json

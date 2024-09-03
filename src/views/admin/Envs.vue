@@ -88,6 +88,56 @@
                     />
                   </v-card-text>
                 </v-card>
+                <v-card class="rounded-0">
+                  <v-card-title>
+                    {{$vuetify.lang.t('$vuetify.lang_view_env_scs_settings')}}
+                    <v-spacer></v-spacer>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-data-table
+                      :headers="[
+                        {text: $vuetify.lang.t('$vuetify.lang_view_sc_sc_name'), value: 'scName', sortable: false},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_sc_sc_provisioner'), value: 'scProvisioner', sortable: false},
+                        {text: $vuetify.lang.t('$vuetify.lang_view_sc_sc_yaml'), value: 'scYaml', sortable: false},
+                      ]"
+                      :items="item.scs"
+                    >
+                      <template v-slot:item.scYaml="{ item }">
+                        <v-dialog width="800" delay= "3000">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                              small
+                              color="primary"
+                              dark
+                              v-bind="attrs"
+                              v-on="on"
+                            >
+                              {{$vuetify.lang.t('$vuetify.lang_menu_view_detail')}}
+                            </v-btn>
+                          </template>
+                          <v-card>
+                            <v-card-title class="headline grey lighten-2">
+                              {{$vuetify.lang.t('$vuetify.lang_menu_view_detail')}}
+                            </v-card-title>
+                            <v-card-text>
+                              <Monaco
+                                ref="monaco"
+                                :monacoOptions="{
+                                  value: item.scYaml,
+                                  automaticLayout: true,
+                                  readOnly: true,
+                                  theme: 'vs-dark',
+                                  language: 'yaml'
+                                }"
+                                :height="500"
+                              ></Monaco>
+                            </v-card-text>
+                          </v-card>
+                        </v-dialog>
+                      </template>
+                    </v-data-table>
+                  </v-card-text>
+                </v-card>                
               </td>
             </template>
           </v-data-table>
@@ -3061,6 +3111,22 @@ export default {
     ).subscribe(next => {
       vm.pageResponse.data.envK8ss[next[1]].pvs = next[0].data.pvs
     })
+    vm.$observables.queryPvs$.pipe(
+      mergeMap(next => {
+        const index = next.index
+        const envName = next.envName
+        return defer(() => { return ENV_API.getEnvScs(envName) }).pipe(
+          rtnRetryWhenOperator(),
+          catchError(next => {
+            return of(null)
+          }),
+          withLatestFrom(of(index))
+        )
+      }),
+      filter(next => next[0])
+    ).subscribe(next => {
+      vm.pageResponse.data.envK8ss[next[1]].scs = next[0].data.scs
+    })
     vm.$observables.queryPage$.pipe(
       mergeMap(next => {
         return defer(() => {
@@ -3077,6 +3143,7 @@ export default {
       tap(next => {
         next[0].data.envK8ss.forEach((row, index) => {
           row.pvs = []
+          row.scs = []
           row.index = index
         })
         vm.pageResponse = next[0]

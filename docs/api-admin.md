@@ -46,8 +46,9 @@
       - [\[POST\] api/admin/project/:projectName/pipelineTriggerCopy admin为项目流水线复制触发器接口](#post-apiadminprojectprojectnamepipelinetriggercopy-admin为项目流水线复制触发器接口)
       - [\[POST\] api/admin/project/:projectName/pipelineTriggerDelete admin为项目流水线移除触发器接口](#post-apiadminprojectprojectnamepipelinetriggerdelete-admin为项目流水线移除触发器接口)
       - [\[POST\] api/admin/project/:projectName/envQuotaConfigUpdate admin为项目环境设置quotaConfig接口](#post-apiadminprojectprojectnameenvquotaconfigupdate-admin为项目环境设置quotaconfig接口)
-      - [\[POST\] api/admin/project/:projectName/envPvAdd admin为项目环境分配pv接口](#post-apiadminprojectprojectnameenvpvadd-admin为项目环境分配pv接口)
-      - [\[POST\] api/admin/project/:projectName/envPvDelete admin为项目环境回收pv接口](#post-apiadminprojectprojectnameenvpvdelete-admin为项目环境回收pv接口)
+      - [\[POST\] api/admin/project/:projectName/envPvcAdd admin为项目环境分配pvc接口](#post-apiadminprojectprojectnameenvpvcadd-admin为项目环境分配pvc接口)
+      - [\[POST\] api/admin/project/:projectName/envPvcDelete admin为项目环境回收pvc接口](#post-apiadminprojectprojectnameenvpvcdelete-admin为项目环境回收pvc接口)
+      - [\[POST\] api/admin/project/:projectName/envPvcScAdd admin为项目环境分配存储类pvc接口](#post-apiadminprojectprojectnameenvpvcscadd-admin为项目环境分配存储类pvc接口)
       - [\[POST\] api/admin/project/:projectName/envNetworkPolicyAdd admin为项目新增网络策略接口](#post-apiadminprojectprojectnameenvnetworkpolicyadd-admin为项目新增网络策略接口)
       - [\[POST\] api/admin/project/:projectName/envNetworkPolicyDelete admin为项目环境删除网络策略接口](#post-apiadminprojectprojectnameenvnetworkpolicydelete-admin为项目环境删除网络策略接口)
       - [\[POST\] api/admin/project/:projectName/envHostAdd admin为项目环境分配主机接口](#post-apiadminprojectprojectnameenvhostadd-admin为项目环境分配主机接口)
@@ -119,6 +120,8 @@
       - [\[GET\] api/admin/env/:envName/pvs admin获取环境所有pv列表接口](#get-apiadminenvenvnamepvs-admin获取环境所有pv列表接口)
       - [\[GET\] api/admin/env/:envName/pvNames admin获取环境可用pv列表接口](#get-apiadminenvenvnamepvnames-admin获取环境可用pv列表接口)
       - [\[POST\] api/admin/env/:envName/pvDelete admin为环境回收pv接口](#post-apiadminenvenvnamepvdelete-admin为环境回收pv接口)
+      - [\[GET\] api/admin/env/:envName/scs admin获取环境所有storageclass列表接口](#get-apiadminenvenvnamescs-admin获取环境所有storageclass列表接口)
+      - [\[GET\] api/admin/env/:envName/scNames admin获取环境所有storageclass名字列表接口](#get-apiadminenvenvnamescnames-admin获取环境所有storageclass名字列表接口)
       - [\[POST\] api/admin/componentTemplates admin获取组件模板列表接口](#post-apiadmincomponenttemplates-admin获取组件模板列表接口)
       - [\[GET\] api/admin/componentTemplate admin获取默认新增组件模板内容接口](#get-apiadmincomponenttemplate-admin获取默认新增组件模板内容接口)
       - [\[POST\] api/admin/componentTemplate admin新增组件模板接口](#post-apiadmincomponenttemplate-admin新增组件模板接口)
@@ -217,9 +220,21 @@
         "deployPatchEnable": true,
         "deployConfigMapEnable": true,
         "deploySecretEnable": true,
+        "archesEnable": true,
+        "extraQuotaEnable": true
     },
 }
 ```
+
+  - executeNumber: 0表示不限制
+  - dockerNumber: 0表示不限制
+  - projectNumber: 0表示不限制
+  - buildDefNumber: 0表示不限制
+  - envNumber: 0表示不限制
+  - gitRepoNumber: 0表示不限制，-1表示禁止
+  - imageRepoNumber: 0表示不限制，-1表示禁止
+  - artifactRepoNumber: 0表示不限制，-1表示禁止
+  - scanCodeRepoNumber: 0表示不限制，-1表示禁止
 
 - response响应内容
 ```json
@@ -329,11 +344,27 @@
         "xxx",
         "xxx"
     ],
+    "envNames": [
+        "xxx",
+        "xxx"
+    ],
+    "projectArches": [
+        "xxx",
+        "xxx"
+    ],
+    "tenantCodes": [
+        "xxx",
+        "xxx"
+    ],
     "projectTeam": "xxx",
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
 ```
+
+- sortMode: createTimeDesc, createTimeAsc, projectNameAsc, projectTeamAsc
+
 
 - response响应内容
 ```json
@@ -347,6 +378,7 @@
         "projects": [
             {
                 "tenantCode": "xxx",
+                "createTime": "xxx",
                 "projectInfo" : {
                     "projectName" : "test-project1",
                     "projectNamespace" : "test-project1",
@@ -474,6 +506,7 @@
     },
     "imageRepoSetting": {
         "imageRepoName": "xxx",
+        "storageLimit": 0,
         "imageRepoHostName": "xxx",
         "imageRepoGroupName": "xxx",
         "imageRepoUserName": "xxx",
@@ -1807,7 +1840,7 @@
 }
 ```
 
-#### [POST] api/admin/project/:projectName/envPvAdd admin为项目环境分配pv接口
+#### [POST] api/admin/project/:projectName/envPvcAdd admin为项目环境分配pvc接口
 
 - request请求内容
 ```json
@@ -1832,13 +1865,38 @@
 }
 ```
 
-#### [POST] api/admin/project/:projectName/envPvDelete admin为项目环境回收pv接口
+#### [POST] api/admin/project/:projectName/envPvcDelete admin为项目环境回收pvc接口
 
 - request请求内容
 ```json
 {
     "envName": "xxx",
-    "pvName": "xxx",
+    "pvcName": "xxx",
+}
+```
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {
+        "auditID": "xxx",
+        "withAdminLog": true,
+    }
+}
+```
+
+#### [POST] api/admin/project/:projectName/envPvcScAdd admin为项目环境分配存储类pvc接口
+
+- request请求内容
+```json
+{
+    "envName": "xxx",
+    "scNames": [
+        "xxx"
+    ],
 }
 ```
 
@@ -2961,6 +3019,7 @@ patches:
     "active": "yes",
     "admin": "yes",
     "tenantAdmin": "yes",
+    "isMember": "yes",
     "sortMode": "username",
     "createTimeRange": {
         "startDate": "2021-02-01",
@@ -2978,6 +3037,7 @@ patches:
     - active: yes / no / 其他情况表示全部
     - admin: yes / no / 其他情况表示全部
     - tenantAdmin: yes / no / 其他情况表示全部
+    - isMember: yes / no / 其他情况表示全部
     - sortMode: 排序方式，默认username
       - username: 用户名顺序
       - name: 名字顺序
@@ -5004,6 +5064,47 @@ nfs:
 }
 ```
 
+#### [GET] api/admin/env/:envName/scs admin获取环境所有storageclass列表接口
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {
+        "auditID": "66b490d5b354cfa7eed6e537",
+        "scs": [
+            {
+                "envName": "devops",
+                "scName": "nfs-csi",
+                "scYaml": "xxx",
+                "scProvisioner": "nfs.csi.k8s.io"
+            }
+        ],
+        "withAdminLog": false
+    }
+}
+```
+
+#### [GET] api/admin/env/:envName/scNames admin获取环境所有storageclass名字列表接口
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {
+        "auditID": "66b490d5b354cfa7eed6e537",
+        "scNames": [
+            "xxx",
+        ],
+        "withAdminLog": false
+    }
+}
+```
+
 #### [POST] api/admin/componentTemplates admin获取组件模板列表接口
 
 - request请求内容
@@ -5283,6 +5384,7 @@ nfs:
         "startDate": "2021-02-01",
         "endDate": "2021-02-02"
     },
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
@@ -5290,6 +5392,7 @@ nfs:
 
     - withAdminLog: 是否包含管理日志， yes/no/其他表示所有
     - withApplyTicket: 是否申请工单， yes/no/其他表示所有
+    - sortMode: startTimeDesc, startTimeAsc
 
 - response响应内容
 ```json
@@ -5427,8 +5530,9 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         - projectDeleteAll: 删除项目并清理名字空间
         - projectUpdate: 修改项目
         - envQuotaConfigUpdate: 设置项目环境的quotaConfig
-        - envPvAdd: 新增环境pv
-        - envPvDelete: 删除环境pv
+        - envPvcAdd: 新增环境pvc
+        - envPvcDelete: 删除环境pvc
+        - envPvcScAdd: 新增环境存储类pvc
         - userAdd: 新增用户
         - other: 其他类型申请
 
@@ -5642,12 +5746,15 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
                 extraRequest: [{"name": "xxx", "value": "xxx"}],（可修改）
                 extraLimit: [{"name": "xxx", "value": "xxx"}],（可修改）
             }
-        - envPvAdd: 新增环境pv
+        - envPvcAdd: 新增环境pvc
             - envName: "test1"（不可修改）
             - pvNames: ["xxx-pvx"]（不可修改）
-        - envPvDelete: 删除环境pv
+        - envPvcDelete: 删除环境pvc
             - envName: "test1"（不可修改）
-            - pvName: "xxx-pvx"（不可修改）
+            - pvcName: "xxx-pvx"（不可修改）
+        - envPvcScAdd: 新增环境存储类pvc
+            - envName: "test1"（不可修改）
+            - scName: "xxx"（不可修改）
         - userAdd: 新增用户
             - username: "xxx"（可修改）
             - name: "xxx"（可修改）
@@ -5723,6 +5830,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         "startDate": "2021-02-01",
         "endDate": "2021-02-02"
     },
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
@@ -5730,6 +5838,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
 
     - enableResend: 是否允许重发邮件，yes/no/其他表示所有
     - statuses: SUCCESS / FAIL
+    - sortMode: createTimeDesc, createTimeAsc
 
 - response响应内容
 ```json
@@ -5840,6 +5949,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         "startDate": "2021-02-01",
         "endDate": "2021-02-02"
     },
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
@@ -5850,6 +5960,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
     - stepResults/requestResults: 步骤状态/状态
         - SUCCESS
         - FAIL
+    - sortMode: createTimeDesc, createTimeAsc
 
 - response响应内容
 ```json
@@ -6037,6 +6148,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         "startDate": "2021-02-01",
         "endDate": "2021-02-02"
     },
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
@@ -6046,6 +6158,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
     - stepResults/mailResults: 步骤状态/状态
         - SUCCESS
         - FAIL
+    - sortMode: createTimeDesc, createTimeAsc
 
 - response响应内容
 ```json
@@ -6203,6 +6316,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         "startDate": "2021-02-01",
         "endDate": "2021-02-02"
     },
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
@@ -6213,6 +6327,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
     - stepResults: 步骤状态
         - SUCCESS
         - FAIL
+    - sortMode: createTimeDesc, createTimeAsc
 
 - response响应内容
 ```json
@@ -6600,6 +6715,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         "startDate": "2021-02-01",
         "endDate": "2021-02-02"
     },
+    "sortMode": "xxx",
     "page": 1,
     "perPage": 10
 }
@@ -6607,6 +6723,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
     - results: webhook状态
         - SUCCESS
         - FAIL
+    - sortMode: createTimeDesc, createTimeAsc
 
 - response响应内容
 ```json
