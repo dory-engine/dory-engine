@@ -104,13 +104,16 @@
                   </v-date-picker>
                 </v-menu>
               </template>
-              <v-text-field
-                :label="$vuetify.lang.t('$vuetify.lang_form_tag_name')"
+              <v-autocomplete
+                :items="archNames"
+                :label="$vuetify.lang.t('$vuetify.lang_form_arch_name')"
                 class="mr-8"
                 dense
-                v-model="runsForm.tagName"
-                @keydown.enter="getRuns()"
-              />
+                small-chips
+                multiple
+                v-model="runsForm.archNames"
+                @blur="getRuns()"
+              ></v-autocomplete>
               <v-autocomplete
                 :items="['manual', 'webhook', 'crontab']"
                 :label="$vuetify.lang.t('$vuetify.lang_form_trigger_kind')"
@@ -126,6 +129,13 @@
                 class="mr-8"
                 dense
                 v-model="runsForm.startUser"
+                @keydown.enter="getRuns()"
+              />
+              <v-text-field
+                :label="$vuetify.lang.t('$vuetify.lang_form_tag_name')"
+                class="mr-8"
+                dense
+                v-model="runsForm.tagName"
                 @keydown.enter="getRuns()"
               />
               <v-autocomplete
@@ -172,6 +182,7 @@ export default {
         runNames: [],
         triggerKinds: [],
         branchNames: [],
+        archNames: [],
         statusResults: [],
         duration: 0,
         startTimeRange: {
@@ -185,6 +196,7 @@ export default {
         page: 1,
         perPage: 10
       },
+      archNames: [],
       runsData: {},
       tableLoading: true,
       projectItems: [],
@@ -219,6 +231,13 @@ export default {
     request.get('/cicd/branchNames').then(response => {
       if (response.data.statusResults !== null) {
         vm.branchItems = response.data.branchNames
+      }
+    }).catch(error => {
+      vm.errorTip(true, error.response.data.msg)
+    })
+    request.get('/cicd/archNames').then(response => {
+      if (response.data.statusResults !== null) {
+        vm.archNames = response.data.archNames
       }
     }).catch(error => {
       vm.errorTip(true, error.response.data.msg)

@@ -2893,7 +2893,8 @@ export default {
         })
         if (response.data.deploySpecStatic.deployEnvs !== null) {
           response.data.deploySpecStatic.deployEnvs.forEach((row, rowIndex) => {
-            let item = row.split("=")
+            let ii = row.indexOf('=');
+            row = [row.substring(0, ii), row.substring(ii + 1)]
             response.data.deploySpecStatic.deployEnvs[rowIndex] = item
           });
         }
@@ -3713,7 +3714,8 @@ export default {
       }
       if (vm.addComponentForm.deploySpecStatic.deployEnvs !== null) {
         vm.addComponentForm.deploySpecStatic.deployEnvs.forEach((row, rowIndex) => {
-          let item = row.split("=")
+          let ii = row.indexOf('=');
+          row = [row.substring(0, ii), row.substring(ii + 1)]
           vm.addComponentForm.deploySpecStatic.deployEnvs[rowIndex] = item
         });
       }
@@ -3739,7 +3741,8 @@ export default {
         })
         if (vm.addComponentForm.deploySpecStatic.deployEnvs !== null) {
           vm.addComponentForm.deploySpecStatic.deployEnvs.forEach((row, rowIndex) => {
-            row = row.split("=");
+            let ii = row.indexOf('=');
+            row = [row.substring(0, ii), row.substring(ii + 1)]
             vm.addComponentForm.deploySpecStatic.deployEnvs[rowIndex] = row;
           });
         }

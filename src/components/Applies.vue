@@ -507,7 +507,6 @@ export default {
   },
   data () {
     return {
-      archNames: [],
       disabledDefNames: [],
       projectItems: [],
       projectForm: '',
@@ -586,7 +585,6 @@ export default {
   },
   created () {
     const vm = this
-    vm.getArchNames()
     vm.getDisabledDefNames()
     function clearOperationForm () {
       vm.operationCardConfig.attrs.confirmLoading = false
@@ -635,7 +633,6 @@ export default {
           'apply'
         ].includes(opType) ||
         [
-          'nodePortAdd',
           'nodePortDelete',
           'envAdd',
           'envDelete',
@@ -647,6 +644,18 @@ export default {
         ].includes(kind)
       ) {
         msg = null
+      } else if (kind === 'nodePortAdd') {
+        formEls = [
+          <VTextField
+            label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_node_port')}
+            required
+            dense
+            value={reactiveOpParam.nodePort}
+            vOn:input={(value) => { reactiveOpParam.nodePort = Number(value) }}
+            hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_node_port_tip_1')}
+            persistent-hint
+          />,
+        ]
       } else if (kind === 'projectDelete') {
         formEls = [
           <VAutocomplete
@@ -720,17 +729,6 @@ export default {
             vOn:input={(value) => { reactiveOpParam.projectTeam = value }}
             rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
             hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_team_tip_1')}
-            persistent-hint
-          />,
-          <VAutocomplete
-            label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_arch')}
-            required
-            dense
-            items={vm.archNames}
-            value={reactiveOpParam.projectArch}
-            vOn:input={(value) => { reactiveOpParam.projectArch = value }}
-            rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
-            hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_arch_tip_1')}
             persistent-hint
           />,
           <VTextField
@@ -1550,14 +1548,6 @@ export default {
       const vm = this
       request.get(`/public/about`).then(response => {
         vm.disabledDefNames = response.data.config.disabledDefNames
-      }).catch(error => {
-        vm.errorTip(true,error.response.data.msg)
-      })
-    },
-    getArchNames () {
-      const vm = this
-      request.get(`/console/archNames`).then(response => {
-        vm.archNames = response.data.archNames
       }).catch(error => {
         vm.errorTip(true,error.response.data.msg)
       })

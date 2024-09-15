@@ -28,6 +28,9 @@
         <span>{{ item.pipelineName }}</span>
       </div>
     </template>
+    <template v-slot:item.pipelineArch="{ item }">
+      <v-chip v-if="item.pipelineArch" small class="mr-2" color="primary">{{ item.pipelineArch }}</v-chip>
+    </template>
     <template v-slot:item.triggerKind="{ item }">
       <v-chip v-if="item.triggerKind" small class="mb-1 white--text" style="text-transform:uppercase" color="teal">
         {{item.triggerKind}}
@@ -70,6 +73,7 @@ export default {
       return [
         { text: vuetify.preset.lang.t('$vuetify.lang_view_run_name'), sortable: false, value: 'runName' },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_project_pipeline_name'), value: 'projectName', sortable: false },
+        { text: vuetify.preset.lang.t('$vuetify.lang_view_architecture'), value: 'pipelineArch', sortable: false },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_tag_name'), value: 'tagName', sortable: false },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_start_user'), value: 'startUser', sortable: false },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_trigger_kind'), value: 'triggerKind', sortable: false },
@@ -79,9 +83,9 @@ export default {
     }
   },
   watch: {
-   queuesData: function(n,o) {
-     this.queuesData = n
-   }
+    queuesData: function(n,o) {
+      this.queuesData = n
+    }
   }
 }
 </script>

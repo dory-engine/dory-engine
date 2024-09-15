@@ -38,7 +38,6 @@
                   <td>
                     <div>{{ project.projectInfo.projectNamespace }}({{ project.projectInfo.shortName }})</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_project_team')}}: {{ project.projectInfo.projectTeam }}</div>
-                    <div>{{$vuetify.lang.t('$vuetify.lang_view_project_arch')}}: {{ project.projectInfo.projectArch }}</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_tenant_code')}}: {{ project.tenantCode }}</div>
                   </td>
                   <td>
@@ -257,9 +256,9 @@
                   </td>
                   <td>{{ item.username }}</td>
                   <td>{{ item.accessLevel }}</td>
-                  <td><v-chip small v-for="(str,j) in item.disableProjectDefs" :key="j">{{str}}</v-chip></td>
-                  <td><v-chip small v-for="(str,j) in item.disableRepoSecrets" :key="j">{{str}}</v-chip></td>
-                  <td><v-chip small v-for="(str,j) in item.disablePipelines" :key="j">{{str}}</v-chip></td>
+                  <td><v-chip small class="mr-1" v-for="(str,j) in item.disableProjectDefs" :key="j">{{str}}</v-chip></td>
+                  <td><v-chip small class="mr-1" v-for="(str,j) in item.disableRepoSecrets" :key="j">{{str}}</v-chip></td>
+                  <td><v-chip small class="mr-1" v-for="(str,j) in item.disablePipelines" :key="j">{{str}}</v-chip></td>
                   <td>
                     <Operations
                       :operations="[
@@ -294,6 +293,9 @@
               <router-link :to="{ name: 'CicdPipeline', params: { pipelineName: item.pipelineName }}">
                 {{ item.pipelineName }}
               </router-link>
+            </template>
+            <template v-slot:item.pipelineArch="{ item }">
+              <v-chip v-if="item.pipelineArch" color="primary" small>{{ item.pipelineArch }}</v-chip>
             </template>
             <template v-slot:item.envs="{ item }">
               <div class="my-1" v-for="(i,index) in item.envs" :key="index">
@@ -491,7 +493,10 @@
             item-key="envName"
             show-expand
             hide-default-footer
-            >
+          >
+            <template v-slot:item.envName="{item}">
+              {{ item.envName }} <v-chip small class="mr-1" color="green white--text">{{item.envArch}}</v-chip> <v-chip v-if="item.arches.length > 1" small class="mr-1" color="primary" v-for="(archName, i) in item.arches" :key="i">{{archName}}</v-chip>
+            </template>
             <template v-slot:expanded-item="{ headers,item }">
               <td :colspan="headers.length" class="pa-1">
                 <v-card class="rounded-0">
@@ -1339,6 +1344,17 @@
                 <v-row>
                   <v-col cols="12">
                     <v-text-field
+                      v-model.number="nodePortAddForm.nodePort"
+                      type="number"
+                      :label="$vuetify.lang.t('$vuetify.lang_form_new_project_node_port')"
+                      dense
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_new_project_node_port_tip_1')"
+                      persistent-hint
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
                       :label="$vuetify.lang.t('$vuetify.lang_form_apply_title')"
                       required
                       dense
@@ -1435,18 +1451,6 @@
                       :hint="$vuetify.lang.t('$vuetify.lang_form_new_project_project_team_tip_1')"
                       persistent-hint
                     ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-autocomplete
-                      v-model="updateProjectForm.projectArch"
-                      :items="archNames"
-                      :label="$vuetify.lang.t('$vuetify.lang_form_new_project_project_arch')"
-                      required
-                      dense
-                      :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                      :hint="$vuetify.lang.t('$vuetify.lang_form_new_project_project_arch_tip_1')"
-                      persistent-hint
-                    ></v-autocomplete>
                   </v-col>
                   <v-col
                     cols="12"
@@ -5813,19 +5817,6 @@
               </v-alert>
               <v-container>
                 <div class="form-item-100">
-                  <div class="d-flex justify-space-between mt-4">
-                    <div class="form-item-50 d-flex align-center">
-                      <v-autocomplete
-                        :items="['amd64', 'arm64v8']"
-                        :label="$vuetify.lang.t('$vuetify.lang_form_component_arch')"
-                        dense
-                        v-model="addComponentDebugForm.arch"
-                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
-                      />
-                    </div>  
-                  </div>
-                </div>
-                <div class="form-item-100">
                   <div>{{$vuetify.lang.t('$vuetify.lang_form_debug_component_debug_quota')}}</div>
                   <div class="d-flex justify-space-between mt-4">
                     <div class="form-item-20 d-flex align-center">
@@ -9601,6 +9592,7 @@ export default {
       nodePortDeleteAttachment: [],
       nodePortAddForm: {
         envName: '',
+        nodePort: 0,
         title: '',
         content: '',
         attachmentIDs: []
@@ -9634,7 +9626,6 @@ export default {
       updateProjectForm: {
         projectDesc: '',
         projectTeam: '',
-        projectArch: '',
         gitRepoUser: '',
         gitRepoToken: '',
         gitRepoPassword: '',
@@ -9884,7 +9875,6 @@ export default {
       accessLevel: [ 'runner', 'developer', 'maintainer' ],
       gitPush: [ {text: vuetify.preset.lang.t('$vuetify.lang_form_yes'), value: true}, {text: vuetify.preset.lang.t('$vuetify.lang_form_no'), value: false} ],
       addComponentDebugForm: {
-        arch: '',
         debugQuota: {},
         ingress: {},
       },
@@ -10227,6 +10217,7 @@ export default {
     newNodePort() {
       const vm = this
       if(vm.$refs.nodePortAddRef.validate()){
+        vm.nodePortAddForm.nodePort = Number(vm.nodePortAddForm.nodePort)
         if(vm.nodePortAddAttachment.length <= 0){
           request.post(`/console/project/${vm.targetProjectName}/nodePortAdd`, vm.nodePortAddForm).then(response => {
             vm.addNodePortDialog = false
@@ -10255,6 +10246,7 @@ export default {
             vm.errorTip(true,error.response.data.msg)
           })
         }
+        vm.nodePortAddForm.nodePort = 0
       }else{
         vm.warnTip(true, vuetify.preset.lang.t('$vuetify.lang_tip_please_check_all_input_is_correct'))
       }
@@ -10419,7 +10411,6 @@ export default {
       const vm = this
       vm.updateProjectForm.projectDesc = vm.project.projectInfo.projectDesc
       vm.updateProjectForm.projectTeam = vm.project.projectInfo.projectTeam
-      vm.updateProjectForm.projectArch = vm.project.projectInfo.projectArch
       vm.updateProjectForm.gitRepoDir = vm.project.projectRepo.gitRepoDir
       vm.updateProjectDialog = true
     },
@@ -11454,7 +11445,6 @@ export default {
       vm.actionType = 'add'
       request.get(`/console/project/${vm.targetProjectName}/envComponentDebugDefault`).then(response => {
         vm.addComponentDebugForm = response.data.deploySpecDebug
-        vm.addComponentDebugForm.arch = 'amd64'
       }).catch(error => {
         vm.errorTip(true,error.response.data.msg)
       })
@@ -11481,7 +11471,6 @@ export default {
         request.post(`/console/project/${vm.targetProjectName}/envComponentDebugUpdate`, {
           componentDebugYaml: componentDebugYaml,
           envName: vm.targetEnvName,
-          arch: vm.addComponentDebugForm.arch,
         }).then(response => {
           vm.addComponentDebugDialog = false
           vm.successTip(true,response.msg)
@@ -11603,7 +11592,6 @@ export default {
       vm.project.projectAvailableEnvs.map(item => {
         if(item.envName === envName){
           vm.addComponentDebugForm = item.componentDebug.deploySpecDebug
-          vm.addComponentDebugForm.arch = item.componentDebug.arch
         }
       })
     },
@@ -11643,16 +11631,11 @@ export default {
         })
         if (response.data.deploySpecStatic.deployEnvs !== null) {
           response.data.deploySpecStatic.deployEnvs.forEach((row, rowIndex) => {
-            row = row.split("=");
+            let ii = row.indexOf('=');
+            row = [row.substring(0, ii), row.substring(ii + 1)]
             response.data.deploySpecStatic.deployEnvs[rowIndex] = row;
           });
         }
-        // if (response.data.deploySpecStatic.deployArgs !== null) {
-        //   response.data.deploySpecStatic.deployArgs.forEach((row, rowIndex) => {
-        //     row = row.split("=");
-        //     response.data.deploySpecStatic.deployArgs[rowIndex] = row;
-        //   });
-        // }
         List[0].value = {
           deploySpecStatic: response.data.deploySpecStatic,
           componentTemplateDesc: '',
@@ -11670,16 +11653,11 @@ export default {
           })
           if (item.deploySpecStatic.deployEnvs !== null) {
             item.deploySpecStatic.deployEnvs.forEach((row, rowIndex) => {
-              row = row.split("=");
+              let ii = row.indexOf('=');
+              row = [row.substring(0, ii), row.substring(ii + 1)]
               item.deploySpecStatic.deployEnvs[rowIndex] = row;
             });
           }
-          // if (item.deploySpecStatic.deployArgs !== null) {
-          //   item.deploySpecStatic.deployArgs.forEach((row, rowIndex) => {
-          //     row = row.split("=");
-          //     item.deploySpecStatic.deployArgs[rowIndex] = row;
-          //   });
-          // }
           var listItem = {
             text: '',
             value: ''
@@ -12840,7 +12818,8 @@ export default {
       vm.addComponentForm.deploySpecStatic = { ...component.deploySpecStatic }
       if (vm.addComponentForm.deploySpecStatic.deployEnvs !== null) {
         vm.addComponentForm.deploySpecStatic.deployEnvs.forEach((row, rowIndex) => {
-          row = row.split("=");
+          let ii = row.indexOf('=');
+          row = [row.substring(0, ii), row.substring(ii + 1)]
           vm.addComponentForm.deploySpecStatic.deployEnvs[rowIndex] = row;
         });
       }
@@ -12956,7 +12935,8 @@ export default {
       })
       if (vm.addComponentForm.deploySpecStatic.deployEnvs !== null) {
         vm.addComponentForm.deploySpecStatic.deployEnvs.forEach((row, rowIndex) => {
-          row = row.split("=");
+          let ii = row.indexOf('=');
+          row = [row.substring(0, ii), row.substring(ii + 1)]
           vm.addComponentForm.deploySpecStatic.deployEnvs[rowIndex] = row;
         });
       }
@@ -13339,6 +13319,7 @@ export default {
       return [
         { text: vuetify.preset.lang.t('$vuetify.lang_view_pipeline_name'), sortable: false, value: 'pipelineName' },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_branch_name'), value: 'branchName', sortable: false },
+        { text: vuetify.preset.lang.t('$vuetify.lang_view_architecture'), value: 'pipelineArch', sortable: false },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_ci_envs'), value: 'envs', sortable: false },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_production_envs'), value: 'envProductions', sortable: false },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_git_push_execute_pipeline'), value: 'webhookPushEvent', sortable: false },

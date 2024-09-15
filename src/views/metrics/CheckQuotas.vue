@@ -116,6 +116,16 @@
                 @change="getEcharts()"
               ></v-autocomplete>
               <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams.archNames"
+                @change="getEcharts()"
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -251,6 +261,16 @@
                 @change="getEcharts2()"
               ></v-autocomplete>
               <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams2.archNames"
+                @change="getEcharts2()"
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -381,6 +401,16 @@
                 @change="getEcharts3()"
               ></v-autocomplete>
               <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams3.archNames"
+                @change="getEcharts3()"
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -427,6 +457,7 @@
                   { text: $vuetify.lang.t('$vuetify.lang_form_metrics_dimension_project_name'), value: 'projectName' },
                   { text: $vuetify.lang.t('$vuetify.lang_form_metrics_dimension_project_team'), value: 'projectTeam' },
                   { text: $vuetify.lang.t('$vuetify.lang_form_metrics_dimension_branch_name'), value: 'branchName' },
+                  { text: $vuetify.lang.t('$vuetify.lang_form_metrics_dimension_arch_name'), value: 'archName' },
                   { text: $vuetify.lang.t('$vuetify.lang_form_metrics_dimension_pipeline_name'), value: 'pipelineName' },  
                   { text: $vuetify.lang.t('$vuetify.lang_form_metrics_dimension_env_name'), value: 'envName' },
                 ]"
@@ -520,6 +551,16 @@
                 small-chips
                 multiple
                 v-model="chartParams4.branchNames"
+                @change="getEcharts4()"
+              ></v-autocomplete>
+              <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams4.archNames"
                 @change="getEcharts4()"
               ></v-autocomplete>
               <v-autocomplete
@@ -645,6 +686,16 @@
                 small-chips
                 multiple
                 v-model="chartParams5.branchNames"
+                @change="getEcharts5()"
+              ></v-autocomplete>
+              <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams5.archNames"
                 @change="getEcharts5()"
               ></v-autocomplete>
               <v-autocomplete
@@ -783,6 +834,16 @@
                 @change="getEcharts6()"
               ></v-autocomplete>
               <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams6.archNames"
+                @change="getEcharts6()"
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -915,6 +976,16 @@
                 small-chips
                 multiple
                 v-model="chartParams7.branchNames"
+                @change="getEcharts7()"
+              ></v-autocomplete>
+              <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams7.archNames"
                 @change="getEcharts7()"
               ></v-autocomplete>
               <v-autocomplete
@@ -1053,6 +1124,16 @@
                 @change="getEcharts8()"
               ></v-autocomplete>
               <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams8.archNames"
+                @change="getEcharts8()"
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -1185,6 +1266,16 @@
                 small-chips
                 multiple
                 v-model="chartParams9.branchNames"
+                @change="getEcharts9()"
+              ></v-autocomplete>
+              <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams9.archNames"
                 @change="getEcharts9()"
               ></v-autocomplete>
               <v-autocomplete
@@ -1323,6 +1414,16 @@
                 @change="getEcharts10()"
               ></v-autocomplete>
               <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams10.archNames"
+                @change="getEcharts10()"
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -1455,6 +1556,16 @@
                 small-chips
                 multiple
                 v-model="chartParams11.branchNames"
+                @change="getEcharts11()"
+              ></v-autocomplete>
+              <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams11.archNames"
                 @change="getEcharts11()"
               ></v-autocomplete>
               <v-autocomplete
@@ -1593,6 +1704,16 @@
                 @change="getEcharts12()"
               ></v-autocomplete>
               <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams12.archNames"
+                @change="getEcharts12()"
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -1725,6 +1846,16 @@
                 small-chips
                 multiple
                 v-model="chartParams13.branchNames"
+                @change="getEcharts13()"
+              ></v-autocomplete>
+              <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams13.archNames"
                 @change="getEcharts13()"
               ></v-autocomplete>
               <v-autocomplete
@@ -1863,6 +1994,16 @@
                 @change="getEcharts14()"
               ></v-autocomplete>
               <v-autocomplete
+                :items="archNamesList"
+                :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="chartParams14.archNames"
+                @change="getEcharts14()"
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="pipelineNamesList"
                 :label="$vuetify.lang.t('$vuetify.lang_form_metrics_filter_by_pipeline_name')"
                 class="mr-8"
@@ -1982,6 +2123,7 @@ export default {
         { text: vuetify.preset.lang.t('$vuetify.lang_form_metrics_dimension_project_name'), value: 'projectName' },
         { text: vuetify.preset.lang.t('$vuetify.lang_form_metrics_dimension_project_team'), value: 'projectTeam' },
         { text: vuetify.preset.lang.t('$vuetify.lang_form_metrics_dimension_branch_name'), value: 'branchName' },
+        { text: vuetify.preset.lang.t('$vuetify.lang_form_metrics_dimension_arch_name'), value: 'archName' },
         { text: vuetify.preset.lang.t('$vuetify.lang_form_metrics_dimension_pipeline_name'), value: 'pipelineName' },
         { text: vuetify.preset.lang.t('$vuetify.lang_form_metrics_dimension_status_result'), value: 'statusResult' },
         { text: vuetify.preset.lang.t('$vuetify.lang_form_metrics_dimension_env_name'), value: 'envName' },
@@ -2013,6 +2155,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         // moduleNames: [],
         envNames: [],
@@ -2030,6 +2173,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         // moduleNames: [],
         envNames: [],
@@ -2047,6 +2191,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         // moduleNames: [],
         envNames: [],
@@ -2064,6 +2209,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         // moduleNames: [],
         envNames: [],
@@ -2081,6 +2227,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         envNames: [],
       },
@@ -2096,6 +2243,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         envNames: [],
       },
@@ -2111,6 +2259,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         envNames: [],
       },
@@ -2126,6 +2275,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         envNames: [],
       },
@@ -2141,6 +2291,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         envNames: [],
       },
@@ -2156,6 +2307,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         envNames: [],
       },
@@ -2171,6 +2323,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         envNames: [],
       },
@@ -2186,6 +2339,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         envNames: [],
       },
@@ -2201,6 +2355,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         envNames: [],
       },
@@ -2216,6 +2371,7 @@ export default {
         projectTeams: [],
         pipelineNames: [],
         branchNames: [],
+        archNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         envNames: [],
       },
@@ -2223,6 +2379,7 @@ export default {
       projectNamesList: [],
       projectTeamsList: [],
       branchNamesList: [],
+      archNamesList: [],
       pipelineNamesList: [],
       envNamesList: [],
       // moduleNamesList: [],
@@ -2278,6 +2435,7 @@ export default {
       vm.projectNamesList = response.data.projectNames
       vm.projectTeamsList = response.data.projectTeams
       vm.branchNamesList = response.data.branchNames
+      vm.archNamesList = response.data.archNames
       vm.pipelineNamesList = response.data.pipelineNames
       vm.envNamesList = response.data.envNames
     })

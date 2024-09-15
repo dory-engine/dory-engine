@@ -21,6 +21,9 @@
       <router-link :to="{ name: 'CicdProject', params: { projectName: item.projectName }}">{{ item.projectName }}</router-link>/
       <router-link :to="{ name: 'CicdPipeline', params: { pipelineName: item.pipelineName }}">{{ item.pipelineName }}</router-link>
     </template>
+    <template v-slot:item.pipelineArch="{ item }">
+      <v-chip v-if="item.pipelineArch" small class="mr-2" color="primary">{{ item.pipelineArch }}</v-chip>
+    </template>
     <template v-slot:item.tagName="{ item }">
       <a v-if="item.gitURL" :href="item.gitURL" target="_blank">{{ item.tagName }}</a>
       <div v-else>{{ item.tagName }}</div>
@@ -84,6 +87,7 @@ export default {
       return [
         { text: vuetify.preset.lang.t('$vuetify.lang_view_run_name'), sortable: false, value: 'runName' },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_project_pipeline_name'), value: 'projectName', sortable: false },
+        { text: vuetify.preset.lang.t('$vuetify.lang_view_architecture'), value: 'pipelineArch', sortable: false },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_tag_name'), value: 'tagName', sortable: false },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_start_user'), value: 'startUser', sortable: false },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_trigger_kind'), value: 'triggerKind', sortable: false },

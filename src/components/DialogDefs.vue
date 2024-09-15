@@ -770,28 +770,43 @@
           </v-alert>
           <v-form ref="pipelineDefRef">
             <v-container>
-              <div class="pipeline-switch">
-                <small>{{$vuetify.lang.t('$vuetify.lang_form_pipeline_def_is_auto_detect_build')}}</small>
-                <v-switch
-                  v-model="pipelineDefForm.isAutoDetectBuild"
-                  dense
-                  inset
-                  :hint="$vuetify.lang.t('$vuetify.lang_form_pipeline_def_is_auto_detect_build_tip_1')"
-                  persistent-hint
-                ></v-switch>
-                <div class="mb-4">
-                  <small>{{$vuetify.lang.t('$vuetify.lang_form_pipeline_def_is_auto_detect_build_tip_2')}}</small>
+              <div class="form-row d-flex justify-space-between">
+                <div class="form-item-30 pipeline-switch mr-4">
+                    <small>{{$vuetify.lang.t('$vuetify.lang_form_pipeline_def_pipeline_arch')}}</small>
+                    <v-autocomplete
+                      v-model="pipelineDefForm.pipelineArch"
+                      :items="archNames"
+                      dense
+                      small-chips
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_pipeline_def_pipeline_arch_tip_1')"
+                      persistent-hint
+                    ></v-autocomplete>
+                </div>                
+                <div class="form-item-30 pipeline-switch mr-4">
+                  <small>{{$vuetify.lang.t('$vuetify.lang_form_pipeline_def_is_auto_detect_build')}}</small>
+                    <v-switch
+                      v-model="pipelineDefForm.isAutoDetectBuild"
+                      dense
+                      inset
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_pipeline_def_is_auto_detect_build_tip_1')"
+                      persistent-hint
+                    ></v-switch>                  
+                    <div class="mb-4">
+                      <small>{{$vuetify.lang.t('$vuetify.lang_form_pipeline_def_is_auto_detect_build_tip_2')}}</small>
+                    </div>
                 </div>
-                <small>{{$vuetify.lang.t('$vuetify.lang_form_pipeline_def_is_queue')}}</small>
-                <v-switch
-                  v-model="pipelineDefForm.isQueue"
-                  dense
-                  inset
-                  :hint="$vuetify.lang.t('$vuetify.lang_form_pipeline_def_is_queue_tip_1')"
-                  persistent-hint
-                ></v-switch>
-              </div>
-              <div class="pipelineBuilds">
+                <div class="form-item-30 pipeline-switch mr-4">
+                    <small>{{$vuetify.lang.t('$vuetify.lang_form_pipeline_def_is_queue')}}</small>
+                    <v-switch
+                      v-model="pipelineDefForm.isQueue"
+                      dense
+                      inset
+                      :hint="$vuetify.lang.t('$vuetify.lang_form_pipeline_def_is_queue_tip_1')"
+                      persistent-hint
+                    ></v-switch>
+                </div>
+              </div>  
+              <div class="pipeline-switch">
                 <small>{{$vuetify.lang.t('$vuetify.lang_form_pipeline_def_builds')}}</small>
                 <div class="my-2" v-if="!pipelineDefForm.isAutoDetectBuild">
                   <v-chip v-for="item in pipelineDefForm.builds" :key="item.name" class="mr-2 mb-2" :color="item.run ? 'success': ''" @click="() => {
@@ -5664,6 +5679,7 @@ export default {
       project: {
         customStepAvailableEnvs: [],
       },
+      archNames: [],
       selectDemoDefDialog: false,
       projectDefDemo: {},
       demoDefs: [],
@@ -5837,6 +5853,11 @@ export default {
     vm.targetProjectName = vm.projectName;
     request.get('/public/about').then(response => {
       vm.community = response.data.community
+    }).catch(error => {
+      vm.errorTip(true, error.response.data.msg);
+    })
+    request.get('/cicd/archNames').then(response => {
+      vm.archNames = response.data.archNames
     }).catch(error => {
       vm.errorTip(true, error.response.data.msg);
     })
@@ -6100,7 +6121,8 @@ export default {
                 addItem = item
                 if (addItem.deployEnvs !== null) {
                   addItem.deployEnvs.forEach((row, rowIndex) => {
-                    row = row.split("=")
+                    let ii = row.indexOf('=');
+                    row = [row.substring(0, ii), row.substring(ii + 1)]
                     addItem.deployEnvs[rowIndex] = row
                   })
                 }
@@ -7640,7 +7662,8 @@ export default {
               }
               if (e.deployEnvs !== null) {
                 e.deployEnvs.forEach((row, rowIndex) => {
-                  row = row.split("=");
+                  let ii = row.indexOf('=');
+                  row = [row.substring(0, ii), row.substring(ii + 1)]
                   e.deployEnvs[rowIndex] = row;
                 });
               }
@@ -8514,7 +8537,8 @@ export default {
             vm.copyDeployContainerDefForm.map((e, i) => {
               if (e.deployEnvs !== null) {
                 e.deployEnvs.forEach((row, rowIndex) => {
-                  row = row.split("=");
+                  let ii = row.indexOf('=');
+                  row = [row.substring(0, ii), row.substring(ii + 1)]
                   e.deployEnvs[rowIndex] = row;
                 });
               }

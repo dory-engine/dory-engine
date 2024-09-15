@@ -111,6 +111,9 @@
                   <th class="text-left">
                     {{$vuetify.lang.t('$vuetify.lang_view_build_check')}}
                   </th>
+                  <th v-show="item.stepDetail.architecture" class="text-left">
+                    {{$vuetify.lang.t('$vuetify.lang_view_architecture')}}
+                  </th>
                   <th class="text-left">
                     {{$vuetify.lang.t('$vuetify.lang_view_latest_commit')}}
                   </th>
@@ -121,12 +124,15 @@
                   <td>
                     <div v-for="(row, i) in (item.stepDetail.buildCmds || [])" :key="i">
                       {{ row }}
-                    </div>                    
+                    </div>
                   </td>
                   <td>
                     <div v-for="(row, i) in (item.stepDetail.buildChecks || [])" :key="i">
                       {{ row }}
-                    </div>                    
+                    </div>
+                  </td>
+                  <td v-show="item.stepDetail.architecture">
+                    <v-chip small class="mr-2" color="primary">{{ item.stepDetail.architecture }}</v-chip>
                   </td>
                   <td>
                     <a v-if="item.stepDetail.gitURL" :href="item.stepDetail.gitURL" target="_blank">{{item.stepDetail.latestCommit.substring(0, 8)}}</a>
@@ -142,6 +148,9 @@
                     {{$vuetify.lang.t('$vuetify.lang_view_branch_name')}}
                   </th>
                   <th class="text-left">
+                    {{$vuetify.lang.t('$vuetify.lang_view_architecture')}}
+                  </th>
+                  <th class="text-left">
                     {{$vuetify.lang.t('$vuetify.lang_view_tag_name')}}
                   </th>
                   <th class="text-left">
@@ -155,7 +164,10 @@
               <tbody>
                 <tr>
                   <td>
-                    {{ item.stepDetail.branchName }}
+                    <v-chip small class="mr-2" color="primary">{{ item.stepDetail.branchName }}</v-chip>
+                  </td>
+                  <td>
+                    <v-chip small class="mr-2" color="primary">{{ item.stepDetail.architecture }}</v-chip>
                   </td>
                   <td>
                     <a v-if="item.stepDetail.imageURL" :href="item.stepDetail.imageURL" target="_blank">{{item.stepDetail.tagName}}</a>

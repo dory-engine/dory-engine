@@ -179,7 +179,6 @@ export default {
                 {config.item.projectInfo.projectNamespace} (<span>{config.item.projectInfo.shortName}</span>)
               </div>
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_team')}: {config.item.projectInfo.projectTeam}</div>
-              <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_arch')}: {config.item.projectInfo.projectArch}</div>
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_tenant_code')}: {config.item.tenantCode}</div>
             </span>
           },

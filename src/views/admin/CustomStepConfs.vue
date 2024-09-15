@@ -470,6 +470,7 @@
                     wrap="off"
                     row-height="12"
                     v-model="addCustomStepsForm.customStepDockerConf.dockerCommands"
+                    :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                     background-color="yellow lighten-5"
                   >
                     <v-icon
@@ -1080,6 +1081,7 @@
                     wrap="off"
                     row-height="12"
                     v-model="updateCustomStepsForm.customStepDockerConf.dockerCommands"
+                    :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                     background-color="yellow lighten-5"
                   >
                     <v-icon
@@ -1572,7 +1574,8 @@ export default {
           }
           if (item.customStepDockerConf.dockerEnvs !== null) {
             item.customStepDockerConf.dockerEnvs.forEach((row, rowIndex) => {
-              row = row.split("=");
+              let ii = row.indexOf('=');
+              row = [row.substring(0, ii), row.substring(ii + 1)]
               item.customStepDockerConf.dockerEnvs[rowIndex] = row;
             });
           }

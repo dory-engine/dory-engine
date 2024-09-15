@@ -83,6 +83,16 @@
                 @blur="stepsSearch()"
               ></v-autocomplete>
               <v-autocomplete
+                :items="archNames"
+                :label="$vuetify.lang.t('$vuetify.lang_form_arch_name')"
+                class="mr-8"
+                dense
+                small-chips
+                multiple
+                v-model="stepsForm.archNames"
+                @blur="stepsSearch()"
+              ></v-autocomplete>
+              <v-autocomplete
                 :items="moduleItems"
                 :label="$vuetify.lang.t('$vuetify.lang_form_module_type')"
                 class="mr-8"
@@ -250,6 +260,7 @@ export default {
         pipelineNames: [],
         runNames: [],
         branchNames: [],
+        archNames: [],
         envNames: [],
         statusResults: ['SUCCESS', 'FAIL'],
         stepActions: [],
@@ -263,6 +274,7 @@ export default {
         },
         sortMode: '',
       },
+      archNames: [],
       pageData: {
         loading: false,
         total: 0,
@@ -300,6 +312,13 @@ export default {
   created () {
     const vm = this
     vm.userToken = JSON.parse(localStorage.getItem('userObj')).userToken
+    request.get('/cicd/archNames').then(response => {
+      if (response.data.statusResults !== null) {
+        vm.archNames = response.data.archNames
+      }
+    }).catch(error => {
+      vm.errorTip(true, error.response.data.msg)
+    })
     if (vm.$route.params.stepID !== undefined) {
       vm.stepsForm.stepIDs.push(vm.$route.params.stepID)
     }

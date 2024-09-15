@@ -8,6 +8,9 @@
     - [cicd 持续交付接口](#cicd-持续交付接口)
       - [\[GET\] api/cicd/projectNames cicd项目名称列表接口，用于搜索的下拉列表](#get-apicicdprojectnames-cicd项目名称列表接口用于搜索的下拉列表)
       - [\[GET\] api/cicd/pipelineNames cicd流水线名称列表接口，用于搜索的下拉列表](#get-apicicdpipelinenames-cicd流水线名称列表接口用于搜索的下拉列表)
+      - [\[GET\] api/cicd/branchNames cicd分支名称列表接口，用于搜索的下拉列表](#get-apicicdbranchnames-cicd分支名称列表接口用于搜索的下拉列表)
+      - [\[GET\] api/cicd/envNames cicd环境名称列表接口，用于搜索的下拉列表](#get-apicicdenvnames-cicd环境名称列表接口用于搜索的下拉列表)
+      - [\[GET\] api/cicd/archNames cicd架构名称列表接口，用于搜索的下拉列表](#get-apicicdarchnames-cicd架构名称列表接口用于搜索的下拉列表)
       - [\[POST\] api/cicd/projects cicd项目列表与搜索接口](#post-apicicdprojects-cicd项目列表与搜索接口)
       - [\[GET\] api/cicd/project/:projectName cicd项目查看接口](#get-apicicdprojectprojectname-cicd项目查看接口)
       - [\[POST\] api/cicd/runs cicd运行列表与搜索接口](#post-apicicdruns-cicd运行列表与搜索接口)
@@ -104,6 +107,57 @@
 }
 ```
 
+#### [GET] api/cicd/branchNames cicd分支名称列表接口，用于搜索的下拉列表
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {
+        "branchNames": [
+            "xxx",
+            "xxx"
+        ]
+    }
+}
+```
+
+#### [GET] api/cicd/envNames cicd环境名称列表接口，用于搜索的下拉列表
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {
+        "envNames": [
+            "xxx",
+            "xxx"
+        ]
+    }
+}
+```
+
+#### [GET] api/cicd/archNames cicd架构名称列表接口，用于搜索的下拉列表
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {
+        "archNames": [
+            "xxx",
+            "xxx"
+        ]
+    }
+}
+```
+
 #### [POST] api/cicd/projects cicd项目列表与搜索接口
 
 - request请求内容
@@ -141,7 +195,6 @@
                     "shortName" : "tp1",
                     "projectDesc" : "测试-项目1",
                     "projectTeam" : "测试团队1",
-                    "projectArch" : "amd64",
                 },
                 "projectRepo": {
                     "artifactRepo": "https://nexus.dory.cookeem.com",
@@ -228,6 +281,7 @@
                         },
                         "errMsgPipelineDef": "",
                         "pipelineDef": {
+                            "pipelineArch": "amd64",
                             "isAutoDetectBuild": false,
                             "isQueue": false,
                             "builds": [
@@ -418,7 +472,6 @@
                 "shortName" : "tp1",
                 "projectDesc" : "测试-项目1",
                 "projectTeam" : "测试团队1",
-                "projectArch" : "amd64",
             },
             "projectRepo": {
                 "artifactRepo": "https://nexus.dory.cookeem.com",
@@ -534,6 +587,7 @@
                     },
                     "errMsgPipelineDef": "",
                     "pipelineDef": {
+                        "pipelineArch": "amd64",
                         "isAutoDetectBuild": false,
                         "isQueue": false,
                         "builds": [
@@ -725,6 +779,10 @@
         "xxx",
         "xxx"
     ],
+    "archNames": [
+        "xxx",
+        "xxx"
+    ],
     "statusResults": [
         "xxx",
         "xxx"
@@ -735,6 +793,7 @@
         "endDate": "2021-02-02"
     },
     "tagName": "xxx",
+    "pipelineArch": "amd64",
     "startUser": "xxx",
     "abortUser": "xxx",
     "runNumber": 1,
@@ -761,6 +820,7 @@
                 "projectName": "test-project1",
                 "pipelineName": "test-project1-develop",
                 "runName": "test-project1-develop-17",
+                "pipelineArch": "amd64",
                 "gitURL": "xxx",
                 "triggerKind": "manual",
                 "startUser" : "xxx",
@@ -808,7 +868,8 @@
                     "result": "PAUSE",
                     "startTime": "11-06 22:02:05"
                 },
-                "tagName": "v0.1.0-release"
+                "tagName": "v0.1.0-release",
+                "pipelineArch": "amd64",
             },
         ],
         "totalCount": 10
@@ -881,7 +942,8 @@
                             "result": "FAIL",
                             "startTime": "04-19 13:25:32"
                         },
-                        "tagName": "v0.0.0"
+                        "tagName": "v0.0.0",
+                        "pipelineArch": "amd64",
                     }
                 ],
                 "pipelineName": "test-project1-develop",
@@ -934,6 +996,7 @@
             },
             "errMsgPipelineDef": "",
             "pipelineDef": {
+                "pipelineArch": "amd64",
                 "isAutoDetectBuild": false,
                 "isQueue": false,
                 "builds": [
@@ -1080,7 +1143,6 @@
             "shortName" : "tp1",
             "projectDesc" : "测试-项目1",
             "projectTeam" : "测试团队1",
-            "projectArch" : "amd64",
         },
         "projectRepo": {
             "artifactRepo": "https://nexus.dory.cookeem.com",
@@ -1243,6 +1305,10 @@
         "xxx"
     ],
     "branchNames": [
+        "xxx",
+        "xxx"
+    ],
+    "archNames": [
         "xxx",
         "xxx"
     ],
@@ -1411,6 +1477,7 @@
                         "go mod tidy",
                         "go build"
                     ],
+                    "architecture": "amd64",
                     "buildEnv": "go-1.17",
                     "buildPath": "Codes/Backend/tp1-gin-demo",
                     "buildPhaseID": 1,
@@ -1610,6 +1677,7 @@
                         "imageRepoPassword": "",
                         "storageLimit": 0,
                     },
+                    "architecture": "amd64",
                     "moduleName": "tp1-gin-demo",
                     "scanImageStatus": "FAIL",
                     "stepBuildIDs": [
@@ -1676,6 +1744,7 @@
                         "imageRepoPassword": "",
                         "storageLimit": 0,
                     },
+                    "architecture": "amd64",
                     "isMeshEnable": false,
                     "k8sConfigMapYaml": "xxx",
                     "k8sDeployYaml": "xxx",
@@ -1722,6 +1791,7 @@
                         "imageRepoPassword": "",
                         "storageLimit": 0,
                     },
+                    "architecture": "amd64",
                     "isMeshEnable": false,
                     "moduleName": "tp1-gin-demo",
                     "toImage": {
@@ -1774,6 +1844,7 @@
                         "imageRepoPassword": "",
                         "storageLimit": 0,
                     },
+                    "architecture": "amd64",
                     "isMeshEnable": true,
                     "isMeshEnableProd": true,
                     "moduleName": "tp1-spring-demo",
@@ -2383,6 +2454,7 @@
                         "go mod tidy",
                         "go build"
                     ],
+                    "architecture": "amd64",
                     "buildEnv": "go-1.17",
                     "buildPath": "Codes/Backend/tp1-gin-demo",
                     "buildPhaseID": 1,
@@ -2686,6 +2758,7 @@
             "startUser" : "xxx",
             "abortUser" : "",
             "tagName" : "v0.1.0-dev-6-ga0fbb33",
+            "pipelineArch": "amd64",
             "pipelineDefYaml": "xxx",
             "status": {
                 "result" : "SUCCESS",
@@ -3259,6 +3332,7 @@
                         "xxx",
                     ],
                     "pipelineDef": {
+                        "pipelineArch": "amd64",
                         "isAutoDetectBuild": false,
                         "isQueue": false,
                         "builds": [
@@ -3413,6 +3487,10 @@
                             "name": "xxx",
                             "value": "yyy"
                         }
+                    ],
+                    "envArch": "amd64",
+                    "arches": [
+                        "amd64"
                     ],
                     "pvcNames": [
                         "test-project1-pv-pvc",
@@ -3776,7 +3854,6 @@
                 "shortName" : "tp1",
                 "projectDesc" : "测试-项目1",
                 "projectTeam" : "测试团队1",
-                "projectArch" : "amd64",
             }
         }
     }
@@ -5035,6 +5112,8 @@ certPath: xxx/yyy
 - 定义项目流水线的开关设置
 
 ```yaml
+# 流水线架构
+pipelineArch: amd64
 # 是否开启构建模块自动检测
 # ++ 假如开启，cicd流水线将会根据代码提交内容自动检测对应构建模块的代码路径中是否有代码文件发生变更，自动设置本次流水线开启哪些构建模块
 # ++ 如果本设置开启，那么cicd流水线自动忽略以下builds(构建模块开关设置)的设置
@@ -5335,6 +5414,7 @@ customStepInsertDefs:
             "tp1-spring-demo"
         ],
         "pipelineDef": {
+            "pipelineArch": "amd64",
             "isAutoDetectBuild": false,
             "isQueue": false,
             "builds": [

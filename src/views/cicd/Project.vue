@@ -39,7 +39,6 @@
                   <td>
                     <div>{{ project.projectInfo.projectNamespace }}({{ project.projectInfo.shortName }})</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_project_team')}}: {{ project.projectInfo.projectTeam }}</div>
-                    <div>{{$vuetify.lang.t('$vuetify.lang_view_project_arch')}}: {{ project.projectInfo.projectArch }}</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_tenant_code')}}: {{ project.tenantCode }}</div>
                   </td>
                   <td>

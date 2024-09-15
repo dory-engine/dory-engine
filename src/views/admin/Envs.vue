@@ -67,6 +67,12 @@
                 ]"
               ></Operations>
             </template>
+            <template v-slot:item.arches="{item}">
+              <div class="mt-1" v-for="(archName, i) in item.arches" :key="i"><v-chip small class="mr-4" color="primary">{{archName}}</v-chip></div>
+            </template>
+            <template v-slot:item.envArch="{item}">
+              <v-chip small class="mr-4" color="green white--text">{{item.envArch}}</v-chip>
+            </template>
             <template v-slot:expanded-item="{ headers, item }">
               <td :colspan="headers.length" class="pa-1">
                 <v-card class="rounded-0">
@@ -3922,6 +3928,8 @@ export default {
       return [
         { text: vuetify.preset.lang.t('$vuetify.lang_view_env'), value: 'envName', sortable: false },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_env_desc'), value: 'envDesc', sortable: false },
+        { text: vuetify.preset.lang.t('$vuetify.lang_view_env_arch'), value: 'envArch', sortable: false },
+        { text: vuetify.preset.lang.t('$vuetify.lang_view_env_arches'), value: 'arches', sortable: false },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_tenant_code'), value: 'tenantCode', sortable: false },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_is_from_file'), value: 'isFromFile', sortable: false },
         { text: vuetify.preset.lang.t('$vuetify.lang_view_operations'), value: 'handle', sortable: false }

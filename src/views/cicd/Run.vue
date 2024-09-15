@@ -12,10 +12,10 @@
           :infos="[
             { key: 'runName', name: $vuetify.lang.t('$vuetify.lang_view_run_name'), value: run.runName},
             { key: 'projectPipelineName', name: $vuetify.lang.t('$vuetify.lang_view_project_pipeline_name'), value: 'projectPipelineName'},
+            { key: 'pipelineArch', name: $vuetify.lang.t('$vuetify.lang_view_architecture'), value: 'pipelineArch'},
             { key: 'projectTagName', name: $vuetify.lang.t('$vuetify.lang_view_tag_name'), value: 'projectTagName'},
             { key: 'startUser', name: $vuetify.lang.t('$vuetify.lang_view_start_user'), value: run.startUser},
             { key: 'triggerKind', name: $vuetify.lang.t('$vuetify.lang_view_trigger_kind'), value: 'triggerKind'},
-            { key: 'startTime', name: $vuetify.lang.t('$vuetify.lang_view_start_time'), value: run.status.startTime},
             { key: 'runResult', name: $vuetify.lang.t('$vuetify.lang_view_run_result'), value: 'runResult'},
             { key: 'opt', name: $vuetify.lang.t('$vuetify.lang_view_operations'), value: 'opt'}
           ]"
@@ -23,6 +23,9 @@
           <template v-slot:projectPipelineName>
             <div class="mt-1"><v-chip outlined small color="primary" :to="{name: 'CicdProject', params: {projectName: run.projectName || ''}}">{{run.projectName}}</v-chip></div>
             <div class="mt-1"><v-chip outlined small color="primary" :to="{name: 'CicdPipeline', params: {pipelineName: run.pipelineName || ''}}">{{run.pipelineName}}</v-chip></div>
+          </template>
+          <template v-slot:pipelineArch>
+            <v-chip v-if="run.pipelineArch" small class="mr-2" color="primary">{{ run.pipelineArch }}</v-chip>
           </template>
           <template v-slot:projectTagName>
             <a v-if="run.gitURL" :href="run.gitURL" target="_blank">{{ run.tagName }}</a>
@@ -34,6 +37,7 @@
             </v-chip>
           </template>
           <template v-slot:runResult>
+            <div>{{ run.status.startTime }}</div>
             <div>{{ run.status.duration }}</div>
             <v-chip small class="mb-1 white--text" :color="statusColorMap[run.status.result] || 'primary'">
               {{run.status.result}}

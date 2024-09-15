@@ -15,7 +15,6 @@ export default {
       projectsForm: {
         projectNames: [],
         envNames: [],
-        projectArches: [],
         tenantCodes: [],
         projectTeam: '',
         sortMode: '',
@@ -29,7 +28,6 @@ export default {
           projectShortName: '',
           projectDesc: '',
           projectTeam: '',
-          projectArch: 'amd64',
           defaultPv: '',
         },
         gitRepoSetting: {
@@ -81,14 +79,18 @@ export default {
         },
         tenantCode: '',
         envName: '',
+        nodePort: 0,
         enableArtifactRepoProxy: true,
         createDemoOnExistGitRepo: true,
+      },
+      nodePortAddForm: {
+        envName: '',
+        nodePort: 0,
       },
       envPvNames: [],
       gitRepoTypes: [],
       gitRepoTypeHint: '',
       repoNames: {},
-      archNames: [],
       disabledDefNames: [],
       tenantCodes: [],
       disableBtn: false,
@@ -139,7 +141,6 @@ export default {
       updateProjectForm: {
         projectDesc: '',
         projectTeam: '',
-        projectArch: '',
         gitRepoUser: '',
         gitRepoToken: '',
         gitRepoPassword: '',
@@ -275,6 +276,9 @@ export default {
                   {vuetify.preset.lang.t('$vuetify.lang_view_branch_name')}
                   </th>
                   <th class="text-left">
+                  {vuetify.preset.lang.t('$vuetify.lang_view_architecture')}
+                  </th>
+                  <th class="text-left">
                   {vuetify.preset.lang.t('$vuetify.lang_view_ci_envs')}
                   </th>
                   <th class="text-left">
@@ -322,6 +326,9 @@ export default {
                       <router-link to={{name: 'CicdPipeline', params: { pipelineName: item.pipelineName }}}>{ item.pipelineName }</router-link>
                     </td>
                     <td>{ item.branchName }</td>
+                    <td>
+                      { item.pipelineArch ? <v-chip small class="mr-2" color="primary">{item.pipelineArch}</v-chip> : null }
+                    </td>
                     <td>
                       {
                         item.envs.map(item => {
@@ -495,11 +502,6 @@ export default {
     }).catch(error => {
       vm.errorTip(true, error.response.data.msg);
     })
-    request.get(`/admin/archNames`).then(response => {
-      vm.archNames = response.data.archNames
-    }).catch(error => {
-      vm.errorTip(true,error.response.data.msg)
-    })
     request.get(`/admin/tenantCodes`).then(response => {
       vm.tenantCodes = response.data.tenantCodes
     }).catch(error => {
@@ -605,7 +607,6 @@ export default {
                 {item.projectInfo.projectNamespace} (<span>{item.projectInfo.shortName}</span>)
               </div>
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_team')}: {item.projectInfo.projectTeam}</div>
-              <div>{vuetify.preset.lang.t('$vuetify.lang_view_project_arch')}: {item.projectInfo.projectArch}</div>
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_tenant_code')}: {item.tenantCode}</div>
               <div>{vuetify.preset.lang.t('$vuetify.lang_view_create_time')}: {item.createTime}</div>
             </span>
@@ -718,7 +719,6 @@ export default {
                     vm.targetProjectRepo = item.projectRepo
                     vm.updateProjectForm.projectDesc = item.projectInfo.projectDesc
                     vm.updateProjectForm.projectTeam = item.projectInfo.projectTeam
-                    vm.updateProjectForm.projectArch = item.projectInfo.projectArch
                     vm.updateProjectForm.gitRepoDir = vm.targetProjectRepo.gitRepoDir
                   } },
                   { text: vuetify.preset.lang.t('$vuetify.lang_form_delete_project'), onClick: () => {
@@ -765,21 +765,6 @@ export default {
                     v-model={vm.projectsForm.envNames}
                     items={vm.envNames}
                     label={vuetify.preset.lang.t('$vuetify.lang_form_env_name')}
-                    multiple
-                    dense
-                    small-chips
-                    vOn:blur={() => {
-                      vm.getProjects()
-                    }}
-                  />
-                </VCol>
-                <VCol
-                  cols="3"
-                >
-                  <VAutocomplete
-                    v-model={vm.projectsForm.projectArches}
-                    items={vm.archNames}
-                    label={vuetify.preset.lang.t('$vuetify.lang_form_project_arches')}
                     multiple
                     dense
                     small-chips
@@ -918,18 +903,6 @@ export default {
                       items={vm.tenantCodes}
                       v-model={vm.addProjectForm.tenantCode}
                       hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_tenant_code_tip_1')}
-                      persistent-hint
-                    ></VAutocomplete>
-                  </VCol>
-                  <VCol cols="12">
-                    <VAutocomplete
-                      label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_arch')}
-                      required
-                      dense
-                      items={vm.archNames}
-                      v-model={vm.addProjectForm.projectInfo.projectArch}
-                      rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
-                      hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_arch_tip_1')}
                       persistent-hint
                     ></VAutocomplete>
                   </VCol>
@@ -1151,7 +1124,7 @@ export default {
                         persistent-hint
                       />
                     </VCol>
-                    <VCol 
+                    <VCol
                       cols="12"
                       v-show={vm.addProjectForm.imageRepoSetting.imageRepoName !== '' && vm.addProjectForm.imageRepoSetting.imageRepoName.value !== ''}
                     >
@@ -1429,6 +1402,17 @@ export default {
                       persistent-hint
                     />
                   </VCol>
+                  <VCol cols="12">
+                    <VTextField
+                      v-show={vm.addProjectForm.projectInfo.projectNamespace === ''}
+                      v-model={vm.addProjectForm.nodePort}
+                      type="number"
+                      label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_node_port')}
+                      dense
+                      hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_node_port_tip_1')}
+                      persistent-hint
+                    />
+                  </VCol>
                 </VRow>
               </VContainer>
             </VForm>
@@ -1453,6 +1437,8 @@ export default {
                     vm.addProjectForm.imageRepoSetting.imageRepoName = vm.addProjectForm.imageRepoSetting.imageRepoName.value
                   }
                   vm.addProjectForm.artifactRepoSetting.artifactRepoPort = Number(vm.addProjectForm.artifactRepoSetting.artifactRepoPort)
+                  vm.addProjectForm.imageRepoSetting.storageLimit = Number(vm.addProjectForm.imageRepoSetting.storageLimit)
+                  vm.addProjectForm.nodePort = Number(vm.addProjectForm.nodePort)
                   request.post('/admin/project', vm.addProjectForm).then(response => {
                     vm.successTip(true, response.msg)
                     vm.addProjectDialog = false
@@ -1736,6 +1722,20 @@ export default {
             <v-alert icon="mdi-alert-circle" prominent text type="info">
               <small>{vuetify.preset.lang.t('$vuetify.lang_form_new_project_node_ports_prompt')}</small>
             </v-alert>
+            <v-form ref="nodePortAddRef">
+              <v-row>
+                <v-col cols="12">
+                  <VTextField
+                    v-model={vm.nodePortAddForm.nodePort}
+                    type="number"
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_node_port')}
+                    dense
+                    hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_node_port_tip_1')}
+                    persistent-hint
+                  />
+                </v-col>
+              </v-row>
+            </v-form>
             <div>
               {vuetify.preset.lang.t('$vuetify.lang_form_new_project_node_ports_tip_1', vm.targetProjectName, vm.targetEnvName)}
             </div>
@@ -1747,6 +1747,7 @@ export default {
               text
               vOn:click={() => {
                 vm.addNodePortDialog = false
+                vm.$refs.nodePortAddRef.reset()
               }}
             >
               { vuetify.preset.lang.t('$vuetify.lang_menu_cancel') }
@@ -1757,7 +1758,9 @@ export default {
               vOn:click={() => {
                 vm.addNodePortDialog = false
                 vm.tableLoading = true
-                request.post(`/admin/project/${vm.targetProjectName}/nodePortAdd`, {envName: vm.targetEnvName}).then(response => {
+                vm.nodePortAddForm.nodePort = Number(vm.nodePortAddForm.nodePort)
+                vm.nodePortAddForm.envName = vm.targetEnvName
+                request.post(`/admin/project/${vm.targetProjectName}/nodePortAdd`, vm.nodePortAddForm).then(response => {
                   vm.successTip(true, response.msg)
                   vm.tableLoading = false
                   vm.showLog(response)
@@ -1766,6 +1769,7 @@ export default {
                   vm.tableLoading = false
                   vm.errorTip(true, error.response.data.msg)
                 })
+                vm.nodePortAddForm.nodePort = 0
               }}
             >
               { vuetify.preset.lang.t('$vuetify.lang_menu_confirm') }
@@ -1879,18 +1883,6 @@ export default {
                       hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_team_tip_1')}
                       persistent-hint
                     ></VTextField>
-                  </VCol>
-                  <VCol cols="12">
-                    <VAutocomplete
-                      label={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_arch')}
-                      required
-                      dense
-                      items={vm.archNames}
-                      v-model={vm.updateProjectForm.projectArch}
-                      rules={[v => !!v || vuetify.preset.lang.t('$vuetify.lang_form_required')]}
-                      hint={vuetify.preset.lang.t('$vuetify.lang_form_new_project_project_arch_tip_1')}
-                      persistent-hint
-                    ></VAutocomplete>
                   </VCol>
                   <VCol
                     cols="12"

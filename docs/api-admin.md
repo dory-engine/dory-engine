@@ -348,10 +348,6 @@
         "xxx",
         "xxx"
     ],
-    "projectArches": [
-        "xxx",
-        "xxx"
-    ],
     "tenantCodes": [
         "xxx",
         "xxx"
@@ -386,7 +382,6 @@
                     "shortName" : "tp1",
                     "projectDesc" : "测试-项目1",
                     "projectTeam" : "测试团队1",
-                    "projectArch" : "amd64",
                 },
                 "projectRepo": {
                     "gitRepo": "https://gitlab.dory.cookeem.com/test-project1/test-project1",
@@ -436,6 +431,7 @@
                         ],
                         "envProductions": [
                         ],
+                        "pipelineArch": "amd64",
                         "successCount" : 20,
                         "failCount" : 2,
                         "abortCount" : 3,
@@ -445,25 +441,6 @@
                             "duration" : "1m30s"
                         }
                     },
-                    {
-                        "pipelineName" : "test-project1-master",
-                        "branchName" : "master",
-                        "envs": [
-                            "test"
-                        ],
-                        "envProductions": [
-                            "prod1",
-                            "prod2"
-                        ],
-                        "successCount" : 10,
-                        "failCount" : 1,
-                        "abortCount" : 0,
-                        "status": {
-                            "result" : "SUCESS",
-                            "startTime" : "02-14 12:12:12",
-                            "duration" : "1m30s"
-                        }
-                    }
                 ]
             }
         ],
@@ -483,7 +460,6 @@
         "projectDesc": "xxx",
         "projectShortName": "xxx",
         "projectTeam": "xxx",
-        "projectArch": "xxx",
         "defaultPv": "xxx",
     },
     "gitRepoSetting": {
@@ -535,6 +511,7 @@
     },
     "tenantCode": "xxx",
     "envName": "xxx",
+    "nodePort": 0,
     "enableArtifactRepoProxy": true,
     "createDemoOnExistGitRepo": true,
 }
@@ -575,7 +552,6 @@
                 "shortName" : "tp1",
                 "projectDesc" : "测试-项目1",
                 "projectTeam" : "测试团队1",
-                "projectArch" : "amd64",
             },
             "projectRepo": {
                 "gitRepo": "https://gitlab.dory.cookeem.com/test-project1/test-project1",
@@ -626,6 +602,10 @@
                             "name": "xxx",
                             "value": "yyy"
                         }
+                    ],
+                    "envArch": "amd64",
+                    "arches": [
+                        "amd64"
                     ],
                     "quotaConfig" : {
                         "defaultQuota" : {
@@ -912,6 +892,7 @@
                     ],
                     "envProductions": [
                     ],
+                    "pipelineArch": "amd64",
                     "pipelineCrons": [
                         {
                             "crontabMinute": 10,
@@ -1010,7 +991,6 @@
 {
     "projectDesc": "xxx",
     "projectTeam": "xxx",
-    "projectArch": "xxx",
     "gitRepoUser": "xxx",
     "gitRepoToken": "xxx",
     "gitRepoPassword": "xxx",
@@ -1058,6 +1038,13 @@
 ```
 
 #### [POST] api/admin/project/:projectName/nodePortAdd admin为项目分配NodePort接口
+
+- request请求内容
+```json
+{
+    "nodePort": 0
+}
+```
 
 - response响应内容
 ```json
@@ -2537,6 +2524,7 @@ ingress:
 ```json
 {
     "envName": "xxx",
+    "arch": "xxx",
     "componentDesc": "xxx",
     "componentYaml": "xxx",
 }
@@ -6037,6 +6025,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
 							"go mod tidy",
 							"go build"
 						],
+                        "architecture": "amd64",
 						"buildEnv": "go-1.17",
 						"buildPath": "Codes/Backend/tp1-gin-demo",
 						"buildPhaseID": 1,
@@ -6209,6 +6198,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
 							"go mod tidy",
 							"go build"
 						],
+                        "architecture": "amd64",
 						"buildEnv": "go-1.17",
 						"buildPath": "Codes/Backend/tp1-gin-demo",
 						"buildPhaseID": 1,

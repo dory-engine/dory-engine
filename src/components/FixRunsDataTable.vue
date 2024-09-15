@@ -63,6 +63,9 @@
               {{ $vuetify.lang.t('$vuetify.lang_view_project_pipeline_name') }}
               </th>
               <th class="text-left">
+              {{ $vuetify.lang.t('$vuetify.lang_view_architecture') }}
+              </th>
+              <th class="text-left">
               {{ $vuetify.lang.t('$vuetify.lang_view_tag_name') }}
               </th>
               <th class="text-left">
@@ -87,6 +90,9 @@
               <td>
                 <router-link :to="{ name: 'CicdProject', params: { 'projectName': failRun.projectName }}">{{ failRun.projectName }}</router-link>/
                 <router-link :to="{ name: 'CicdPipeline', params: { 'pipelineName': failRun.pipelineName }}">{{ failRun.pipelineName }}</router-link>
+              </td>
+              <td>
+                <v-chip v-if="failRun.pipelineArch" small class="mr-2" color="primary">{{ failRun.pipelineArch }}</v-chip>
               </td>
               <td>{{ failRun.tagName }}</td>
               <td>{{ failRun.startUser }}</td>

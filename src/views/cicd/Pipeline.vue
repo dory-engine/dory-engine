@@ -22,6 +22,9 @@
                     {{$vuetify.lang.t('$vuetify.lang_view_branch_name')}}
                   </th>
                   <th class="text-left">
+                    {{$vuetify.lang.t('$vuetify.lang_view_architecture')}}
+                  </th>
+                  <th class="text-left">
                     {{$vuetify.lang.t('$vuetify.lang_view_ci_envs')}}
                   </th>
                   <th class="text-left">
@@ -42,6 +45,7 @@
                 <tr>
                   <td>{{ pipelineData.pipeline.pipelineName }}</td>
                   <td>{{ pipelineData.pipeline.branchName }}</td>
+                  <td><v-chip v-if="pipelineData.pipeline.pipelineDef && pipelineData.pipeline.pipelineDef.pipelineArch" small class="mr-2" color="primary">{{ pipelineData.pipeline.pipelineDef.pipelineArch }}</v-chip></td>
                   <td>
                     <template>
                       <div class="my-1" v-for="(item,index) in pipelineData.pipeline.envs" :key="index">
@@ -125,7 +129,6 @@
                   <td>
                     <div>{{ pipelineData.projectInfo.projectNamespace }}({{ pipelineData.projectInfo.shortName }})</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_project_team')}}: {{ pipelineData.projectInfo.projectTeam }}</div>
-                    <div>{{$vuetify.lang.t('$vuetify.lang_view_project_arch')}}: {{ pipelineData.projectInfo.projectArch }}</div>
                     <div>{{$vuetify.lang.t('$vuetify.lang_view_tenant_code')}}: {{ pipelineData.tenantCode }}</div>
                   </td>
                   <td>

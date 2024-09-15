@@ -16,6 +16,7 @@ export default {
     set(data, ['attrs', 'headers'], get(['attrs', 'headers'], data) || [
       { value: 'pipelineName', text: vuetify.preset.lang.t('$vuetify.lang_view_pipeline_name'), sortable: true },
       { value: 'branchName', text: vuetify.preset.lang.t('$vuetify.lang_view_branch_name'), sortable: false },
+      { value: 'pipelineArch', text: vuetify.preset.lang.t('$vuetify.lang_view_architecture'), sortable: false },
       { value: 'envs', text: vuetify.preset.lang.t('$vuetify.lang_view_ci_envs'), sortable: false },
       { value: 'envProductions', text: vuetify.preset.lang.t('$vuetify.lang_view_production_envs'), sortable: false },
       { value: 'operation', text: vuetify.preset.lang.t('$vuetify.lang_view_operations'), sortable: false }
@@ -24,6 +25,13 @@ export default {
     set(data, ['attrs', 'itemKey'], get(['attrs', 'itemKey'], data) || 'branchName')
     set(data, ['scopedSlots', 'item.pipelineName'], context.scopedSlots['item.pipelineName'] || ((config) => {
       return <router-link to={{name: 'CicdPipeline', params: { pipelineName: config.item.pipelineName }}}>{ config.item.pipelineName }</router-link>
+    }))
+    set(data, ['scopedSlots', 'item.pipelineArch'], context.scopedSlots['item.pipelineArch'] || ((config) => {
+      if (config.item.pipelineDef.pipelineArch) {
+        return <v-chip small class="mr-2" color="primary">{config.item.pipelineDef.pipelineArch}</v-chip>
+      } else {
+        return null
+      }
     }))
     set(data, ['scopedSlots', 'item.envs'], context.scopedSlots['item.envs'] || ((config) => {
       return config.item.envs.map(row => {

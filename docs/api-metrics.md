@@ -127,6 +127,9 @@
         "branchNames": [
             "develop",
         ],
+        "archNames": [
+            "amd64",
+        ],
         "envNames": [
             "test",
         ],
@@ -191,6 +194,9 @@
         "branchNames": [
             "develop",
         ],
+        "archNames": [
+            "amd64",
+        ],
         "envNames": [
             "test",
         ],
@@ -249,6 +255,9 @@
     "data": {
         "branchNames": [
             "develop",
+        ],
+        "archNames": [
+            "amd64",
         ],
         "envNames": [
             "test",
@@ -310,6 +319,9 @@
         "branchNames": [
             "develop",
         ],
+        "archNames": [
+            "amd64",
+        ],
         "envNames": [
             "test",
         ],
@@ -370,6 +382,9 @@
         "branchNames": [
             "develop",
         ],
+        "archNames": [
+            "amd64",
+        ],
         "envNames": [
             "test",
         ],
@@ -429,6 +444,9 @@
         "branchNames": [
             "develop",
         ],
+        "archNames": [
+            "amd64",
+        ],
         "envNames": [
             "test",
         ],
@@ -485,6 +503,9 @@
         "branchNames": [
             "develop",
         ],
+        "archNames": [
+            "amd64",
+        ],
         "envNames": [
             "test",
         ],
@@ -540,6 +561,9 @@
     "data": {
         "branchNames": [
             "develop",
+        ],
+        "archNames": [
+            "amd64",
         ],
         "envNames": [
             "test",
@@ -601,6 +625,9 @@
         "branchNames": [
             "develop",
         ],
+        "archNames": [
+            "amd64",
+        ],
         "envNames": [
             "test",
         ],
@@ -656,6 +683,9 @@
     "data": {
         "branchNames": [
             "develop",
+        ],
+        "archNames": [
+            "amd64",
         ],
         "envNames": [
             "test",
@@ -716,6 +746,9 @@
         "branchNames": [
             "develop",
         ],
+        "archNames": [
+            "amd64",
+        ],
         "envNames": [
             "test",
         ],
@@ -771,6 +804,9 @@
     "data": {
         "branchNames": [
             "develop",
+        ],
+        "archNames": [
+            "amd64",
         ],
         "envNames": [
             "test",
@@ -833,6 +869,9 @@
         "branchNames": [
             "develop",
         ],
+        "archNames": [
+            "amd64",
+        ],
         "envNames": [
             "test",
         ],
@@ -891,6 +930,9 @@
     "data": {
         "branchNames": [
             "develop",
+        ],
+        "archNames": [
+            "amd64",
         ],
         "envNames": [
             "test",
@@ -993,6 +1035,9 @@
     "branchNames": [
         "xxx"
     ],
+    "archNames": [
+        "amd64",
+    ],
     "pipelineNames": [
         "xxx"
     ]
@@ -1010,6 +1055,7 @@
     - projectTeams: 过滤团队
     - branchNames: 过滤分支
     - pipelineNames: 过滤流水线
+    - archNames: 过滤架构
 
     - 【注意】每个大类指标都有4个接口：
         - [POST] api/metrics/xxx/count 次数统计接口（单位：次数）
@@ -1129,6 +1175,9 @@
     "branchNames": [
         "xxx"
     ],
+    "archNames": [
+        "amd64",
+    ],
     "pipelineNames": [
         "xxx"
     ],
@@ -1174,6 +1223,9 @@
     ],
     "branchNames": [
         "xxx"
+    ],
+    "archNames": [
+        "amd64",
     ],
     "pipelineNames": [
         "xxx"
@@ -1228,6 +1280,9 @@
     "branchNames": [
         "xxx"
     ],
+    "archNames": [
+        "amd64",
+    ],
     "pipelineNames": [
         "xxx"
     ],
@@ -1275,6 +1330,9 @@
     ],
     "branchNames": [
         "xxx"
+    ],
+    "archNames": [
+        "amd64",
     ],
     "pipelineNames": [
         "xxx"
@@ -1330,6 +1388,9 @@
     "branchNames": [
         "xxx"
     ],
+    "archNames": [
+        "amd64",
+    ],
     "pipelineNames": [
         "xxx"
     ],
@@ -1381,6 +1442,9 @@
     "branchNames": [
         "xxx"
     ],
+    "archNames": [
+        "amd64",
+    ],
     "pipelineNames": [
         "xxx"
     ],
@@ -1428,6 +1492,9 @@
     "branchNames": [
         "xxx"
     ],
+    "archNames": [
+        "amd64",
+    ],
     "pipelineNames": [
         "xxx"
     ],
@@ -1472,6 +1539,9 @@
     ],
     "branchNames": [
         "xxx"
+    ],
+    "archNames": [
+        "amd64",
     ],
     "pipelineNames": [
         "xxx"
@@ -1527,6 +1597,9 @@
     "branchNames": [
         "xxx"
     ],
+    "archNames": [
+        "amd64",
+    ],
     "pipelineNames": [
         "xxx"
     ],
@@ -1575,6 +1648,9 @@
     ],
     "branchNames": [
         "xxx"
+    ],
+    "archNames": [
+        "amd64",
     ],
     "pipelineNames": [
         "xxx"
@@ -1639,6 +1715,9 @@
     "branchNames": [
         "xxx"
     ],
+    "archNames": [
+        "amd64",
+    ],
     "pipelineNames": [
         "xxx"
     ],
@@ -1687,6 +1766,9 @@
     ],
     "branchNames": [
         "xxx"
+    ],
+    "archNames": [
+        "amd64",
     ],
     "pipelineNames": [
         "xxx"
@@ -1740,6 +1822,9 @@
     ],
     "branchNames": [
         "xxx"
+    ],
+    "archNames": [
+        "amd64",
     ],
     "pipelineNames": [
         "xxx"

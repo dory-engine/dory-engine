@@ -142,10 +142,6 @@
         "xxx",
         "xxx"
     ],
-    "projectArches": [
-        "xxx",
-        "xxx"
-    ],
     "tenantCodes": [
         "xxx",
         "xxx"
@@ -179,7 +175,6 @@
                     "shortName" : "tp1",
                     "projectDesc" : "测试-项目1",
                     "projectTeam" : "测试团队1",
-                    "projectArch" : "amd64",
                 },
                 "projectRepo": {
                     "gitRepo": "https://gitlab.dory.cookeem.com/test-project1/test-project1",
@@ -229,6 +224,7 @@
                         ],
                         "envProductions": [
                         ],
+                        "pipelineArch": "amd64",
                         "successCount" : 20,
                         "failCount" : 2,
                         "abortCount" : 3,
@@ -238,25 +234,6 @@
                             "duration" : "1m30s"
                         }
                     },
-                    {
-                        "pipelineName" : "test-project1-master",
-                        "branchName" : "master",
-                        "envs": [
-                            "test"
-                        ],
-                        "envProductions": [
-                            "prod1",
-                            "prod2"
-                        ],
-                        "successCount" : 10,
-                        "failCount" : 1,
-                        "abortCount" : 0,
-                        "status": {
-                            "result" : "SUCESS",
-                            "startTime" : "02-14 12:12:12",
-                            "duration" : "1m30s"
-                        }
-                    }
                 ]
             }
         ],
@@ -284,7 +261,6 @@
                 "shortName" : "tp1",
                 "projectDesc" : "测试-项目1",
                 "projectTeam" : "测试团队1",
-                "projectArch" : "amd64",
             },
             "projectRepo": {
                 "gitRepo": "https://gitlab.dory.cookeem.com/test-project1/test-project1",
@@ -335,6 +311,10 @@
                             "name": "xxx",
                             "value": "yyy"
                         }
+                    ],
+                    "envArch": "amd64",
+                    "arches": [
+                        "amd64"
                     ],
                     "quotaConfig" : {
                         "defaultQuota" : {
@@ -621,6 +601,7 @@
                     ],
                     "envProductions": [
                     ],
+                    "pipelineArch": "amd64",
                     "pipelineCrons": [
                         {
                             "crontabMinute": 10,
@@ -699,6 +680,7 @@
                     "envs": [
                         "devops"
                     ],
+                    "pipelineArch": "amd64",
                     "errMsgPipelineDef": "",
                     "isDefault": true,
                     "pipelineCrons": [
@@ -738,19 +720,6 @@
                     "sourceBranch": "",
                     "webhookPushEvent": true
                 },
-                {
-                    "branchName": "xxx",
-                    "envProductions": [],
-                    "envs": [
-                        "uat"
-                    ],
-                    "errMsgPipelineDef": "",
-                    "isDefault": false,
-                    "pipelineCrons": [],
-                    "pipelineTriggers": [],
-                    "sourceBranch": "develop",
-                    "webhookPushEvent": false
-                }
             ],
             "projectAvailableEnvs": [
                 {
@@ -944,7 +913,6 @@
                 "projectNamespace": "test-project1",
                 "projectShortName": "tp1",
                 "shortName": "tp1",
-                "projectArch": "amd64",
                 "defaultPv": "",
                 "projectDesc": "test-project1",
                 "projectTeam": "TP"
@@ -970,6 +938,7 @@
 - request请求内容
 ```json
 {
+    "nodePort": 0,
     "title": "xxx",
     "content": "xxx",
     "attachmentIDs": [
@@ -1180,7 +1149,6 @@
 {
     "projectDesc": "xxx",
     "projectTeam": "xxx",
-    "projectArch": "xxx",
     "gitRepoUser": "xxx",
     "gitRepoToken": "xxx",
     "gitRepoPassword": "xxx",
@@ -2329,7 +2297,6 @@
 ```json
 {
     "envName": "xxx",
-    "arch": "xxx",
     "componentDebugYaml": "xxx",
 }
 ```
@@ -3625,6 +3592,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
 							"go mod tidy",
 							"go build"
 						],
+                        "architecture": "amd64",
 						"buildEnv": "go-1.17",
 						"buildPath": "Codes/Backend/tp1-gin-demo",
 						"buildPhaseID": 1,
@@ -3797,6 +3765,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
 							"go mod tidy",
 							"go build"
 						],
+                        "architecture": "amd64",
 						"buildEnv": "go-1.17",
 						"buildPath": "Codes/Backend/tp1-gin-demo",
 						"buildPhaseID": 1,

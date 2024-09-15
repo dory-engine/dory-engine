@@ -906,7 +906,8 @@ export default {
           item.commandsAfterCheck = vm.formateText(item.commandsAfterCheck)
           if (item.dockerEnvs !== null) {
             item.dockerEnvs.forEach((row, rowIndex) => {
-              row = row.split("=");
+              let ii = row.indexOf('=');
+              row = [row.substring(0, ii), row.substring(ii + 1)]
               item.dockerEnvs[rowIndex] = row;
             });
           }
