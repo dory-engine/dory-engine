@@ -39,6 +39,12 @@ export default {
         { config.item.stepInfo.runName }
       </router-link>
     }))
+    set(data, ['scopedSlots', 'item.stepInfo.stepAction'], context.scopedSlots['item.stepInfo.stepAction'] || ((config) => {
+      return <div>
+        <div>{ config.item.stepInfo.stepAction }</div>
+        { config.item.stepInfo.architecture ? <div><v-chip small class="mr-2" color="primary">{config.item.stepInfo.architecture}</v-chip></div> : null}
+      </div>
+    }))
     set(data, ['scopedSlots', 'item.stepInfo.result'], context.scopedSlots['item.stepInfo.result'] || ((config) => {
       let chipColor = ''
       switch (config.item.stepInfo.result) {

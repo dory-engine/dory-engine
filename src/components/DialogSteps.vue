@@ -14,6 +14,9 @@
                     {{$vuetify.lang.t('$vuetify.lang_view_step_action')}}
                   </th>
                   <th class="text-left">
+                    {{$vuetify.lang.t('$vuetify.lang_view_architecture')}}
+                  </th>
+                  <th class="text-left">
                     {{$vuetify.lang.t('$vuetify.lang_view_operations')}}
                   </th>
                 </tr>
@@ -25,6 +28,9 @@
                   </td>
                   <td>
                     {{item.stepAction}}
+                  </td>
+                  <td>
+                    <v-chip v-if="item.architecture" small class="mr-2" color="primary">{{ item.architecture }}</v-chip>
                   </td>
                   <td>
                     <v-btn small class="my-1" color="primary" @click="() => {
@@ -91,7 +97,7 @@
               <tbody>
                 <tr>
                   <td>
-                    {{item.stepDetail.branchName }}
+                    <v-chip small class="mr-2" color="primary">{{ item.stepDetail.branchName }}</v-chip>
                   </td>
                   <td>
                     {{item.stepDetail.buildPath }}
@@ -111,9 +117,6 @@
                   <th class="text-left">
                     {{$vuetify.lang.t('$vuetify.lang_view_build_check')}}
                   </th>
-                  <th v-show="item.stepDetail.architecture" class="text-left">
-                    {{$vuetify.lang.t('$vuetify.lang_view_architecture')}}
-                  </th>
                   <th class="text-left">
                     {{$vuetify.lang.t('$vuetify.lang_view_latest_commit')}}
                   </th>
@@ -131,9 +134,6 @@
                       {{ row }}
                     </div>
                   </td>
-                  <td v-show="item.stepDetail.architecture">
-                    <v-chip small class="mr-2" color="primary">{{ item.stepDetail.architecture }}</v-chip>
-                  </td>
                   <td>
                     <a v-if="item.stepDetail.gitURL" :href="item.stepDetail.gitURL" target="_blank">{{item.stepDetail.latestCommit.substring(0, 8)}}</a>
                     <div v-else>{{ item.stepDetail.latestCommit.substring(0, 8) }}</div>
@@ -146,9 +146,6 @@
                 <tr>
                   <th class="text-left">
                     {{$vuetify.lang.t('$vuetify.lang_view_branch_name')}}
-                  </th>
-                  <th class="text-left">
-                    {{$vuetify.lang.t('$vuetify.lang_view_architecture')}}
                   </th>
                   <th class="text-left">
                     {{$vuetify.lang.t('$vuetify.lang_view_tag_name')}}
@@ -165,9 +162,6 @@
                 <tr>
                   <td>
                     <v-chip small class="mr-2" color="primary">{{ item.stepDetail.branchName }}</v-chip>
-                  </td>
-                  <td>
-                    <v-chip small class="mr-2" color="primary">{{ item.stepDetail.architecture }}</v-chip>
                   </td>
                   <td>
                     <a v-if="item.stepDetail.imageURL" :href="item.stepDetail.imageURL" target="_blank">{{item.stepDetail.tagName}}</a>

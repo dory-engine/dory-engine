@@ -3474,6 +3474,10 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         "xxx",
         "xxx"
     ],
+    "archNames": [
+        "xxx",
+        "xxx"
+    ],
     "envNames": [
         "xxx",
         "xxx"
@@ -3568,6 +3572,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
 				"stepInfo": {
                     "beforeExecute": false,
 					"branchName": "develop",
+                    "architecture": "amd64",
 					"duration": "1s",
 					"endTime": "04-21 20:33:06",
                     "envName": "test",
@@ -3592,7 +3597,6 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
 							"go mod tidy",
 							"go build"
 						],
-                        "architecture": "amd64",
 						"buildEnv": "go-1.17",
 						"buildPath": "Codes/Backend/tp1-gin-demo",
 						"buildPhaseID": 1,
@@ -3675,6 +3679,10 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         "xxx",
         "xxx"
     ],
+    "archNames": [
+        "xxx",
+        "xxx"
+    ],
     "envNames": [
         "xxx",
         "xxx"
@@ -3741,6 +3749,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
 				"stepInfo": {
                     "beforeExecute": false,
 					"branchName": "develop",
+                    "architecture": "amd64",
 					"duration": "1s920ms",
 					"endTime": "04-22 14:40:36",
 					"envName": "",
@@ -3765,7 +3774,6 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
 							"go mod tidy",
 							"go build"
 						],
-                        "architecture": "amd64",
 						"buildEnv": "go-1.17",
 						"buildPath": "Codes/Backend/tp1-gin-demo",
 						"buildPhaseID": 1,
@@ -3847,6 +3855,10 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
         "xxx",
         "xxx"
     ],
+    "archNames": [
+        "xxx",
+        "xxx"
+    ],
     "envNames": [
         "xxx",
         "xxx"
@@ -3903,6 +3915,7 @@ form-data模式，文件formName: attachment[]，支持上传多个文件
                 "stepInfo": {
                     "beforeExecute": false,
                     "branchName": "develop",
+                    "architecture": "amd64",
                     "duration": "3s870ms",
                     "endTime": "05-13 23:38:49",
                     "envName": "test",

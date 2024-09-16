@@ -234,7 +234,6 @@ export default {
         headers: [
           { value: 'stepDetail.moduleName', text: vuetify.preset.lang.t('$vuetify.lang_view_module_name'), sortable: false },
           { value: 'stepDetail.branchName', text: vuetify.preset.lang.t('$vuetify.lang_view_branch_name'), sortable: false },
-          { value: 'stepDetail.architecture', text: vuetify.preset.lang.t('$vuetify.lang_view_architecture'), sortable: false },
           { value: 'stepDetail.buildPath', text: vuetify.preset.lang.t('$vuetify.lang_view_build_path'), sortable: false },
           { value: 'stepDetail.buildEnv', text: vuetify.preset.lang.t('$vuetify.lang_view_build_env'), sortable: false },
           { value: 'stepDetail.buildCmds', text: vuetify.preset.lang.t('$vuetify.lang_view_build_command'), sortable: false },
@@ -242,13 +241,6 @@ export default {
           { value: 'stepDetail.latestCommit', text: vuetify.preset.lang.t('$vuetify.lang_view_latest_commit'), sortable: false }
         ],
         scopedSlots: {
-          'item.stepDetail.architecture': (config) => {
-            if (config.item.stepDetail.architecture) {
-              return <v-chip small class="mr-2" color="primary">{config.item.stepDetail.architecture}</v-chip>
-            } else {
-              return null
-            }
-          },
           'item.stepDetail.buildCmds': (config) => {
             return <div>{
               Object.keys(config.item.stepDetail.buildCmds).map(row => {
@@ -276,17 +268,12 @@ export default {
         headers: [
           { value: 'stepDetail.moduleName', text: vuetify.preset.lang.t('$vuetify.lang_view_module_name'), sortable: false },
           { value: 'stepDetail.branchName', text: vuetify.preset.lang.t('$vuetify.lang_view_branch_name'), sortable: false },
-          { value: 'stepDetail.architecture', text: vuetify.preset.lang.t('$vuetify.lang_view_architecture'), sortable: false },
           { value: 'stepDetail.tagName', text: vuetify.preset.lang.t('$vuetify.lang_view_tag_name'), sortable: false },
           { value: 'stepDetail.stepBuildIDs', text: vuetify.preset.lang.t('$vuetify.lang_view_related_build_records'), sortable: false },
-          { value: 'stepDetail.architecture', text: vuetify.preset.lang.t('$vuetify.lang_view_architecture'), sortable: false },
           { value: 'stepDetail.size', text: vuetify.preset.lang.t('$vuetify.lang_view_image_size'), sortable: false },
           { value: 'stepDetail.dockerFile', text: vuetify.preset.lang.t('$vuetify.lang_view_docker_file'), sortable: false },
         ],
         scopedSlots: {
-          'item.stepDetail.architecture': (config) => {
-            return <v-chip small class="mr-2" color="primary">{config.item.stepDetail.architecture}</v-chip>
-          },
           'item.stepDetail.tagName': (config) => {
             if(config.item.stepDetail.imageURL){
               return <a href={config.item.stepDetail.imageURL} target="_Blank">{config.item.stepDetail.tagName}</a>
@@ -521,7 +508,6 @@ export default {
         headers: [
           { value: 'stepDetail.moduleName', text: vuetify.preset.lang.t('$vuetify.lang_view_module_name'), sortable: false },
           { value: 'stepDetail.envName', text: vuetify.preset.lang.t('$vuetify.lang_view_env'), sortable: false },
-          { value: 'stepDetail.architecture', text: vuetify.preset.lang.t('$vuetify.lang_view_architecture'), sortable: false },
           { value: 'stepDetail.isMeshEnable', text: vuetify.preset.lang.t('$vuetify.lang_view_mesh_enable'), sortable: false },
           { value: 'stepDetail.image.tagName', text: vuetify.preset.lang.t('$vuetify.lang_view_tag_name'), sortable: false },
           { value: 'stepDetail.image.stepPackageID', text: vuetify.preset.lang.t('$vuetify.lang_view_related_package_record'), sortable: false },
@@ -530,13 +516,6 @@ export default {
           { value: 'stepDetail.archiveUrl', text: vuetify.preset.lang.t('$vuetify.lang_view_archive_url'), sortable: false },
         ],
         scopedSlots: {
-          'item.stepDetail.architecture': (config) => {
-            if (config.item.stepDetail.architecture) {
-              return <v-chip small class="mr-2" color="primary">{config.item.stepDetail.architecture}</v-chip>
-            } else {
-              return null
-            }
-          },
           'item.stepDetail.image.tagName': (config) => {
             if(config.item.stepDetail.image.imageURL){
               return <a href={config.item.stepDetail.image.imageURL} target="_Blank">{config.item.stepDetail.image.tagName}</a>
@@ -1202,7 +1181,6 @@ ${row.errorDescribe}
         headers: [
           { value: 'stepDetail.moduleName', text: vuetify.preset.lang.t('$vuetify.lang_view_module_name'), sortable: false },
           { value: 'stepDetail.branchName', text: vuetify.preset.lang.t('$vuetify.lang_view_branch_name'), sortable: false },
-          { value: 'stepDetail.architecture', text: vuetify.preset.lang.t('$vuetify.lang_view_architecture'), sortable: false },
           { value: 'stepDetail.image.tagName', text: vuetify.preset.lang.t('$vuetify.lang_view_tag_name'), sortable: false },
           { value: 'stepDetail.stepBuildIDs', text: vuetify.preset.lang.t('$vuetify.lang_view_related_build_records'), sortable: false },
           { value: 'stepDetail.image.stepPackageID', text: vuetify.preset.lang.t('$vuetify.lang_view_related_package_record'), sortable: false },
@@ -1210,13 +1188,6 @@ ${row.errorDescribe}
           { value: 'stepDetail.imageMetadata', text: vuetify.preset.lang.t('$vuetify.lang_view_scan_image_metadata'), sortable: false },
         ],
         scopedSlots: {
-          'item.stepDetail.architecture': (config) => {
-            if (config.item.stepDetail.architecture) {
-              return <v-chip small class="mr-2" color="primary">{config.item.stepDetail.architecture}</v-chip>
-            } else {
-              return null
-            }
-          },
           'item.stepDetail.image.tagName': (config) => {
             if(config.item.stepDetail.image.imageURL){
               return <a href={config.item.stepDetail.image.imageURL} target="_Blank">{config.item.stepDetail.image.tagName}</a>
@@ -1966,6 +1937,13 @@ ${row.errorDescribe}
         { config.item.stepInfo.runName }
       </router-link>
     }))
+    set(data, ['scopedSlots', 'item.stepInfo.stepAction'], context.scopedSlots['item.stepInfo.stepAction'] || ((config) => {
+      return <div>
+        <div>{ config.item.stepInfo.stepAction }</div>
+        { config.item.stepInfo.architecture ? <div><v-chip small class="mr-2" color="primary">{config.item.stepInfo.architecture}</v-chip></div> : null}
+      </div>
+    }))
+
     set(data, ['scopedSlots', 'item.read'], context.scopedSlots['item.read'] || ((config) => {
       if(config.item.readTime){
         return <v-chip small text-color="white" color="green">{vuetify.preset.lang.t('$vuetify.lang_view_read')}</v-chip>

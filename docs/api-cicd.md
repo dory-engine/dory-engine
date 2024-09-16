@@ -1373,6 +1373,7 @@
                     "startTime": "12-05 17:38:06"
                 },
                 "stepAction": "gitPull",
+                "architecture": "amd64",
                 "stepContainerStats": {
                     "cpuDelta": 41189466175.101265,
                     "cpuPercent": 0.0013811729968044092,
@@ -1477,7 +1478,6 @@
                         "go mod tidy",
                         "go build"
                     ],
-                    "architecture": "amd64",
                     "buildEnv": "go-1.17",
                     "buildPath": "Codes/Backend/tp1-gin-demo",
                     "buildPhaseID": 1,
@@ -1551,7 +1551,6 @@
                 },
                 "stepAction": "packageImage",
                 "stepDetail": {
-                    "architecture": "amd64",
                     "created": "2023-09-11T08:12:02.325973076Z",
                     "branchName": "release",
                     "createTime": "2022-04-15T23:55:42.799+08:00",
@@ -1677,7 +1676,6 @@
                         "imageRepoPassword": "",
                         "storageLimit": 0,
                     },
-                    "architecture": "amd64",
                     "moduleName": "tp1-gin-demo",
                     "scanImageStatus": "FAIL",
                     "stepBuildIDs": [
@@ -1744,7 +1742,6 @@
                         "imageRepoPassword": "",
                         "storageLimit": 0,
                     },
-                    "architecture": "amd64",
                     "isMeshEnable": false,
                     "k8sConfigMapYaml": "xxx",
                     "k8sDeployYaml": "xxx",
@@ -1791,7 +1788,6 @@
                         "imageRepoPassword": "",
                         "storageLimit": 0,
                     },
-                    "architecture": "amd64",
                     "isMeshEnable": false,
                     "moduleName": "tp1-gin-demo",
                     "toImage": {
@@ -1844,7 +1840,6 @@
                         "imageRepoPassword": "",
                         "storageLimit": 0,
                     },
-                    "architecture": "amd64",
                     "isMeshEnable": true,
                     "isMeshEnableProd": true,
                     "moduleName": "tp1-spring-demo",
@@ -2426,6 +2421,7 @@
                 "pipelineName": "test-project1-release",
                 "projectName": "test-project1",
                 "runName": "test-project1-release-1",
+                "architecture": "amd64",
                 "status": {
                     "duration": "2s829ms",
                     "result": "SUCCESS",
@@ -2454,7 +2450,6 @@
                         "go mod tidy",
                         "go build"
                     ],
-                    "architecture": "amd64",
                     "buildEnv": "go-1.17",
                     "buildPath": "Codes/Backend/tp1-gin-demo",
                     "buildPhaseID": 1,
@@ -2481,7 +2476,6 @@
                 },
                 "stepAction": "packageImage",
                 "stepDetail": {
-                    "architecture": "amd64",
                     "created": "2023-09-11T08:12:02.325973076Z",
                     "branchName": "release",
                     "createTime": "2022-04-15T23:55:42.799+08:00",
@@ -2967,6 +2961,10 @@
         "xxx",
         "xxx"
     ],
+    "archNames": [
+        "xxx",
+        "xxx"
+    ],
     "envNames": [
         "xxx",
         "xxx"
@@ -3018,6 +3016,7 @@
                 "stepInfo": {
                     "beforeExecute": false,
                     "branchName": "develop",
+                    "architecture": "amd64",
                     "duration": "3s870ms",
                     "endTime": "05-13 23:38:49",
                     "moduleType": "build",

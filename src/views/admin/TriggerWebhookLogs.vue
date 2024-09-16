@@ -46,6 +46,16 @@
               @blur="getList(true)"
             ></v-autocomplete>
             <v-autocomplete
+              :items="archNames"
+              :label="$vuetify.lang.t('$vuetify.lang_form_arch_name')"
+              class="mr-8"
+              dense
+              small-chips
+              multiple
+              v-model="webhookForm.archNames"
+              @blur="getList(true)"
+            ></v-autocomplete>
+            <v-autocomplete
               :items="options.envNames || []"
               :label="$vuetify.lang.t('$vuetify.lang_form_env')"
               class="mr-8"
@@ -258,6 +268,7 @@ export default {
         pipelineNames: [],
         runNames: [],
         branchNames: [],
+        archNames: [],
         envNames: [],
         stepActions: [],
         moduleTypes: [],
@@ -278,6 +289,7 @@ export default {
         triggerWebhookLogs: [],
         totalCount: 0
       },
+      archNames: [],
       expanded: [],
       dates:[],
       menu2: false,
@@ -292,6 +304,13 @@ export default {
   created () {
     const vm = this
     vm.userToken = JSON.parse(localStorage.getItem('userObj')).userToken
+    request.get('/admin/archNames').then(response => {
+      if (response.data.statusResults !== null) {
+        vm.archNames = response.data.archNames
+      }
+    }).catch(error => {
+      vm.errorTip(true, error.response.data.msg)
+    })
     vm.getList(false)
     request.get('/admin/triggerWebhookLogOptions').then(response => {
       vm.options = response.data
