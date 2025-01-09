@@ -7,7 +7,7 @@ const userService = User.getInstance()
 export function rtnTopMenu (userService) {
   return [
     { key: 'projects', icon: 'mdi-rocket-launch', title: vuetify.preset.lang.t('$vuetify.lang_menu_cicd'), type: 'router', routerKey: 'Cicd' },
-    { key: 'metrics', icon: 'mdi-bulletin-board', title: vuetify.preset.lang.t('$vuetify.lang_menu_metrics'), type: 'router', routerKey: 'Metrics' },
+    { key: 'metrics', icon: 'mdi-chart-multiple', title: vuetify.preset.lang.t('$vuetify.lang_menu_metrics'), type: 'router', routerKey: 'Metrics' },
     { key: 'console', icon: 'mdi-console', title: vuetify.preset.lang.t('$vuetify.lang_menu_project_console'), type: 'router', routerKey: 'Console' },
     { key: 'admin', icon: 'mdi-account-cog', title: vuetify.preset.lang.t('$vuetify.lang_menu_admin_console'), type: 'router', routerKey: 'Admin' },
     { key: 'announcements', icon: 'mdi-bullhorn-outline', title: vuetify.preset.lang.t('$vuetify.lang_menu_announcements'), type: 'router', routerKey: 'Announcements' },

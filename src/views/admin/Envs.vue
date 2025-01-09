@@ -52,10 +52,16 @@
           <v-data-table
             :headers="headers"
             :items="pageResponse.data.envK8ss"
-            :server-items-length="pageRequest.perPage"
+            :page="pageRequest.page"
+            :items-per-page="pageRequest.perPage"
+            :server-items-length="pageResponse.data.totalCount"
             class="elevation-1"
             dense
             item-key="envName"
+            :footer-props="{
+              showCurrentPage: true,
+              itemsPerPageOptions: [ 5, 10, 15, 20 ]
+            }"
             show-expand
           >
             <template v-slot:item.handle="{ item }">
@@ -272,27 +278,6 @@
                   </div>
                   <div class="form-item-45 d-flex align-center">
                     <v-text-field
-                      :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_ca_crt_base64')"
-                      required
-                      dense
-                      v-model="formValue.envK8s.caCrtBase64"
-                      :rules="[
-                        v => !!v || $vuetify.lang.t('$vuetify.lang_form_required'),
-                      ]"
-                    />
-                    <v-tooltip right max-width="300px">
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
-                      </template>
-                      <div style="font-size: 12px;">
-                        <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_ca_crt_base64_tip_1')}}</div>
-                      </div>
-                    </v-tooltip>
-                  </div>
-                </div>
-                <div class="d-flex justify-space-between mt-4">
-                  <div class="form-item-45 d-flex align-center">
-                    <v-text-field
                       :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_view_host')"
                       required
                       dense
@@ -307,6 +292,27 @@
                       </template>
                       <div style="font-size: 12px;">
                         <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_view_host_tip_1')}}</div>
+                      </div>
+                    </v-tooltip>
+                  </div>
+                </div>
+                <div class="d-flex justify-space-between mt-4">
+                  <div class="form-item-45 d-flex align-center">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_ca_crt_base64')"
+                      required
+                      dense
+                      v-model="formValue.envK8s.caCrtBase64"
+                      :rules="[
+                        v => !!v || $vuetify.lang.t('$vuetify.lang_form_required'),
+                      ]"
+                    />
+                    <v-tooltip right max-width="300px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_ca_crt_base64_tip_1')}}</div>
                       </div>
                     </v-tooltip>
                   </div>
@@ -374,6 +380,27 @@
                       ]"
                     />
                   </div>
+                  <div class="form-item-45 d-flex align-center">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_dashboard_url_pod')"
+                      required
+                      dense
+                      v-model="formValue.envK8s.dashboardUrlPod"
+                      :rules="[
+                        v => !!v || $vuetify.lang.t('$vuetify.lang_form_required'),
+                      ]"
+                    />
+                    <v-tooltip right max-width="300px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_dashboard_url_pod_tip_1')}}</div>
+                      </div>
+                    </v-tooltip>
+                  </div>
+                </div>
+                <div class="d-flex justify-space-between mt-4">
                   <div class="form-item-45 d-flex align-center">
                     <v-text-field
                       :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_timezone')"
@@ -1222,27 +1249,6 @@
                   </div>
                   <div class="form-item-45 d-flex align-center">
                     <v-text-field
-                      :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_ca_crt_base64')"
-                      required
-                      dense
-                      v-model="formValue.envK8s.caCrtBase64"
-                      :rules="[
-                        v => !!v || $vuetify.lang.t('$vuetify.lang_form_required'),
-                      ]"
-                    />
-                    <v-tooltip right max-width="300px">
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
-                      </template>
-                      <div style="font-size: 12px;">
-                        <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_ca_crt_base64_tip_1')}}</div>
-                      </div>
-                    </v-tooltip>
-                  </div>
-                </div>
-                <div class="d-flex justify-space-between mt-4">
-                  <div class="form-item-45 d-flex align-center">
-                    <v-text-field
                       :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_view_host')"
                       required
                       dense
@@ -1257,6 +1263,27 @@
                       </template>
                       <div style="font-size: 12px;">
                         <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_view_host_tip_1')}}</div>
+                      </div>
+                    </v-tooltip>
+                  </div>
+                </div>
+                <div class="d-flex justify-space-between mt-4">
+                  <div class="form-item-45 d-flex align-center">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_ca_crt_base64')"
+                      required
+                      dense
+                      v-model="formValue.envK8s.caCrtBase64"
+                      :rules="[
+                        v => !!v || $vuetify.lang.t('$vuetify.lang_form_required'),
+                      ]"
+                    />
+                    <v-tooltip right max-width="300px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_ca_crt_base64_tip_1')}}</div>
                       </div>
                     </v-tooltip>
                   </div>
@@ -1324,6 +1351,27 @@
                       ]"
                     />
                   </div>
+                  <div class="form-item-45 d-flex align-center">
+                    <v-text-field
+                      :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_dashboard_url_pod')"
+                      required
+                      dense
+                      v-model="formValue.envK8s.dashboardUrlPod"
+                      :rules="[
+                        v => !!v || $vuetify.lang.t('$vuetify.lang_form_required'),
+                      ]"
+                    />
+                    <v-tooltip right max-width="300px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_dashboard_url_pod_tip_1')}}</div>
+                      </div>
+                    </v-tooltip>
+                  </div>
+                </div>
+                <div class="d-flex justify-space-between mt-4">
                   <div class="form-item-45 d-flex align-center">
                     <v-text-field
                       :label="$vuetify.lang.t('$vuetify.lang_form_env_k8s_connection_settings_timezone')"

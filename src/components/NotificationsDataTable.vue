@@ -514,6 +514,7 @@ export default {
           { value: 'stepDetail.createdDeployYaml', text: vuetify.preset.lang.t('$vuetify.lang_view_created_deployment_yaml'), sortable: false },
           { value: 'stepDetail.currentDeployYaml', text: vuetify.preset.lang.t('$vuetify.lang_view_current_deployment_yaml'), sortable: false },
           { value: 'stepDetail.archiveUrl', text: vuetify.preset.lang.t('$vuetify.lang_view_archive_url'), sortable: false },
+          { value: 'stepDetail.dashboardUrl', text: vuetify.preset.lang.t('$vuetify.lang_view_dashboard_url'), sortable: false },
         ],
         scopedSlots: {
           'item.stepDetail.image.tagName': (config) => {
@@ -674,6 +675,16 @@ export default {
               return <div></div>
             }
           },
+          'item.stepDetail.dashboardUrl': (config) => {
+            let codeValue = config.item.stepDetail.dashboardUrl
+            if(codeValue){
+              return <a target="_Blank" href={codeValue}>
+                <v-btn small color="primary">{vuetify.preset.lang.t('$vuetify.lang_menu_view_detail')}</v-btn>
+              </a>
+            } else {
+              return <div></div>
+            }
+          },
         }
       },
       checkDeploy: {
@@ -682,7 +693,9 @@ export default {
           { value: 'stepDetail.envName', text: vuetify.preset.lang.t('$vuetify.lang_view_env'), sortable: false },
           { value: 'stepDetail.branchName', text: vuetify.preset.lang.t('$vuetify.lang_view_branch_name'), sortable: false },
           { value: 'stepDetail.deploymentStatus', text: vuetify.preset.lang.t('$vuetify.lang_view_deploy_status'), sortable: false },
-          { value: 'stepDetail.checkResourceStatuses', text: vuetify.preset.lang.t('$vuetify.lang_view_pods_error_describe'), sortable: false }
+          { value: 'stepDetail.checkResourceStatuses', text: vuetify.preset.lang.t('$vuetify.lang_view_pods_error_describe'), sortable: false },
+          { value: 'stepDetail.eventsOutput', text: vuetify.preset.lang.t('$vuetify.lang_view_events'), sortable: false },
+          { value: 'stepDetail.dashboardUrl', text: vuetify.preset.lang.t('$vuetify.lang_view_dashboard_url'), sortable: false },
         ],
         scopedSlots: {
           'item.stepDetail.checkResourceStatuses': (config) => {
@@ -745,6 +758,63 @@ ${row.errorDescribe}
               return <div></div>
             }
           },
+          'item.stepDetail.eventsOutput': (config) => {
+            let codeValue = config.item.stepDetail.eventsOutput
+            if(codeValue){
+              return <v-dialog
+              width="1000"
+              delay= "3000"
+              scopedSlots={{
+                activator: ({on, attrs}) => {
+                  return <v-btn
+                  small
+                  color="primary"
+                  {...{
+                    props: attrs,
+                    on
+                  }}>
+                  {vuetify.preset.lang.t('$vuetify.lang_menu_view_detail')}
+                  </v-btn>
+                }
+              }}
+              vOn:input={() => {
+
+              }}
+              >
+                <v-card>
+                  <v-card-title class="headline grey lighten-2">
+                    {vuetify.preset.lang.t('$vuetify.lang_menu_view_detail')}
+                  </v-card-title>
+
+                  <v-card-text>
+                    <Monaco
+                      ref="monaco"
+                      monacoOptions={{
+                        value: codeValue,
+                        automaticLayout:true,
+                        readOnly: true,
+                        theme: "vs-dark",
+                        language: "markdown"
+                      }}
+                      height={500}
+                    ></Monaco>
+                  </v-card-text>
+                </v-card>
+              </v-dialog>
+            }else{
+              return <div></div>
+            }
+          },
+          'item.stepDetail.dashboardUrl': (config) => {
+            let codeValue = config.item.stepDetail.dashboardUrl
+            if(codeValue){
+              return <a target="_Blank" href={codeValue}>
+                <v-btn small color="primary">{vuetify.preset.lang.t('$vuetify.lang_menu_view_detail')}</v-btn>
+              </a>
+            } else {
+              return <div></div>
+            }
+          },
         },
         subTable: {
           headers: [
@@ -758,6 +828,7 @@ ${row.errorDescribe}
             { value: 'age', text: 'age', sortable: false },
             { value: 'errorDescribe', text: vuetify.preset.lang.t('$vuetify.lang_view_pods_error_describe'), sortable: false },
             { value: 'errorLog', text: vuetify.preset.lang.t('$vuetify.lang_view_pods_error_logs'), sortable: false },
+            { value: 'dashboardUrlPod', text: vuetify.preset.lang.t('$vuetify.lang_view_dashboard_url'), sortable: false },
           ],
           itemsPath: ['stepDetail', 'checkPodStatuses']
         }
@@ -1078,7 +1149,8 @@ ${row.errorDescribe}
           { value: 'stepDetail.branchName', text: vuetify.preset.lang.t('$vuetify.lang_view_branch_name'), sortable: false },
           { value: 'stepDetail.isMeshEnable', text: vuetify.preset.lang.t('$vuetify.lang_view_mesh_enable'), sortable: false },
           { value: 'stepDetail.fromImages', text: vuetify.preset.lang.t('$vuetify.lang_view_image_tag_source'), sortable: false },
-          { value: 'stepDetail.toImages', text: vuetify.preset.lang.t('$vuetify.lang_view_image_tag_target'), sortable: false }
+          { value: 'stepDetail.toImages', text: vuetify.preset.lang.t('$vuetify.lang_view_image_tag_target'), sortable: false },
+          { value: 'stepDetail.dashboardUrl', text: vuetify.preset.lang.t('$vuetify.lang_view_dashboard_url'), sortable: false },
         ],
         scopedSlots: {
           'item.stepDetail.fromImages': (config) => {
@@ -1174,6 +1246,16 @@ ${row.errorDescribe}
                 }
               })
             }</div>
+          },
+          'item.stepDetail.dashboardUrl': (config) => {
+            let codeValue = config.item.stepDetail.dashboardUrl
+            if(codeValue){
+              return <a target="_Blank" href={codeValue}>
+                <v-btn small color="primary">{vuetify.preset.lang.t('$vuetify.lang_menu_view_detail')}</v-btn>
+              </a>
+            } else {
+              return <div></div>
+            }
           },
         }
       },
@@ -1356,6 +1438,7 @@ ${row.errorDescribe}
           { value: 'stepDetail.fromImage.stepPackageID', text: vuetify.preset.lang.t('$vuetify.lang_view_related_package_record'), sortable: false },
           { value: 'stepDetail.toImage.tagName', text: vuetify.preset.lang.t('$vuetify.lang_view_image_tag_target'), sortable: false },
           { value: 'stepDetail.toImage.stepPackageID', text: vuetify.preset.lang.t('$vuetify.lang_view_related_package_record'), sortable: false },
+          { value: 'stepDetail.dashboardUrl', text: vuetify.preset.lang.t('$vuetify.lang_view_dashboard_url'), sortable: false },
         ],
         scopedSlots: {
           'item.stepDetail.fromImage.tagName': (config) => {
@@ -1451,6 +1534,16 @@ ${row.errorDescribe}
                 </v-card>
               </v-dialog>
             }else{
+              return <div></div>
+            }
+          },
+          'item.stepDetail.dashboardUrl': (config) => {
+            let codeValue = config.item.stepDetail.dashboardUrl
+            if(codeValue){
+              return <a target="_Blank" href={codeValue}>
+                <v-btn small color="primary">{vuetify.preset.lang.t('$vuetify.lang_menu_view_detail')}</v-btn>
+              </a>
+            } else {
               return <div></div>
             }
           },
@@ -2443,6 +2536,16 @@ ${row.errorDescribe}
                       </v-card>
                     </v-dialog>
                   }else{
+                    return <div></div>
+                  }
+                },
+                'item.dashboardUrlPod': (config) => {
+                  let codeValue = config.item.dashboardUrlPod
+                  if(codeValue){
+                    return <a target="_Blank" href={codeValue}>
+                      <v-btn small color="primary">{vuetify.preset.lang.t('$vuetify.lang_menu_view_detail')}</v-btn>
+                    </a>
+                  } else {
                     return <div></div>
                   }
                 },

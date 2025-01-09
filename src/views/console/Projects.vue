@@ -18,6 +18,7 @@ export default {
       },
       projectsForm: {
         projectNames: [],
+        projectDescs: [],
         projectTeam: '',
         sortMode: '',
         page: 1,
@@ -62,7 +63,8 @@ export default {
       deleteNodePortDialog: false,
       deleteEnvDialog: false,
       addNodePortDialog: false,
-      projectList: [],
+      projectNames: [],
+      projectDescs: [],
       newEnvDialog: false,
       newEnvSelectList: [],
       updateProjectDialog: false,
@@ -170,7 +172,12 @@ export default {
       vm.errorTip(true, error.response.data.msg);
     })
     request.get('/console/projectNames').then(response => {
-      vm.projectList = response.data.projectNames
+      vm.projectNames = response.data.projectNames
+    }).catch(error => {
+      vm.errorTip(true, error.response.data.msg)
+    })
+    request.get('/console/projectDescs').then(response => {
+      vm.projectDescs = response.data.projectDescs
     }).catch(error => {
       vm.errorTip(true, error.response.data.msg)
     })
@@ -573,8 +580,23 @@ export default {
                 <VCol cols="3">
                   <VAutocomplete
                     v-model={vm.projectsForm.projectNames}
-                    items={vm.projectList}
+                    items={vm.projectNames}
                     label={vuetify.preset.lang.t('$vuetify.lang_form_project_name')}
+                    multiple
+                    dense
+                    small-chips
+                    vOn:blur={() => {
+                      vm.getProjects()
+                    }}
+                  />
+                </VCol>
+                <VCol
+                  cols="3"
+                >
+                  <VAutocomplete
+                    v-model={vm.projectsForm.projectDescs}
+                    items={vm.projectDescs}
+                    label={vuetify.preset.lang.t('$vuetify.lang_form_project_desc')}
                     multiple
                     dense
                     small-chips

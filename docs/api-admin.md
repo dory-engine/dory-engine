@@ -10,6 +10,7 @@
       - [\[POST\] api/admin/reload 重新读取所有配置并重新检测环境网格配置](#post-apiadminreload-重新读取所有配置并重新检测环境网格配置)
       - [\[POST\] api/admin/license 请求license](#post-apiadminlicense-请求license)
       - [\[GET\] api/admin/projectNames admin项目名称列表接口，用于搜索的下拉列表](#get-apiadminprojectnames-admin项目名称列表接口用于搜索的下拉列表)
+      - [\[GET\] api/admin/projectDescs admin项目全称列表接口，用于搜索的下拉列表](#get-apiadminprojectdescs-admin项目全称列表接口用于搜索的下拉列表)
       - [\[POST\] api/admin/projectNames/tenantCode admin项目名称列表接口，用于用户列表页设置项目member选择项目用途](#post-apiadminprojectnamestenantcode-admin项目名称列表接口用于用户列表页设置项目member选择项目用途)
       - [\[GET\] api/admin/projectEnvs admin项目与可用环境列表接口，用于把主机/数据库加入到项目环境](#get-apiadminprojectenvs-admin项目与可用环境列表接口用于把主机数据库加入到项目环境)
       - [\[GET\] api/admin/projectNamespaces admin项目名字空间列表接口](#get-apiadminprojectnamespaces-admin项目名字空间列表接口)
@@ -268,6 +269,25 @@
 }
 ```
 
+#### [GET] api/admin/projectDescs admin项目全称列表接口，用于搜索的下拉列表
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {
+        "auditID": "xxx",
+        "withAdminLog": true,
+        "projectDescs": [
+            "测试-项目1",
+            "测试-项目2"
+        ]
+    }
+}
+```
+
 #### [POST] api/admin/projectNames/tenantCode admin项目名称列表接口，用于用户列表页设置项目member选择项目用途
 
 - request请求内容
@@ -341,6 +361,10 @@
 ```json
 {
     "projectNames": [
+        "xxx",
+        "xxx"
+    ],
+    "projectDescs": [
         "xxx",
         "xxx"
     ],
@@ -760,18 +784,11 @@
                                 "imageName": "registry.dory.cookeem.com/public/ssh-debug:v1.1.5",
                                 "podName": "tp1-ssh-debug-db65c949f-q22jt",
                                 "podSpec": "xxx",
+                                "dashboardUrlPod": "xxx",
                                 "ready": "0/1",
                                 "reason": "ErrImagePull",
                                 "restart": "0"
                             },
-                            {
-                                "age": "2s804ms",
-                                "imageName": "registry.dory.cookeem.com/public/vnc-debug:v1.6.1",
-                                "podName": "tp1-vnc-debug-864f497979-qmzcn",
-                                "ready": "0/1",
-                                "reason": "ErrImagePull",
-                                "restart": "0"
-                            }
                         ],
                         "deploymentYaml": "xxx",
                         "serviceYaml": "xxx",
@@ -862,6 +879,7 @@
                                     "imageName": "101.36.228.198:30004/mysql:8.0.23",
                                     "podName": "tp1-mysql-84cb7c69b4-z6pwc",
                                     "podSpec": "xxx",
+                                    "dashboardUrlPod": "xxx",
                                     "ready": "0/1",
                                     "reason": "ImagePullBackOff",
                                     "restart": "0"
@@ -2542,7 +2560,7 @@ deployName: tp1-mysql
 deployImage: mysql:8.0.23
 # 部署方式*
 # ++ 容器发布模块的部署方式
-# @@ 下拉选择 deployment statefulset
+# @@ 下拉选择 deployment statefulset job cronjob
 deployType: deployment
 # 是否headless服务
 # ++ headless服务不做负载均衡，并且pod之间可以通过域名互相访问，只有deployType为statefulset的时候，可以设置deployHeadless为true
@@ -2787,6 +2805,51 @@ deployConfigSettings:
   pvcName: "xxx1-local-pv"
   # 共享存储项目目录相对路径
   podPath: "tp1-gin-demo/config2/"
+# configmap文件所在代码仓库的分支名称
+deployConfigMapBranch: develop
+# 把代码中的配置文件保存成kubernetes的configmap
+deployConfigMaps:
+  # configmap的名字*
+- name: tp1-configmap1
+  # 来源的文件类型*
+  # ++ from-file: 来源于文件，把整个文件保存到configmap
+  # ++ from-env-file: 来源于环境变量文件，环境变量文件内容格式为"key=value"，把环境变量文件中的变量名和变量值以键值对形式保存到configmap
+  # @@ 下拉选择 from-file from-env-file
+  # @@ 默认 from-file
+  fromFileType: from-file
+  # 文件所在代码目录相对路径*
+  # ++ 支持多个文件，必须填写文件，不能填写目录
+  paths:
+  - Codes/Backend/tp1-gin-demo/config/a.env
+# secret文件所在代码仓库的分支名称
+deploySecretBranch: develop
+# 把代码中的配置文件保存成kubernetes的secret
+deploySecrets:
+  # secret的名字*
+- name: tp1-secret1
+  # secret类型*
+  # ++ generic: 普通密钥，把整个文件的内容做成secret
+  # ++ docker-registry: 把~/.docker/config.json的内容做成secret
+  # ++ tls: 制作tls证书类型的secret
+  # @@ 下拉选择 generic docker-registry tls
+  # @@ 默认 generic
+  secretType: generic
+  # 来源的文件类型
+  # ++ from-file: 来源于文件，把整个文件保存到secret
+  # ++ from-env-file: 来源于环境变量文件，环境变量文件内容格式为"key=value"，把环境变量文件中的变量名和变量值以键值对形式保存到secret
+  # @@ 下拉选择 from-file from-env-file
+  # @@ 默认 from-file
+  fromFileType: from-file
+  # 文件所在代码目录相对路径
+  # ++ 支持多个文件，必须填写文件，不能填写目录
+  paths:
+  - Codes/Backend/tp1-gin-demo/config/a.env
+  # docker的客户端设置文件所在代码目录相对路径
+  dockerConfig: Codes/Backend/tp1-gin-demo/config/config.json
+  # tls.crt证书文件所在代码目录相对路径
+  cert: Codes/Backend/tp1-gin-demo/config/tls.crt
+  # tls.key证书文件所在代码目录相对路径
+  key: Codes/Backend/tp1-gin-demo/config/tls.key
 # 容器发布模块的生命周期事件设置
 lifecycle:
   # 容器启动后生命周期事件设置
@@ -2857,6 +2920,60 @@ subdomain: "example"
 # ++ 包含的环境变量包括: K8S_METADATA_NAME, K8S_METADATA_NAMESPACE, K8S_METADATA_UID, K8S_SPEC_SERVICEACCOUNTNAME, K8S_SPEC_NODENAME, K8S_STATUS_HOSTIP, K8S_STATUS_PODIP, K8S_RESOURCE_LIMITS_CPU, K8S_RESOURCE_REQUESTS_CPU, K8S_RESOURCE_LIMITS_MEMORY, K8S_RESOURCE_REQUESTS_MEMORY
 # ++ pod的labels和annotations信息将会存放在pod容器的/etc/k8s-pod-meta目录
 enableDownwardApi: false
+# 重启策略
+# ++ Always: 非运行状态下一直重启（默认）
+# ++ OnFailure: 异常情况下重启
+# ++ Never: 不重启
+# @@ 下拉选择 Always OnFailure Never
+restartPolicy: Always
+# 任务设置
+# ++ deployType 为 job 或者 cronjob 情况下需要填写
+job:
+  # 成功执行多少个子任务表示成功*
+  # ++ 默认为1，必须大于1
+  completions: 1
+  # 可以并行执行多少个子任务*
+  # ++ 默认为1，必须大于1
+  parallelism: 1
+  # 子任务的编号模式
+  # ++ NonIndexed: 子任务随机编号，子任务以随机顺序执行（默认）
+  # ++ Indexed: 子任务顺序编号，子任务以编号顺序执行
+  # @@ 下拉选择 NonIndexed Indexed
+  completionMode: NonIndexed
+  # 子任务允许失败多少次
+  # ++ 默认不设置为6
+  backoffLimit: 6
+  # 允许任务执行多长时间，单位秒
+  # ++ 超过设置时长就会自动结束整个任务
+  # ++ 不设置表示不限制时长
+  activeDeadlineSeconds: 10
+  # 任务结束后多长时间自动删除子任务的容器，单位秒
+  # ++ 超过设置时长就会自动删除子任务的容器
+  # ++ 不设置表示不自动删除子任务的容器
+  ttlSecondsAfterFinished: 10
+# 计划任务设置
+# ++ deployType 为 cronjob 情况下需要填写
+cronJob:
+  # 计划任务*
+  # 必须遵循crontab的格式
+  # 例如: 5 5 * * *
+  schedule: "*/5 5 * * *"
+  # 计划任务创建的任务执行时发生重叠如何处理
+  # ++ Allow: 允许并发任务执行（默认）
+  # ++ Forbid: 不允许并发任务执行；如果新任务的执行时间到了而老任务没有执行完，计划任务会忽略新任务的执行
+  # ++ Replace: 如果新任务的执行时间到了而老任务没有执行完，计划任务会用新任务替换当前正在运行的任务
+  # @@ 下拉选择 Allow Forbid Replace
+  concurrencyPolicy: Allow
+  # 任务延迟开始的最后期限，单位秒
+  # ++ 任务如果由于某种原因错过了调度时间，开始该任务的截止时间的秒数
+  # ++ 不设置表示假如超过截止时间，计划任务不会开始该任务的实例
+  startingDeadlineSeconds: 10
+  # 保留多少已成功的任务
+  # ++ 默认为3，设置为0表示不保留
+  successfulJobsHistoryLimit: 10
+  # 保留多少已失败的任务
+  # ++ 默认为1，设置为0表示不保留
+  failedJobsHistoryLimit: 10
 # 通过patch方式追加额外的部署参数
 # ++ 假如容器部署定义中的设置参数不满足要求，那么可以使用patch的方式给容器部署追加参数
 # ++ 只有项目名字空间开启特权模式情况下，才能通过patch方式追加额外的部署参数
@@ -4334,6 +4451,7 @@ token: "xxx"
 				"token": "xxx",
                 "caCrtBase64": "xxx",
 				"dashboardUrl": "xxx",
+                "dashboardUrlPod": "xxx",
                 "dashboardUrlNetworkPolicy": "xxx",
 				"istioNamespace": "xxx",
                 "ingressControllerNamespace": "traefik",
@@ -4551,9 +4669,11 @@ token: 'xxx'
 # kubernetes环境的 apiserver 的ca证书的base64编码字符串*
 caCrtBase64: "xxx"
 # kubernetes dashboard管理控制台的url
-dashboardUrl: "https://k8s.dory.cookeem.com/#/workloads?namespace={{ .projectNamespace }}"
+dashboardUrl: "https://example.com/#/workloads?namespace={{ .projectNamespace }}"
 # kubernetes dashboard管理控制台网络策略的url
-dashboardUrlNetworkPolicy: "https://k8s.dory.cookeem.com/#/networkpolicy?namespace={{ .projectNamespace }}"
+dashboardUrlNetworkPolicy: "https://example.com/#/networkpolicy?namespace={{ .projectNamespace }}"
+# kubernetes dashboard管理控制台的pod管理url
+dashboardUrlPod: "https://example.com/#/pod/{{ .projectNamespace }}/{{ .podName }}?namespace={{ .projectNamespace }}"
 # 环境中istio服务网格部署的名字空间
 istioNamespace: "istio-system"
 # 环境中ingress controller部署的名字空间

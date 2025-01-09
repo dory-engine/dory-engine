@@ -7,6 +7,7 @@
   - [api接口](#api接口)
     - [cicd 持续交付接口](#cicd-持续交付接口)
       - [\[GET\] api/cicd/projectNames cicd项目名称列表接口，用于搜索的下拉列表](#get-apicicdprojectnames-cicd项目名称列表接口用于搜索的下拉列表)
+      - [\[GET\] api/cicd/projectDescs cicd项目全称列表接口，用于搜索的下拉列表](#get-apicicdprojectdescs-cicd项目全称列表接口用于搜索的下拉列表)
       - [\[GET\] api/cicd/pipelineNames cicd流水线名称列表接口，用于搜索的下拉列表](#get-apicicdpipelinenames-cicd流水线名称列表接口用于搜索的下拉列表)
       - [\[GET\] api/cicd/branchNames cicd分支名称列表接口，用于搜索的下拉列表](#get-apicicdbranchnames-cicd分支名称列表接口用于搜索的下拉列表)
       - [\[GET\] api/cicd/envNames cicd环境名称列表接口，用于搜索的下拉列表](#get-apicicdenvnames-cicd环境名称列表接口用于搜索的下拉列表)
@@ -90,6 +91,23 @@
 }
 ```
 
+#### [GET] api/cicd/projectDescs cicd项目全称列表接口，用于搜索的下拉列表
+
+- response响应内容
+```json
+{
+    "status": "SUCCESS",
+    "msg": "xxx",
+    "duration": "1.290581419s",
+    "data": {
+        "projectDescs": [
+            "测试-项目1",
+            "测试-项目2"
+        ]
+    }
+}
+```
+
 #### [GET] api/cicd/pipelineNames cicd流水线名称列表接口，用于搜索的下拉列表
 
 - response响应内容
@@ -164,6 +182,10 @@
 ```json
 {
     "projectNames": [
+        "xxx",
+        "xxx"
+    ],
+    "projectDescs": [
         "xxx",
         "xxx"
     ],
@@ -1724,6 +1746,7 @@
                     "branchName": "release",
                     "createTime": "2022-04-15T23:55:43.153+08:00",
                     "configMapYaml": "xxx",
+                    "dashboardUrl": "xxx",
                     "deployYaml": "xxx",
                     "envName": "prod",
                     "hpaYaml": "xxx",
@@ -1772,6 +1795,7 @@
                 "stepDetail": {
                     "branchName": "develop",
                     "createTime": "2022-04-15T23:53:58.799+08:00",
+                    "dashboardUrl": "xxx",
                     "envName": "test",
                     "fromImage": {
                         "imageURL": "https://registry.dory.cookeem.com/harbor/projects/16/repositories/tp1-gin-demo/artifacts/v0.0.0-develop-5",
@@ -1816,6 +1840,7 @@
                 "stepDetail": {
                     "branchName": "release",
                     "createTime": "2022-04-15T23:55:42.875+08:00",
+                    "dashboardUrl": "xxx",
                     "envName": "uat",
                     "fromImages": [
                         {
@@ -1876,6 +1901,40 @@
                 "stepAction": "checkDeploy",
                 "stepDetail": {
                     "branchName": "develop",
+                    "dashboardUrl": "xxx",
+                    "events": [
+                        {
+                            "apiVersion": "v1",
+                            "count": 1,
+                            "firstTimestamp": "2024-11-13T15:12:48+08:00",
+                            "involvedObject": {
+                                "apiVersion": "v1",
+                                "kind": "Pod",
+                                "name": "mdp1-gin-demo-0",
+                                "namespace": "my-demo-project1",
+                                "resourceVersion": "18892391",
+                                "uid": "c6b4f6f8-bee7-4584-a6b3-e9d7b474261b"
+                            },
+                            "kind": "Event",
+                            "lastTimestamp": "2024-11-13T15:12:48+08:00",
+                            "message": "Stopping container mdp1-gin-demo",
+                            "metadata": {
+                                "creationTimestamp": "2024-11-13T07:12:48Z",
+                                "name": "mdp1-gin-demo-0.180775ad218207fb",
+                                "namespace": "my-demo-project1",
+                                "resourceVersion": "18956223",
+                                "uid": "82a9235f-89ec-467a-a94f-981c26a31d83"
+                            },
+                            "reason": "Killing",
+                            "reportingComponent": "kubelet",
+                            "reportingInstance": "gditdev-master03",
+                            "source": {
+                                "component": "kubelet"
+                            },
+                            "type": "Normal"
+                        }
+                    ],
+                    "eventsOutput": "xxx",
                     "checkPodStatuses": [
                         {
                             "age": "10h38m",
@@ -1889,26 +1948,11 @@
                             },
                             "podName": "tp1-spring-demo-buildid-2-6fb5d64f9d-fcktf",
                             "podSpec": "xxx",
+                            "dashboardUrlPod": "xxx",
                             "ready": "2/2",
                             "reason": "Running",
                             "restart": "0"
                         },
-                        {
-                            "age": "10h35m",
-                            "errorDescribe": "xxx",
-                            "errorLog": "xxx",
-                            "image": {
-                                "imageURL": "https://registry.dory.cookeem.com/harbor/projects/16/repositories/tp1-spring-demo/artifacts/v0.0.0-develop-3",
-                                "stepPackageID": "6259935b1645d0d247fd681f",
-                                "moduleName": "xxx",
-                                "tagName": "v0.0.0-develop-3"
-                            },
-                            "podName": "tp1-spring-demo-buildid-3-5db8d86f76-mm79m",
-                            "podSpec": "xxx",
-                            "ready": "2/2",
-                            "reason": "Running",
-                            "restart": "0"
-                        }
                     ],
                     "createTime": "2022-04-16T10:22:29.878+08:00",
                     "deploymentStatus": "READY",

@@ -640,7 +640,7 @@
                       {{$vuetify.lang.t('$vuetify.lang_view_env_network_policy_settings')}}
                       <v-spacer></v-spacer>
                       <v-btn color="primary" small class="my-1 mr-1" @click="openAddNetworkPolicy(item.envName)">{{ $vuetify.lang.t('$vuetify.lang_menu_new_network_policy') }}</v-btn>
-                      <v-btn color="primary" small class="my-1 mr-1" :href="item.dashboardUrlNetworkPolicy" target="_blank">{{ $vuetify.lang.t('$vuetify.lang_menu_network_policy_dashboard') }}</v-btn>
+                      <v-btn color="green white--text" small class="my-1 mr-1" :href="item.dashboardUrlNetworkPolicy" target="_blank">{{ $vuetify.lang.t('$vuetify.lang_menu_network_policy_dashboard') }}</v-btn>
                     </v-card-title>
                     <v-card-text>
                       <v-simple-table dense>
@@ -828,6 +828,7 @@
                       {{$vuetify.lang.t('$vuetify.lang_view_env_debug_components_settings')}}
                       <v-spacer></v-spacer>
                       <v-btn color="primary" small class="my-1 mr-1" @click="openAddDebug(item.envName)">{{ $vuetify.lang.t('$vuetify.lang_menu_new_debug_component') }}</v-btn>
+                      <v-btn color="green white--text" small class="my-1 mr-1" :href="item.dashboardUrl" target="_blank">{{ $vuetify.lang.t('$vuetify.lang_view_dashboard_url') }}</v-btn>
                     </v-card-title>
                     <v-card-text class="info-table">
                       <v-data-table
@@ -884,6 +885,9 @@
                                     <th class="text-left">
                                       {{ $vuetify.lang.t('$vuetify.lang_view_pods_pod_spec') }}
                                     </th>
+                                    <th class="text-left">
+                                      {{ $vuetify.lang.t('$vuetify.lang_view_dashboard_url') }}
+                                    </th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -896,6 +900,9 @@
                                     <td>{{ i.age }}</td>
                                     <td>
                                       <v-btn small color="primary" @click="showYaml(i.podSpec, $vuetify.lang.t('$vuetify.lang_view_pods_pod_spec'))">{{ $vuetify.lang.t('$vuetify.lang_menu_view_detail') }}</v-btn>
+                                    </td>
+                                    <td>
+                                      <v-btn small color="green white--text" :href="i.dashboardUrlPod" target="_blank">{{ $vuetify.lang.t('$vuetify.lang_menu_view_detail') }}</v-btn>
                                     </td>
                                   </tr>
                                 </tbody>
@@ -919,6 +926,7 @@
                       {{$vuetify.lang.t('$vuetify.lang_view_env_components_settings')}}
                       <v-spacer></v-spacer>
                       <v-btn color="primary" small class="my-1 mr-1" @click="openAddComponent(item.envName)">{{ $vuetify.lang.t('$vuetify.lang_menu_new_component') }}</v-btn>
+                      <v-btn color="green white--text" small class="my-1 mr-1" :href="item.dashboardUrl" target="_blank">{{ $vuetify.lang.t('$vuetify.lang_view_dashboard_url') }}</v-btn>
                     </v-card-title>
                     <v-card-text class="info-table">
                       <v-data-table
@@ -987,6 +995,9 @@
                                     <th class="text-left">
                                       {{ $vuetify.lang.t('$vuetify.lang_view_pods_pod_spec') }}
                                     </th>
+                                    <th class="text-left">
+                                      {{ $vuetify.lang.t('$vuetify.lang_view_dashboard_url') }}
+                                    </th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -999,6 +1010,9 @@
                                     <td>{{ i.age }}</td>
                                     <td>
                                       <v-btn small color="primary" @click="showYaml(i.podSpec, $vuetify.lang.t('$vuetify.lang_view_pods_pod_spec'))">{{ $vuetify.lang.t('$vuetify.lang_menu_view_detail') }}</v-btn>
+                                    </td>
+                                    <td>
+                                      <v-btn small color="green white--text" :href="i.dashboardUrlPod" target="_blank">{{ $vuetify.lang.t('$vuetify.lang_menu_view_detail') }}</v-btn>
                                     </td>
                                   </tr>
                                 </tbody>
@@ -1958,7 +1972,7 @@
                       v-model="memberAddForm.accessLevel"
                       :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                       :messages="[
-                        $vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_1'), 
+                        $vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_1'),
                         $vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_2'),
                         $vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_3'),
                       ]"
@@ -2073,7 +2087,7 @@
                       v-model="memberAddForm.accessLevel"
                       :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
                       :messages="[
-                        $vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_1'), 
+                        $vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_1'),
                         $vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_2'),
                         $vuetify.lang.t('$vuetify.lang_form_assign_permissions_access_level_tip_3'),
                       ]"
@@ -2514,11 +2528,11 @@
             </v-tooltip>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
-                <v-icon 
-                  color="primary" 
-                  class="mr-4" 
-                  v-bind="attrs" 
-                  v-on="on" 
+                <v-icon
+                  color="primary"
+                  class="mr-4"
+                  v-bind="attrs"
+                  v-on="on"
                   @click="() => {
                     $refs.cronAddRef.reset()
                     addCrontabDialog = false
@@ -2821,11 +2835,11 @@
             </v-tooltip>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
-                <v-icon 
-                  color="primary" 
-                  class="mr-4" 
-                  v-bind="attrs" 
-                  v-on="on" 
+                <v-icon
+                  color="primary"
+                  class="mr-4"
+                  v-bind="attrs"
+                  v-on="on"
                   @click="() => {
                     $refs.triggerAddRef.reset()
                     addTriggerDialog = false
@@ -2911,8 +2925,8 @@
                         v-model="addTriggerForm.checkVarToIgnore"
                         dense
                         :messages="[
-                          $vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_check_var_to_ignore_tip_1'), 
-                          $vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_check_var_to_ignore_tip_2'), 
+                          $vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_check_var_to_ignore_tip_1'),
+                          $vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_check_var_to_ignore_tip_2'),
                           $vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_check_var_to_ignore_tip_3'),
                           $vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_check_var_to_ignore_tip_4'),
                         ]"
@@ -3295,11 +3309,11 @@
             </v-tooltip>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
-                <v-icon 
-                  color="primary" 
-                  class="mr-4" 
-                  v-bind="attrs" 
-                  v-on="on" 
+                <v-icon
+                  color="primary"
+                  class="mr-4"
+                  v-bind="attrs"
+                  v-on="on"
                   @click="() => {
                     $refs.triggerUpdateRef.reset()
                     updateTriggerDialog = false
@@ -3386,8 +3400,8 @@
                         v-model="updateTriggerForm.checkVarToIgnore"
                         dense
                         :messages="[
-                          $vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_check_var_to_ignore_tip_1'), 
-                          $vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_check_var_to_ignore_tip_2'), 
+                          $vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_check_var_to_ignore_tip_1'),
+                          $vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_check_var_to_ignore_tip_2'),
                           $vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_check_var_to_ignore_tip_3'),
                           $vuetify.lang.t('$vuetify.lang_form_add_pipeline_trigger_check_var_to_ignore_tip_4'),
                         ]"
@@ -5815,13 +5829,14 @@
               <div class="form-row d-flex justify-space-between mt-4">
                 <div class="form-item-45">
                   <v-autocomplete
-                    :items="['deployment', 'statefulset']"
+                    :items="['deployment', 'statefulset', 'job', 'cronjob']"
                     :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_type')"
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_type_tip_1')"
                     persistent-hint
                     v-model="addComponentForm.deploySpecStatic.deployType"
                     :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                    @change="chooseDeployType($event)"
                   >
                   </v-autocomplete>
                 </div>
@@ -5847,9 +5862,9 @@
                   ></v-autocomplete>
                 </div>
                 <div class="form-item-100 params-item" v-if="
-                  addComponentForm.deploySpecStatic.deployResources.cpuLimit !== '' || 
-                  addComponentForm.deploySpecStatic.deployResources.cpuRequest !== '' || 
-                  addComponentForm.deploySpecStatic.deployResources.memoryLimit !== '' || 
+                  addComponentForm.deploySpecStatic.deployResources.cpuLimit !== '' ||
+                  addComponentForm.deploySpecStatic.deployResources.cpuRequest !== '' ||
+                  addComponentForm.deploySpecStatic.deployResources.memoryLimit !== '' ||
                   addComponentForm.deploySpecStatic.deployResources.memoryRequest !== '' ||
                   addComponentForm.deploySpecStatic.deployResources.extraRequest !== null ||
                   addComponentForm.deploySpecStatic.deployResources.extraLimit !== null
@@ -6003,15 +6018,16 @@
                   </div>
                 </div>
                 <div class="form-item-100 params-item" v-if="
-                  addComponentForm.deploySpecStatic.deployCommand !== '' || 
-                  addComponentForm.deploySpecStatic.deployEnvs !== null || 
-                  addComponentForm.deploySpecStatic.deployArgs !== null || 
-                  addComponentForm.deploySpecStatic.workingDir !== '' || 
-                  addComponentForm.deploySpecStatic.nodeSelector !== null || 
-                  addComponentForm.deploySpecStatic.nodeName !== '' || 
-                  addComponentForm.deploySpecStatic.terminationGracePeriodSeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.subdomain !== '' || 
-                  addComponentForm.deploySpecStatic.enableDownwardApi || 
+                  addComponentForm.deploySpecStatic.deployCommand !== '' ||
+                  addComponentForm.deploySpecStatic.deployEnvs !== null ||
+                  addComponentForm.deploySpecStatic.deployArgs !== null ||
+                  addComponentForm.deploySpecStatic.workingDir !== '' ||
+                  addComponentForm.deploySpecStatic.nodeSelector !== null ||
+                  addComponentForm.deploySpecStatic.nodeName !== '' ||
+                  addComponentForm.deploySpecStatic.terminationGracePeriodSeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.subdomain !== '' ||
+                  addComponentForm.deploySpecStatic.enableDownwardApi ||
+                  addComponentForm.deploySpecStatic.restartPolicy !== '' ||
                   addComponentForm.deploySpecStatic.deploySessionAffinityTimeoutSeconds !== 0 ||
                   addComponentForm.deploySpecStatic.deployHeadless !== false ||
                   addComponentForm.deploySpecStatic.podManagementPolicy !== ''
@@ -6144,8 +6160,8 @@
                           dense
                           v-model="addComponentForm.deploySpecStatic.subdomain"
                           :messages="[
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_subdomain_tip_1'), 
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_subdomain_tip_2'), 
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_subdomain_tip_1'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_subdomain_tip_2'),
                           ]"
                         >
                           <template v-slot:message>
@@ -6164,9 +6180,9 @@
                           dense
                           v-model="addComponentForm.deploySpecStatic.enableDownwardApi"
                           :messages="[
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_1'), 
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_2'), 
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_3'), 
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_1'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_2'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_3'),
                           ]"
                         >
                           <template v-slot:message>
@@ -6175,7 +6191,36 @@
                             <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_3')}}</div>
                           </template>
                         </v-autocomplete>
-                      </div>                    
+                      </div>
+                    </div>
+                    <div class="params-content d-flex justify-space-between mt-4">
+                      <div class="form-item-45 d-flex align-center">
+                        <v-autocomplete
+                          v-if="addComponentForm.deploySpecStatic.deployType === 'deployment' || addComponentForm.deploySpecStatic.deployType === 'statefulset'"
+                          :items="[
+                            { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy_always'), value: 'Always' },
+                            { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy_on_failure'), value: 'OnFailure' },
+                            { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy_never'), value: 'Never' },
+                          ]"
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy')"
+                          dense
+                          clearable
+                          v-model="addComponentForm.deploySpecStatic.restartPolicy"
+                        >
+                        </v-autocomplete>
+                        <v-autocomplete
+                          v-else-if="addComponentForm.deploySpecStatic.deployType === 'job' || addComponentForm.deploySpecStatic.deployType === 'cronjob'"
+                          :items="[
+                            { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy_on_failure'), value: 'OnFailure' },
+                            { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy_never'), value: 'Never' },
+                          ]"
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy')"
+                          dense
+                          clearable
+                          v-model="addComponentForm.deploySpecStatic.restartPolicy"
+                        >
+                        </v-autocomplete>
+                      </div>
                     </div>
                   </div>
                   <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.deployType === 'statefulset'">
@@ -6200,8 +6245,8 @@
                           dense
                           v-model="addComponentForm.deploySpecStatic.podManagementPolicy"
                           :messages="[
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_1'), 
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_2'), 
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_1'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_2'),
                             $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_3'),
                           ]"
                         >
@@ -6212,6 +6257,253 @@
                           </template>
                         </v-autocomplete>
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item-100 params-item" v-if="
+                  addComponentForm.deploySpecStatic.job.completions !== 0 ||
+                  addComponentForm.deploySpecStatic.job.parallelism !== 0 ||
+                  addComponentForm.deploySpecStatic.job.completionMode !== '' ||
+                  addComponentForm.deploySpecStatic.job.backoffLimit !== 0 ||
+                  addComponentForm.deploySpecStatic.job.activeDeadlineSeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.job.ttlSecondsAfterFinished !== 0
+                  " :id="'job-add'"
+                >
+                  <div>
+                    {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job')}}
+                    <v-tooltip right max-width="250px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="mx-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_tip_1')}}</span>
+                    </v-tooltip>
+                    <v-icon color="error" @click="clearParams('job')">mdi-minus-circle-outline</v-icon>
+                  </div>
+                  <div class="params-content d-flex justify-space-between mt-4">
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_completions')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.job.completions"
+                        :rules="[intRule]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_completions_tip_1')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_parallelism')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.job.parallelism"
+                        :rules="[intRule]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_parallelism_tip_1')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                  </div>
+                  <div class="params-content d-flex justify-space-between mt-4">
+                    <div class="form-item-50 d-flex align-center">
+                      <v-autocomplete
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_completion_mode')"
+                        dense
+                        chips
+                        clearable
+                        :items="['NonIndexed', 'Indexed']"
+                        v-model="addComponentForm.deploySpecStatic.job.completionMode"
+                      >
+                      </v-autocomplete>
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_completion_mode_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_completion_mode_tip_2')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_backoff_limit')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.job.backoffLimit"
+                        :rules="[intRule]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_backoff_limit_tip_1')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                  </div>
+                  <div class="params-content d-flex justify-space-between mt-4">
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_active_deadline_seconds')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.job.activeDeadlineSeconds"
+                        :rules="[intRule]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_active_deadline_seconds_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_active_deadline_seconds_tip_2')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_ttl_seconds_after_finished')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.job.ttlSecondsAfterFinished"
+                        :rules="[intRule]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_ttl_seconds_after_finished_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_ttl_seconds_after_finished_tip_2')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item-100 params-item" v-if="
+                  addComponentForm.deploySpecStatic.cronJob.schedule !== '' ||
+                  addComponentForm.deploySpecStatic.cronJob.concurrencyPolicy !== '' ||
+                  addComponentForm.deploySpecStatic.cronJob.startingDeadlineSeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.cronJob.successfulJobsHistoryLimit !== 0 ||
+                  addComponentForm.deploySpecStatic.cronJob.failedJobsHistoryLimit !== 0
+                  " :id="'cronJob-add'"
+                >
+                  <div>
+                    {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job')}}
+                    <v-tooltip right max-width="250px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="mx-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_tip_1')}}</span>
+                    </v-tooltip>
+                    <v-icon color="error" @click="clearParams('cronJob')">mdi-minus-circle-outline</v-icon>
+                  </div>
+                  <div class="params-content d-flex justify-space-between mt-4">
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_schedule')"
+                        dense
+                        v-model="addComponentForm.deploySpecStatic.cronJob.schedule"
+                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_schedule_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_schedule_tip_2')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                    <div class="form-item-50 d-flex align-center">
+                      <v-autocomplete
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_concurrency_policy')"
+                        dense
+                        chips
+                        clearable
+                        :items="['Allow', 'Forbid', 'Replace']"
+                        v-model="addComponentForm.deploySpecStatic.cronJob.concurrencyPolicy"
+                      >
+                      </v-autocomplete>
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_concurrency_policy_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_concurrency_policy_tip_2')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_concurrency_policy_tip_3')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                  </div>
+                  <div class="params-content d-flex justify-space-between mt-4">
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_starting_deadline_seconds')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.cronJob.startingDeadlineSeconds"
+                        :rules="[intRuleZero]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_starting_deadline_seconds_tip_1')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                  </div>
+                  <div class="params-content d-flex justify-space-between mt-4">
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_successful_jobs_history_limit')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.cronJob.successfulJobsHistoryLimit"
+                        :rules="[intRuleZero]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_successful_jobs_history_limit_tip_1')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_failed_jobs_history_limit')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.cronJob.failedJobsHistoryLimit"
+                        :rules="[intRule]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_failed_jobs_history_limit_tip_1')}}</div>
+                        </div>
+                      </v-tooltip>
                     </div>
                   </div>
                 </div>
@@ -6269,7 +6561,7 @@
                   </div>
                 </div>
                 <div class="form-item-100 params-item" v-if="
-                  addComponentForm.deploySpecStatic.deployNodePorts !== null || 
+                  addComponentForm.deploySpecStatic.deployNodePorts !== null ||
                   addComponentForm.deploySpecStatic.deployLocalPorts !== null
                   " :id="'deployPorts-add'"
                 >
@@ -6513,17 +6805,17 @@
                   </div>
                 </div>
                 <div class="form-item-100 params-item" v-if="
-                  addComponentForm.deploySpecStatic.deployHealthCheck.livenessDelaySeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.livenessPeriodSeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.readinessDelaySeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.readinessPeriodSeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.startupDelaySeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.startupPeriodSeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.checkPort !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.exec !== '' || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.port !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.path !== '' || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.scheme !== '' || 
+                  addComponentForm.deploySpecStatic.deployHealthCheck.livenessDelaySeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.livenessPeriodSeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.readinessDelaySeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.readinessPeriodSeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.startupDelaySeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.startupPeriodSeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.checkPort !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.exec !== '' ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.port !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.path !== '' ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.scheme !== '' ||
                   addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.httpHeaders !== null
                   " :id="'deployHealthCheck-add'"
                 >
@@ -6745,15 +7037,15 @@
                   </div>
                 </div>
                 <div class="form-item-100 params-item" v-if="
-                  addComponentForm.deploySpecStatic.lifecycle.postStart.exec !== '' || 
-                  addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.port !== 0 || 
-                  addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.path !== '' || 
-                  addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.scheme !== '' || 
+                  addComponentForm.deploySpecStatic.lifecycle.postStart.exec !== '' ||
+                  addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.port !== 0 ||
+                  addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.path !== '' ||
+                  addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.scheme !== '' ||
                   addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.httpHeaders !== null ||
-                  addComponentForm.deploySpecStatic.lifecycle.preStop.exec !== '' || 
-                  addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.port !== 0 || 
-                  addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.path !== '' || 
-                  addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.scheme !== '' || 
+                  addComponentForm.deploySpecStatic.lifecycle.preStop.exec !== '' ||
+                  addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.port !== 0 ||
+                  addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.path !== '' ||
+                  addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.scheme !== '' ||
                   addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.httpHeaders !== null
                   " :id="'lifecycle-add'"
                 >
@@ -6966,10 +7258,10 @@
                 </div>
                 <div class="form-item-100 params-item" v-if="
                   !hpaConfigDisable &&
-                  (addComponentForm.deploySpecStatic.hpaConfig.cpuAverageRequestPercent !== 0 || 
-                  addComponentForm.deploySpecStatic.hpaConfig.maxReplicas !== 0 || 
-                  addComponentForm.deploySpecStatic.hpaConfig.memoryAverageRequestPercent !== 0 || 
-                  addComponentForm.deploySpecStatic.hpaConfig.cpuAverageValue !== '' || 
+                  (addComponentForm.deploySpecStatic.hpaConfig.cpuAverageRequestPercent !== 0 ||
+                  addComponentForm.deploySpecStatic.hpaConfig.maxReplicas !== 0 ||
+                  addComponentForm.deploySpecStatic.hpaConfig.memoryAverageRequestPercent !== 0 ||
+                  addComponentForm.deploySpecStatic.hpaConfig.cpuAverageValue !== '' ||
                   addComponentForm.deploySpecStatic.hpaConfig.memoryAverageValue !== '')
                   " :id="'hpaConfig-add'">
                   <div>
@@ -7258,6 +7550,199 @@
                     </div>
                   </div>
                 </div>
+                <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.deployConfigMaps !== null" :id="'deployConfigMaps-add'">
+                  <div>
+                    {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps')}}
+                    <v-tooltip right max-width="250px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_free_trial_not_supported')}}</div>
+                      </div>
+                    </v-tooltip>
+                    <v-icon color="success" class="ml-4" @click="addDeployConfigMaps()">mdi-table-plus</v-icon>
+                    <v-icon color="error" class="ml-4" @click="clearParams('deployConfigMaps')">mdi-minus-circle-outline</v-icon>
+                  </div>
+                  <div class="form-item-50">
+                    <v-autocomplete
+                      :items="sourceBranchNames"
+                      :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_deploy_config_map_branch')"
+                      dense
+                      v-model="addComponentForm.deploySpecStatic.deployConfigMapBranch"
+                    ></v-autocomplete>
+                  </div>
+                  <div class="params-content" v-for="(row, i) in addComponentForm.deploySpecStatic.deployConfigMaps">
+                    <div class="d-flex justify-space-between align-center mt-4" >
+                      <div class="form-item-45">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_name')"
+                          dense
+                          v-model="row.name"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_name_tip_1', project.projectInfo.projectShortName)"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-45">
+                        <v-autocomplete
+                          :items="['from-file', 'from-env-file']"
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_from_file_type')"
+                          dense
+                          v-model="row.fromFileType"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :messages="[
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_from_file_type_tip_1'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_from_file_type_tip_2'),
+                          ]"
+                        >
+                          <template v-slot:message>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_from_file_type_tip_1')}}</div>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_from_file_type_tip_2')}}</div>
+                          </template>
+                        </v-autocomplete>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-space-between align-center mt-4" >
+                      <div class="form-item-45">
+                        <v-combobox
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_paths')"
+                          v-model="row.paths"
+                          dense
+                          multiple
+                          small-chips
+                          hide-selected
+                          :rules="[v => v.length > 0 || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_paths_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div>
+                        <v-icon color="success" class="mr-4" @click="copyDeployConfigMaps(i)">mdi-content-copy</v-icon>
+                        <v-icon color="error" @click="deleteDeployConfigMaps(i)">mdi-trash-can-outline</v-icon>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.deploySecrets !== null" :id="'deploySecrets-add'">
+                  <div>
+                    {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets')}}
+                    <v-tooltip right max-width="250px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_free_trial_not_supported')}}</div>
+                      </div>
+                    </v-tooltip>
+                    <v-icon color="success" class="ml-4" @click="addDeploySecrets()">mdi-table-plus</v-icon>
+                    <v-icon color="error" class="ml-4" @click="clearParams('deploySecrets')">mdi-minus-circle-outline</v-icon>
+                  </div>
+                  <div class="form-item-50">
+                    <v-autocomplete
+                      :items="sourceBranchNames"
+                      :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_deploy_secret_branch')"
+                      dense
+                      v-model="addComponentForm.deploySpecStatic.deploySecretBranch"
+                    ></v-autocomplete>
+                  </div>
+                  <div class="params-content" v-for="(row, i) in addComponentForm.deploySpecStatic.deploySecrets">
+                    <div class="d-flex justify-space-between align-center mt-4" >
+                      <div class="form-item-45">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_name')"
+                          dense
+                          v-model="row.name"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_name_tip_1', project.projectInfo.projectShortName)"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-45">
+                        <v-autocomplete
+                          :items="['generic', 'docker-registry', 'tls']"
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type')"
+                          dense
+                          v-model="row.secretType"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :messages="[
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type_tip_1'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type_tip_2'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type_tip_3'),
+                          ]"
+                          @change="selectDeployContainerDefDeploySecretType($event, i)"
+                        >
+                          <template v-slot:message>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type_tip_1')}}</div>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type_tip_2')}}</div>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type_tip_3')}}</div>
+                          </template>
+                        </v-autocomplete>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-space-between align-center mt-4" >
+                      <div class="form-item-45" v-if="row.secretType === 'generic'">
+                        <v-autocomplete
+                          :items="['from-file', 'from-env-file']"
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_from_file_type')"
+                          dense
+                          v-model="row.fromFileType"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :messages="[
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_from_file_type_tip_1'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_from_file_type_tip_2'),
+                          ]"
+                        >
+                          <template v-slot:message>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_from_file_type_tip_1')}}</div>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_from_file_type_tip_2')}}</div>
+                          </template>
+                        </v-autocomplete>
+                      </div>
+                      <div class="form-item-45" v-if="row.secretType === 'generic'">
+                        <v-combobox
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_paths')"
+                          v-model="row.paths"
+                          dense
+                          multiple
+                          small-chips
+                          hide-selected
+                          :rules="[v => v.length > 0 || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_paths_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-45" v-if="row.secretType === 'docker-registry'">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_docker_config')"
+                          dense
+                          v-model="row.dockerConfig"
+                          :rules="[v => v.length>0 && v.slice(0,1) !='/' || $vuetify.lang.t('$vuetify.lang_form_required_can_not_start_with_slash')]"
+                        />
+                      </div>
+                      <div class="form-item-45" v-if="row.secretType === 'tls'">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_cert')"
+                          dense
+                          v-model="row.cert"
+                          :rules="[v => v.length>0 && v.slice(0,1) !='/' || $vuetify.lang.t('$vuetify.lang_form_required_can_not_start_with_slash')]"
+                        />
+                      </div>
+                      <div class="form-item-45" v-if="row.secretType === 'tls'">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_key')"
+                          dense
+                          v-model="row.key"
+                          :rules="[v => v.length>0 && v.slice(0,1) !='/' || $vuetify.lang.t('$vuetify.lang_form_required_can_not_start_with_slash')]"
+                        />
+                      </div>
+                      <div>
+                        <v-icon color="success" class="mr-4" @click="copyDeploySecrets(i)">mdi-content-copy</v-icon>
+                        <v-icon color="error" @click="deleteDeploySecrets(i)">mdi-trash-can-outline</v-icon>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="form-item-100 params-item" v-if="!patchesDisable && addComponentForm.deploySpecStatic.patches !== null" :id="'patches-add'">
                   <div>
                     {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_patches')}}
@@ -7428,13 +7913,14 @@
               <div class="form-row d-flex justify-space-between mt-4">
                 <div class="form-item-45">
                   <v-autocomplete
-                    :items="['deployment', 'statefulset']"
+                    :items="['deployment', 'statefulset', 'job', 'cronjob']"
                     :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_type')"
                     dense
                     :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_type_tip_1')"
                     persistent-hint
                     v-model="addComponentForm.deploySpecStatic.deployType"
                     :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                    @change="chooseDeployType($event)"
                   >
                   </v-autocomplete>
                 </div>
@@ -7460,9 +7946,9 @@
                   ></v-autocomplete>
                 </div>
                 <div class="form-item-100 params-item" v-if="
-                  addComponentForm.deploySpecStatic.deployResources.cpuLimit !== '' || 
-                  addComponentForm.deploySpecStatic.deployResources.cpuRequest !== '' || 
-                  addComponentForm.deploySpecStatic.deployResources.memoryLimit !== '' || 
+                  addComponentForm.deploySpecStatic.deployResources.cpuLimit !== '' ||
+                  addComponentForm.deploySpecStatic.deployResources.cpuRequest !== '' ||
+                  addComponentForm.deploySpecStatic.deployResources.memoryLimit !== '' ||
                   addComponentForm.deploySpecStatic.deployResources.memoryRequest !== '' ||
                   addComponentForm.deploySpecStatic.deployResources.extraRequest !== null ||
                   addComponentForm.deploySpecStatic.deployResources.extraLimit !== null
@@ -7616,15 +8102,16 @@
                   </div>
                 </div>
                 <div class="form-item-100 params-item" v-if="
-                  addComponentForm.deploySpecStatic.deployCommand !== '' || 
-                  addComponentForm.deploySpecStatic.deployEnvs !== null || 
-                  addComponentForm.deploySpecStatic.deployArgs !== null || 
-                  addComponentForm.deploySpecStatic.workingDir !== '' || 
-                  addComponentForm.deploySpecStatic.nodeSelector !== null || 
-                  addComponentForm.deploySpecStatic.nodeName !== '' || 
-                  addComponentForm.deploySpecStatic.terminationGracePeriodSeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.subdomain !== '' || 
-                  addComponentForm.deploySpecStatic.enableDownwardApi || 
+                  addComponentForm.deploySpecStatic.deployCommand !== '' ||
+                  addComponentForm.deploySpecStatic.deployEnvs !== null ||
+                  addComponentForm.deploySpecStatic.deployArgs !== null ||
+                  addComponentForm.deploySpecStatic.workingDir !== '' ||
+                  addComponentForm.deploySpecStatic.nodeSelector !== null ||
+                  addComponentForm.deploySpecStatic.nodeName !== '' ||
+                  addComponentForm.deploySpecStatic.terminationGracePeriodSeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.subdomain !== '' ||
+                  addComponentForm.deploySpecStatic.enableDownwardApi ||
+                  addComponentForm.deploySpecStatic.restartPolicy !== '' ||
                   addComponentForm.deploySpecStatic.deploySessionAffinityTimeoutSeconds !== 0 ||
                   addComponentForm.deploySpecStatic.deployHeadless !== false ||
                   addComponentForm.deploySpecStatic.podManagementPolicy !== ''
@@ -7757,8 +8244,8 @@
                           dense
                           v-model="addComponentForm.deploySpecStatic.subdomain"
                           :messages="[
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_subdomain_tip_1'), 
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_subdomain_tip_2'), 
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_subdomain_tip_1'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_subdomain_tip_2'),
                           ]"
                         >
                           <template v-slot:message>
@@ -7777,9 +8264,9 @@
                           dense
                           v-model="addComponentForm.deploySpecStatic.enableDownwardApi"
                           :messages="[
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_1'), 
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_2'), 
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_3'), 
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_1'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_2'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_3'),
                           ]"
                         >
                           <template v-slot:message>
@@ -7788,7 +8275,36 @@
                             <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_enable_downward_api_tip_3')}}</div>
                           </template>
                         </v-autocomplete>
-                      </div>                    
+                      </div>
+                    </div>
+                    <div class="params-content d-flex justify-space-between mt-4">
+                      <div class="form-item-45 d-flex align-center">
+                        <v-autocomplete
+                          v-if="addComponentForm.deploySpecStatic.deployType === 'deployment' || addComponentForm.deploySpecStatic.deployType === 'statefulset'"
+                          :items="[
+                            { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy_always'), value: 'Always' },
+                            { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy_on_failure'), value: 'OnFailure' },
+                            { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy_never'), value: 'Never' },
+                          ]"
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy')"
+                          dense
+                          clearable
+                          v-model="addComponentForm.deploySpecStatic.restartPolicy"
+                        >
+                        </v-autocomplete>
+                        <v-autocomplete
+                          v-else-if="addComponentForm.deploySpecStatic.deployType === 'job' || addComponentForm.deploySpecStatic.deployType === 'cronjob'"
+                          :items="[
+                            { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy_on_failure'), value: 'OnFailure' },
+                            { text: $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy_never'), value: 'Never' },
+                          ]"
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_restart_policy')"
+                          dense
+                          clearable
+                          v-model="addComponentForm.deploySpecStatic.restartPolicy"
+                        >
+                        </v-autocomplete>
+                      </div>
                     </div>
                   </div>
                   <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.deployType === 'statefulset'">
@@ -7813,8 +8329,8 @@
                           dense
                           v-model="addComponentForm.deploySpecStatic.podManagementPolicy"
                           :messages="[
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_1'), 
-                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_2'), 
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_1'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_2'),
                             $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_pod_management_policy_tip_3'),
                           ]"
                         >
@@ -7825,6 +8341,253 @@
                           </template>
                         </v-autocomplete>
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item-100 params-item" v-if="
+                  addComponentForm.deploySpecStatic.job.completions !== 0 ||
+                  addComponentForm.deploySpecStatic.job.parallelism !== 0 ||
+                  addComponentForm.deploySpecStatic.job.completionMode !== '' ||
+                  addComponentForm.deploySpecStatic.job.backoffLimit !== 0 ||
+                  addComponentForm.deploySpecStatic.job.activeDeadlineSeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.job.ttlSecondsAfterFinished !== 0
+                  " :id="'job-'+targetIndex"
+                >
+                  <div>
+                    {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job')}}
+                    <v-tooltip right max-width="250px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="mx-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_tip_1')}}</span>
+                    </v-tooltip>
+                    <v-icon color="error" @click="clearParams('job')">mdi-minus-circle-outline</v-icon>
+                  </div>
+                  <div class="params-content d-flex justify-space-between mt-4">
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_completions')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.job.completions"
+                        :rules="[intRule]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_completions_tip_1')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_parallelism')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.job.parallelism"
+                        :rules="[intRule]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_parallelism_tip_1')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                  </div>
+                  <div class="params-content d-flex justify-space-between mt-4">
+                    <div class="form-item-50 d-flex align-center">
+                      <v-autocomplete
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_completion_mode')"
+                        dense
+                        chips
+                        clearable
+                        :items="['NonIndexed', 'Indexed']"
+                        v-model="addComponentForm.deploySpecStatic.job.completionMode"
+                      >
+                      </v-autocomplete>
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_completion_mode_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_completion_mode_tip_2')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_backoff_limit')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.job.backoffLimit"
+                        :rules="[intRule]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_backoff_limit_tip_1')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                  </div>
+                  <div class="params-content d-flex justify-space-between mt-4">
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_active_deadline_seconds')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.job.activeDeadlineSeconds"
+                        :rules="[intRule]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_active_deadline_seconds_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_active_deadline_seconds_tip_2')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_ttl_seconds_after_finished')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.job.ttlSecondsAfterFinished"
+                        :rules="[intRule]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_ttl_seconds_after_finished_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_job_ttl_seconds_after_finished_tip_2')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item-100 params-item" v-if="
+                  addComponentForm.deploySpecStatic.cronJob.schedule !== '' ||
+                  addComponentForm.deploySpecStatic.cronJob.concurrencyPolicy !== '' ||
+                  addComponentForm.deploySpecStatic.cronJob.startingDeadlineSeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.cronJob.successfulJobsHistoryLimit !== 0 ||
+                  addComponentForm.deploySpecStatic.cronJob.failedJobsHistoryLimit !== 0
+                  " :id="'cronJob-'+targetIndex"
+                >
+                  <div>
+                    {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job')}}
+                    <v-tooltip right max-width="250px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="mx-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <span style="font-size: 12px;">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_tip_1')}}</span>
+                    </v-tooltip>
+                    <v-icon color="error" @click="clearParams('cronJob')">mdi-minus-circle-outline</v-icon>
+                  </div>
+                  <div class="params-content d-flex justify-space-between mt-4">
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_schedule')"
+                        dense
+                        v-model="addComponentForm.deploySpecStatic.cronJob.schedule"
+                        :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_schedule_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_schedule_tip_2')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                    <div class="form-item-50 d-flex align-center">
+                      <v-autocomplete
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_concurrency_policy')"
+                        dense
+                        chips
+                        clearable
+                        :items="['Allow', 'Forbid', 'Replace']"
+                        v-model="addComponentForm.deploySpecStatic.cronJob.concurrencyPolicy"
+                      >
+                      </v-autocomplete>
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_concurrency_policy_tip_1')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_concurrency_policy_tip_2')}}</div>
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_concurrency_policy_tip_3')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                  </div>
+                  <div class="params-content d-flex justify-space-between mt-4">
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_starting_deadline_seconds')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.cronJob.startingDeadlineSeconds"
+                        :rules="[intRuleZero]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_starting_deadline_seconds_tip_1')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                  </div>
+                  <div class="params-content d-flex justify-space-between mt-4">
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_successful_jobs_history_limit')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.cronJob.successfulJobsHistoryLimit"
+                        :rules="[intRuleZero]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_successful_jobs_history_limit_tip_1')}}</div>
+                        </div>
+                      </v-tooltip>
+                    </div>
+                    <div class="form-item-50 d-flex align-center">
+                      <v-text-field
+                        :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_failed_jobs_history_limit')"
+                        dense
+                        v-model.number="addComponentForm.deploySpecStatic.cronJob.failedJobsHistoryLimit"
+                        :rules="[intRule]"
+                        type="number"
+                      />
+                      <v-tooltip right max-width="250px">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                        </template>
+                        <div style="font-size: 12px;">
+                          <div>{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_cron_job_failed_jobs_history_limit_tip_1')}}</div>
+                        </div>
+                      </v-tooltip>
                     </div>
                   </div>
                 </div>
@@ -7882,7 +8645,7 @@
                   </div>
                 </div>
                 <div class="form-item-100 params-item" v-if="
-                  addComponentForm.deploySpecStatic.deployNodePorts !== null || 
+                  addComponentForm.deploySpecStatic.deployNodePorts !== null ||
                   addComponentForm.deploySpecStatic.deployLocalPorts !== null
                   " :id="'deployPorts-'+targetIndex"
                 >
@@ -8126,17 +8889,17 @@
                   </div>
                 </div>
                 <div class="form-item-100 params-item" v-if="
-                  addComponentForm.deploySpecStatic.deployHealthCheck.livenessDelaySeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.livenessPeriodSeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.readinessDelaySeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.readinessPeriodSeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.startupDelaySeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.startupPeriodSeconds !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.checkPort !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.exec !== '' || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.port !== 0 || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.path !== '' || 
-                  addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.scheme !== '' || 
+                  addComponentForm.deploySpecStatic.deployHealthCheck.livenessDelaySeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.livenessPeriodSeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.readinessDelaySeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.readinessPeriodSeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.startupDelaySeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.startupPeriodSeconds !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.checkPort !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.exec !== '' ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.port !== 0 ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.path !== '' ||
+                  addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.scheme !== '' ||
                   addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.httpHeaders !== null
                   " :id="'deployHealthCheck-'+targetIndex"
                 >
@@ -8358,15 +9121,15 @@
                   </div>
                 </div>
                 <div class="form-item-100 params-item" v-if="
-                  addComponentForm.deploySpecStatic.lifecycle.postStart.exec !== '' || 
-                  addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.port !== 0 || 
-                  addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.path !== '' || 
-                  addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.scheme !== '' || 
+                  addComponentForm.deploySpecStatic.lifecycle.postStart.exec !== '' ||
+                  addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.port !== 0 ||
+                  addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.path !== '' ||
+                  addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.scheme !== '' ||
                   addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.httpHeaders !== null ||
-                  addComponentForm.deploySpecStatic.lifecycle.preStop.exec !== '' || 
-                  addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.port !== 0 || 
-                  addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.path !== '' || 
-                  addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.scheme !== '' || 
+                  addComponentForm.deploySpecStatic.lifecycle.preStop.exec !== '' ||
+                  addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.port !== 0 ||
+                  addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.path !== '' ||
+                  addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.scheme !== '' ||
                   addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.httpHeaders !== null
                   " :id="'lifecycle-'+targetIndex"
                 >
@@ -8579,10 +9342,10 @@
                 </div>
                 <div class="form-item-100 params-item" v-if="
                   !hpaConfigDisable &&
-                  (addComponentForm.deploySpecStatic.hpaConfig.cpuAverageRequestPercent !== 0 || 
-                  addComponentForm.deploySpecStatic.hpaConfig.maxReplicas !== 0 || 
-                  addComponentForm.deploySpecStatic.hpaConfig.memoryAverageRequestPercent !== 0 || 
-                  addComponentForm.deploySpecStatic.hpaConfig.cpuAverageValue !== '' || 
+                  (addComponentForm.deploySpecStatic.hpaConfig.cpuAverageRequestPercent !== 0 ||
+                  addComponentForm.deploySpecStatic.hpaConfig.maxReplicas !== 0 ||
+                  addComponentForm.deploySpecStatic.hpaConfig.memoryAverageRequestPercent !== 0 ||
+                  addComponentForm.deploySpecStatic.hpaConfig.cpuAverageValue !== '' ||
                   addComponentForm.deploySpecStatic.hpaConfig.memoryAverageValue !== '')
                   " :id="'hpaConfig-'+targetIndex">
                   <div>
@@ -8867,6 +9630,199 @@
                       <div>
                         <v-icon color="success" class="mr-4" @click="copyDeployConfigSettings(i)">mdi-content-copy</v-icon>
                         <v-icon color="error" @click="deleteDeployConfigSettings(i)">mdi-trash-can-outline</v-icon>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.deployConfigMaps !== null" :id="'deployConfigMaps-'+targetIndex">
+                  <div>
+                    {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps')}}
+                    <v-tooltip right max-width="250px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_free_trial_not_supported')}}</div>
+                      </div>
+                    </v-tooltip>
+                    <v-icon color="success" class="ml-4" @click="addDeployConfigMaps()">mdi-table-plus</v-icon>
+                    <v-icon color="error" class="ml-4" @click="clearParams('deployConfigMaps')">mdi-minus-circle-outline</v-icon>
+                  </div>
+                  <div class="form-item-50">
+                    <v-autocomplete
+                      :items="sourceBranchNames"
+                      :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_deploy_config_map_branch')"
+                      dense
+                      v-model="addComponentForm.deploySpecStatic.deployConfigMapBranch"
+                    ></v-autocomplete>
+                  </div>
+                  <div class="params-content" v-for="(row, i) in addComponentForm.deploySpecStatic.deployConfigMaps">
+                    <div class="d-flex justify-space-between align-center mt-4" >
+                      <div class="form-item-45">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_name')"
+                          dense
+                          v-model="row.name"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_name_tip_1', project.projectInfo.projectShortName)"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-45">
+                        <v-autocomplete
+                          :items="['from-file', 'from-env-file']"
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_from_file_type')"
+                          dense
+                          v-model="row.fromFileType"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :messages="[
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_from_file_type_tip_1'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_from_file_type_tip_2'),
+                          ]"
+                        >
+                          <template v-slot:message>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_from_file_type_tip_1')}}</div>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_from_file_type_tip_2')}}</div>
+                          </template>
+                        </v-autocomplete>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-space-between align-center mt-4" >
+                      <div class="form-item-45">
+                        <v-combobox
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_paths')"
+                          v-model="row.paths"
+                          dense
+                          multiple
+                          small-chips
+                          hide-selected
+                          :rules="[v => v.length > 0 || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps_paths_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div>
+                        <v-icon color="success" class="mr-4" @click="copyDeployConfigMaps(i)">mdi-content-copy</v-icon>
+                        <v-icon color="error" @click="deleteDeployConfigMaps(i)">mdi-trash-can-outline</v-icon>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item-100 params-item" v-if="addComponentForm.deploySpecStatic.deploySecrets !== null" :id="'deploySecrets-'+targetIndex">
+                  <div>
+                    {{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets')}}
+                    <v-tooltip right max-width="250px">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon small class="ml-2 diy-icon" v-bind="attrs" v-on="on">mdi-progress-question</v-icon>
+                      </template>
+                      <div style="font-size: 12px;">
+                        <div>{{$vuetify.lang.t('$vuetify.lang_form_free_trial_not_supported')}}</div>
+                      </div>
+                    </v-tooltip>
+                    <v-icon color="success" class="ml-4" @click="addDeploySecrets()">mdi-table-plus</v-icon>
+                    <v-icon color="error" class="ml-4" @click="clearParams('deploySecrets')">mdi-minus-circle-outline</v-icon>
+                  </div>
+                  <div class="form-item-50">
+                    <v-autocomplete
+                      :items="sourceBranchNames"
+                      :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_deploy_secret_branch')"
+                      dense
+                      v-model="addComponentForm.deploySpecStatic.deploySecretBranch"
+                    ></v-autocomplete>
+                  </div>
+                  <div class="params-content" v-for="(row, i) in addComponentForm.deploySpecStatic.deploySecrets">
+                    <div class="d-flex justify-space-between align-center mt-4" >
+                      <div class="form-item-45">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_name')"
+                          dense
+                          v-model="row.name"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_name_tip_1', project.projectInfo.projectShortName)"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-45">
+                        <v-autocomplete
+                          :items="['generic', 'docker-registry', 'tls']"
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type')"
+                          dense
+                          v-model="row.secretType"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :messages="[
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type_tip_1'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type_tip_2'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type_tip_3'),
+                          ]"
+                          @change="selectDeployContainerDefDeploySecretType($event, i)"
+                        >
+                          <template v-slot:message>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type_tip_1')}}</div>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type_tip_2')}}</div>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_secret_type_tip_3')}}</div>
+                          </template>
+                        </v-autocomplete>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-space-between align-center mt-4" >
+                      <div class="form-item-45" v-if="row.secretType === 'generic'">
+                        <v-autocomplete
+                          :items="['from-file', 'from-env-file']"
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_from_file_type')"
+                          dense
+                          v-model="row.fromFileType"
+                          :rules="[v => !!v || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :messages="[
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_from_file_type_tip_1'),
+                            $vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_from_file_type_tip_2'),
+                          ]"
+                        >
+                          <template v-slot:message>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_from_file_type_tip_1')}}</div>
+                            <div class="my-1">{{$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_from_file_type_tip_2')}}</div>
+                          </template>
+                        </v-autocomplete>
+                      </div>
+                      <div class="form-item-45" v-if="row.secretType === 'generic'">
+                        <v-combobox
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_paths')"
+                          v-model="row.paths"
+                          dense
+                          multiple
+                          small-chips
+                          hide-selected
+                          :rules="[v => v.length > 0 || $vuetify.lang.t('$vuetify.lang_form_required')]"
+                          :hint="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_paths_tip_1')"
+                          persistent-hint
+                        />
+                      </div>
+                      <div class="form-item-45" v-if="row.secretType === 'docker-registry'">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_docker_config')"
+                          dense
+                          v-model="row.dockerConfig"
+                          :rules="[v => v.length>0 && v.slice(0,1) !='/' || $vuetify.lang.t('$vuetify.lang_form_required_can_not_start_with_slash')]"
+                        />
+                      </div>
+                      <div class="form-item-45" v-if="row.secretType === 'tls'">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_cert')"
+                          dense
+                          v-model="row.cert"
+                          :rules="[v => v.length>0 && v.slice(0,1) !='/' || $vuetify.lang.t('$vuetify.lang_form_required_can_not_start_with_slash')]"
+                        />
+                      </div>
+                      <div class="form-item-45" v-if="row.secretType === 'tls'">
+                        <v-text-field
+                          :label="$vuetify.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets_key')"
+                          dense
+                          v-model="row.key"
+                          :rules="[v => v.length>0 && v.slice(0,1) !='/' || $vuetify.lang.t('$vuetify.lang_form_required_can_not_start_with_slash')]"
+                        />
+                      </div>
+                      <div>
+                        <v-icon color="success" class="mr-4" @click="copyDeploySecrets(i)">mdi-content-copy</v-icon>
+                        <v-icon color="error" @click="deleteDeploySecrets(i)">mdi-trash-can-outline</v-icon>
                       </div>
                     </div>
                   </div>
@@ -9477,6 +10433,10 @@ export default {
           },
           deployConfigBranch: '',
           deployConfigSettings: null,
+          deployConfigMapBranch: '',
+          deployConfigMaps: null,
+          deploySecretBranch: '',
+          deploySecrets: null,
           patches: null,
           deployEnvs: null,
           deployCommand: "",
@@ -9488,6 +10448,22 @@ export default {
           terminationGracePeriodSeconds: 0,
           subdomain: "",
           enableDownwardApi: false,
+          restartPolicy: "",
+          job: {
+            completions: 0,
+            parallelism: 0,
+            completionMode: '',
+            backoffLimit: 0,
+            activeDeadlineSeconds: 0,
+            ttlSecondsAfterFinished: 0,
+          },
+          cronJob: {
+            schedule: '',
+            concurrencyPolicy: '',
+            startingDeadlineSeconds: 0,
+            successfulJobsHistoryLimit: 0,
+            failedJobsHistoryLimit: 0,
+          }
         }
       },
       componentList: [],
@@ -10387,7 +11363,7 @@ export default {
         vm.dialogLoading = false
       }).catch(error => {
         vm.errorTip(true,error.response.data.msg)
-      })      
+      })
     },
     allotSC () {
       const vm = this
@@ -10824,11 +11800,11 @@ export default {
             }else if(yaml[item] instanceof Object){
               if(item === 'hpaConfig'){
                 if (
-                    yaml.hpaConfig.cpuAverageRequestPercent === 0 && 
-                    yaml.hpaConfig.maxReplicas === 0 && 
-                    yaml.hpaConfig.memoryAverageRequestPercent === 0 && 
-                    yaml.hpaConfig.cpuAverageValue === '' && 
-                    yaml.hpaConfig.memoryAverageValue === '' 
+                    yaml.hpaConfig.cpuAverageRequestPercent === 0 &&
+                    yaml.hpaConfig.maxReplicas === 0 &&
+                    yaml.hpaConfig.memoryAverageRequestPercent === 0 &&
+                    yaml.hpaConfig.cpuAverageValue === '' &&
+                    yaml.hpaConfig.memoryAverageValue === ''
                   ) {
                   delete yaml.hpaConfig
                 } else {
@@ -10836,9 +11812,9 @@ export default {
                 }
               } else if (item === 'deployResources'){
                 if (
-                  yaml.deployResources.cpuLimit === '' && 
-                  yaml.deployResources.cpuRequest === '' && 
-                  yaml.deployResources.memoryLimit === '' && 
+                  yaml.deployResources.cpuLimit === '' &&
+                  yaml.deployResources.cpuRequest === '' &&
+                  yaml.deployResources.memoryLimit === '' &&
                   yaml.deployResources.memoryRequest === '' &&
                   yaml.deployResources.extraRequest === null &&
                   yaml.deployResources.extraLimit === null
@@ -10849,13 +11825,13 @@ export default {
                 }
               }else if(item === 'deployHealthCheck'){
                 if (
-                  yaml.deployHealthCheck.checkPort === 0 && 
-                  yaml.deployHealthCheck.livenessDelaySeconds === 0 && 
-                  yaml.deployHealthCheck.livenessPeriodSeconds === 0 && 
-                  yaml.deployHealthCheck.readinessDelaySeconds === 0 && 
-                  yaml.deployHealthCheck.readinessPeriodSeconds === 0 && 
-                  yaml.deployHealthCheck.httpGet.port === 0 && 
-                  yaml.deployHealthCheck.httpGet.httpHeaders === null && 
+                  yaml.deployHealthCheck.checkPort === 0 &&
+                  yaml.deployHealthCheck.livenessDelaySeconds === 0 &&
+                  yaml.deployHealthCheck.livenessPeriodSeconds === 0 &&
+                  yaml.deployHealthCheck.readinessDelaySeconds === 0 &&
+                  yaml.deployHealthCheck.readinessPeriodSeconds === 0 &&
+                  yaml.deployHealthCheck.httpGet.port === 0 &&
+                  yaml.deployHealthCheck.httpGet.httpHeaders === null &&
                   yaml.deployHealthCheck.httpGet.path === ''
                 ){
                   delete yaml.deployHealthCheck
@@ -10865,7 +11841,7 @@ export default {
                 }
               }else if(item === 'securityContext'){
                 if (
-                  yaml.securityContext.runAsGroup === 0 && 
+                  yaml.securityContext.runAsGroup === 0 &&
                   yaml.securityContext.runAsUser === 0
                 ){
                   delete yaml.securityContext
@@ -10873,8 +11849,8 @@ export default {
                   vm.sortData(yaml.securityContext)
                 }
               }else if(item === 'deployVolumes'){
-                if (yaml.deployVolumes && 
-                  yaml.deployVolumes !== null && 
+                if (yaml.deployVolumes &&
+                  yaml.deployVolumes !== null &&
                   yaml.deployVolumes.length > 0
                 ){
                   yaml.deployVolumes.forEach(row => {
@@ -10883,8 +11859,8 @@ export default {
                 }
               }else if(item === 'deployLocalPorts'){
                 if(
-                  yaml.deployLocalPorts && 
-                  yaml.deployLocalPorts !== null && 
+                  yaml.deployLocalPorts &&
+                  yaml.deployLocalPorts !== null &&
                   yaml.deployLocalPorts.length > 0
                 ){
                   yaml.deployLocalPorts.forEach(row => {
@@ -11049,6 +12025,8 @@ export default {
 
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources'), value: 'deployResources' })
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_other'), value: 'deployOther' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_job'), value: 'job' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_cron_job'), value: 'cronJob' })
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_meta'), value: 'deployMeta' })
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_ports'), value: 'deployPorts' })
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_volumes'), value: 'deployVolumes' })
@@ -11068,7 +12046,8 @@ export default {
             vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_patches'), value: 'patches' })
           }
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_settings'), value: 'deployConfigSettings' })
-          
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps'), value: 'deployConfigMaps' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets'), value: 'deploySecrets' })
           vm.nodeNames = item.nodeNames;
           vm.nodeLabels = item.nodeLabels;
           vm.pvs = item.pvs
@@ -11111,10 +12090,10 @@ export default {
             } else if (copyData[item] instanceof Object) {
               if (item === 'hpaConfig'){
                 if(
-                  copyData.hpaConfig.cpuAverageRequestPercent === 0 && 
-                  copyData.hpaConfig.maxReplicas === 0 && 
-                  copyData.hpaConfig.memoryAverageRequestPercent === 0 && 
-                  copyData.hpaConfig.cpuAverageValue === '' && 
+                  copyData.hpaConfig.cpuAverageRequestPercent === 0 &&
+                  copyData.hpaConfig.maxReplicas === 0 &&
+                  copyData.hpaConfig.memoryAverageRequestPercent === 0 &&
+                  copyData.hpaConfig.cpuAverageValue === '' &&
                   copyData.hpaConfig.memoryAverageValue === '' )
                 {
                   delete copyData.hpaConfig
@@ -11123,11 +12102,11 @@ export default {
                 }
               } else if (item === 'deployResources') {
                 if (
-                    copyData.deployResources.cpuLimit === '' && 
-                    copyData.deployResources.cpuRequest === '' && 
-                    copyData.deployResources.memoryLimit === '' && 
-                    copyData.deployResources.memoryRequest === '' && 
-                    copyData.deployResources.extraRequest === null && 
+                    copyData.deployResources.cpuLimit === '' &&
+                    copyData.deployResources.cpuRequest === '' &&
+                    copyData.deployResources.memoryLimit === '' &&
+                    copyData.deployResources.memoryRequest === '' &&
+                    copyData.deployResources.extraRequest === null &&
                     copyData.deployResources.extraLimit === null
                   ) {
                   delete copyData.deployResources
@@ -11136,17 +12115,17 @@ export default {
                 }
               } else if (item === 'deployHealthCheck') {
                 if (
-                    copyData.deployHealthCheck.livenessDelaySeconds === 0 && 
-                    copyData.deployHealthCheck.livenessPeriodSeconds === 0 && 
-                    copyData.deployHealthCheck.readinessDelaySeconds === 0 && 
-                    copyData.deployHealthCheck.readinessPeriodSeconds === 0 && 
-                    copyData.deployHealthCheck.startupDelaySeconds === 0 && 
-                    copyData.deployHealthCheck.startupPeriodSeconds === 0 && 
-                    copyData.deployHealthCheck.checkPort === 0 && 
-                    copyData.deployHealthCheck.exec === '' && 
-                    copyData.deployHealthCheck.httpGet.port === 0 && 
-                    copyData.deployHealthCheck.httpGet.httpHeaders === null && 
-                    copyData.deployHealthCheck.httpGet.path === '' && 
+                    copyData.deployHealthCheck.livenessDelaySeconds === 0 &&
+                    copyData.deployHealthCheck.livenessPeriodSeconds === 0 &&
+                    copyData.deployHealthCheck.readinessDelaySeconds === 0 &&
+                    copyData.deployHealthCheck.readinessPeriodSeconds === 0 &&
+                    copyData.deployHealthCheck.startupDelaySeconds === 0 &&
+                    copyData.deployHealthCheck.startupPeriodSeconds === 0 &&
+                    copyData.deployHealthCheck.checkPort === 0 &&
+                    copyData.deployHealthCheck.exec === '' &&
+                    copyData.deployHealthCheck.httpGet.port === 0 &&
+                    copyData.deployHealthCheck.httpGet.httpHeaders === null &&
+                    copyData.deployHealthCheck.httpGet.path === '' &&
                     copyData.deployHealthCheck.httpGet.scheme === ''
                   ) {
                   delete copyData.deployHealthCheck
@@ -11156,15 +12135,15 @@ export default {
                 }
               } else if (item === 'lifecycle') {
                 if (
-                    copyData.lifecycle.postStart.exec === '' && 
-                    copyData.lifecycle.postStart.httpGet.port === 0 && 
-                    copyData.lifecycle.postStart.httpGet.httpHeaders === null && 
-                    copyData.lifecycle.postStart.httpGet.path === '' && 
+                    copyData.lifecycle.postStart.exec === '' &&
+                    copyData.lifecycle.postStart.httpGet.port === 0 &&
+                    copyData.lifecycle.postStart.httpGet.httpHeaders === null &&
+                    copyData.lifecycle.postStart.httpGet.path === '' &&
                     copyData.lifecycle.postStart.httpGet.scheme === '' &&
-                    copyData.lifecycle.preStop.exec === '' && 
-                    copyData.lifecycle.preStop.httpGet.port === 0 && 
-                    copyData.lifecycle.preStop.httpGet.httpHeaders === null && 
-                    copyData.lifecycle.preStop.httpGet.path === '' && 
+                    copyData.lifecycle.preStop.exec === '' &&
+                    copyData.lifecycle.preStop.httpGet.port === 0 &&
+                    copyData.lifecycle.preStop.httpGet.httpHeaders === null &&
+                    copyData.lifecycle.preStop.httpGet.path === '' &&
                     copyData.lifecycle.preStop.httpGet.scheme === ''
                   ) {
                   delete copyData.lifecycle
@@ -11176,7 +12155,7 @@ export default {
                 }
               } else if (item === 'securityContext') {
                 if (
-                    copyData.securityContext.runAsGroup === 0 && 
+                    copyData.securityContext.runAsGroup === 0 &&
                     copyData.securityContext.runAsUser === 0
                   ) {
                   delete copyData.securityContext
@@ -11185,8 +12164,8 @@ export default {
                 }
               } else if (item === 'deployVolumes') {
                 if (
-                    copyData.deployVolumes && 
-                    copyData.deployVolumes !== null && 
+                    copyData.deployVolumes &&
+                    copyData.deployVolumes !== null &&
                     copyData.deployVolumes.length > 0
                   ) {
                   copyData.deployVolumes.forEach(row => {
@@ -11195,8 +12174,8 @@ export default {
                 }
               } else if (item === 'deployLocalPorts') {
                 if (
-                    copyData.deployLocalPorts && 
-                    copyData.deployLocalPorts !== null && 
+                    copyData.deployLocalPorts &&
+                    copyData.deployLocalPorts !== null &&
                     copyData.deployLocalPorts.length > 0
                   ) {
                   copyData.deployLocalPorts.forEach(row => {
@@ -11205,8 +12184,8 @@ export default {
                 }
               } else if (item === 'deployNodePorts') {
                 if (
-                    copyData.deployNodePorts && 
-                    copyData.deployNodePorts !== null && 
+                    copyData.deployNodePorts &&
+                    copyData.deployNodePorts !== null &&
                     copyData.deployNodePorts.length > 0
                   ) {
                   copyData.deployNodePorts.forEach(row => {
@@ -11238,9 +12217,23 @@ export default {
         vm.addComponentForm.deploySpecStatic.terminationGracePeriodSeconds = 0;
         vm.addComponentForm.deploySpecStatic.subdomain = '';
         vm.addComponentForm.deploySpecStatic.enableDownwardApi = false;
+        vm.addComponentForm.deploySpecStatic.restartPolicy = '';
         vm.addComponentForm.deploySpecStatic.deploySessionAffinityTimeoutSeconds = 0;
         vm.addComponentForm.deploySpecStatic.deployHeadless = false;
         vm.addComponentForm.deploySpecStatic.podManagementPolicy = '';
+      } else if (name === "job") {
+        vm.addComponentForm.deploySpecStatic.job.completions = 0;
+        vm.addComponentForm.deploySpecStatic.job.parallelism = 0;
+        vm.addComponentForm.deploySpecStatic.job.completionMode = '';
+        vm.addComponentForm.deploySpecStatic.job.backoffLimit = 0;
+        vm.addComponentForm.deploySpecStatic.job.activeDeadlineSeconds = 0;
+        vm.addComponentForm.deploySpecStatic.job.ttlSecondsAfterFinished = 0;
+      } else if (name === "cronJob") {
+        vm.addComponentForm.deploySpecStatic.cronJob.schedule = '';
+        vm.addComponentForm.deploySpecStatic.cronJob.concurrencyPolicy = '';
+        vm.addComponentForm.deploySpecStatic.cronJob.startingDeadlineSeconds = 0;
+        vm.addComponentForm.deploySpecStatic.cronJob.successfulJobsHistoryLimit = 0;
+        vm.addComponentForm.deploySpecStatic.cronJob.failedJobsHistoryLimit = 0;
       } else if (name === "deployMeta") {
         vm.addComponentForm.deploySpecStatic.deployMeta = {
           labels: null,
@@ -11310,6 +12303,12 @@ export default {
       } else if (name === 'deployConfigSettings') {
         vm.addComponentForm.deploySpecStatic.deployConfigSettings = null
         vm.addComponentForm.deploySpecStatic.deployConfigBranch = ''
+      } else if (name === 'deployConfigMaps') {
+        vm.addComponentForm.deploySpecStatic.deployConfigMaps = null
+        vm.addComponentForm.deploySpecStatic.deployConfigMapBranch = ''
+      } else if (name === 'deploySecrets') {
+        vm.addComponentForm.deploySpecStatic.deploySecrets = null
+        vm.addComponentForm.deploySpecStatic.deploySecretBranch = ''
       } else {
         vm.addComponentForm.deploySpecStatic[name] = null;
       }
@@ -11327,12 +12326,51 @@ export default {
           vm.addComponentForm.deploySpecStatic.terminationGracePeriodSeconds === 0 &&
           vm.addComponentForm.deploySpecStatic.subdomain === '' &&
           vm.addComponentForm.deploySpecStatic.enableDownwardApi === false &&
+          vm.addComponentForm.deploySpecStatic.restartPolicy === '' &&
           vm.addComponentForm.deploySpecStatic.deploySessionAffinityTimeoutSeconds === 0 &&
           vm.addComponentForm.deploySpecStatic.deployHeadless === false &&
           vm.addComponentForm.deploySpecStatic.podManagementPolicy === ''
         ) {
           vm.addComponentForm.deploySpecStatic.deployEnvs = [["", ""]];
         }
+      } else if (e === "job") {
+        if (
+          vm.addComponentForm.deploySpecStatic.job.completions === 0 &&
+          vm.addComponentForm.deploySpecStatic.job.parallelism === 0 &&
+          vm.addComponentForm.deploySpecStatic.job.completionMode === '' &&
+          vm.addComponentForm.deploySpecStatic.job.backoffLimit === 0 &&
+          vm.addComponentForm.deploySpecStatic.job.activeDeadlineSeconds === 0 &&
+          vm.addComponentForm.deploySpecStatic.job.ttlSecondsAfterFinished === 0
+        ) {
+          vm.addComponentForm.deploySpecStatic.job.completions = 1
+          vm.addComponentForm.deploySpecStatic.job.parallelism = 1
+          vm.addComponentForm.deploySpecStatic.job.completionMode = 'NonIndexed'
+          vm.addComponentForm.deploySpecStatic.restartPolicy = 'Never'
+        }
+      } else if (e === "cronJob") {
+        if (
+          vm.addComponentForm.deploySpecStatic.job.completions === 0 &&
+          vm.addComponentForm.deploySpecStatic.job.parallelism === 0 &&
+          vm.addComponentForm.deploySpecStatic.job.completionMode === '' &&
+          vm.addComponentForm.deploySpecStatic.job.backoffLimit === 0 &&
+          vm.addComponentForm.deploySpecStatic.job.activeDeadlineSeconds === 0 &&
+          vm.addComponentForm.deploySpecStatic.job.ttlSecondsAfterFinished === 0
+        ) {
+          vm.addComponentForm.deploySpecStatic.job.completions = 1
+          vm.addComponentForm.deploySpecStatic.job.parallelism = 1
+          vm.addComponentForm.deploySpecStatic.job.completionMode = 'NonIndexed'
+          vm.addComponentForm.deploySpecStatic.restartPolicy = 'Never'
+        }
+        if (
+          vm.addComponentForm.deploySpecStatic.cronJob.schedule === '' &&
+          vm.addComponentForm.deploySpecStatic.cronJob.concurrencyPolicy === '' &&
+          vm.addComponentForm.deploySpecStatic.cronJob.startingDeadlineSeconds === 0 &&
+          vm.addComponentForm.deploySpecStatic.cronJob.successfulJobsHistoryLimit === 0 &&
+          vm.addComponentForm.deploySpecStatic.cronJob.failedJobsHistoryLimit === 0
+        ) {
+          vm.addComponentForm.deploySpecStatic.cronJob.schedule = '30 5 15 1 *'
+          vm.addComponentForm.deploySpecStatic.cronJob.concurrencyPolicy = 'Allow'
+        }        
       } else if (e === "deployMeta") {
         if (
           vm.addComponentForm.deploySpecStatic.deployMeta.labels === null &&
@@ -11390,15 +12428,15 @@ export default {
         }
       } else if (e === "lifecycle") {
         if (
-          vm.addComponentForm.deploySpecStatic.lifecycle.postStart.exec === '' && 
-          vm.addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.port === 0 && 
-          vm.addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.httpHeaders === null && 
-          vm.addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.path === '' && 
+          vm.addComponentForm.deploySpecStatic.lifecycle.postStart.exec === '' &&
+          vm.addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.port === 0 &&
+          vm.addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.httpHeaders === null &&
+          vm.addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.path === '' &&
           vm.addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.scheme === '' &&
-          vm.addComponentForm.deploySpecStatic.lifecycle.preStop.exec === '' && 
-          vm.addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.port === 0 && 
-          vm.addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.httpHeaders === null && 
-          vm.addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.path === '' && 
+          vm.addComponentForm.deploySpecStatic.lifecycle.preStop.exec === '' &&
+          vm.addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.port === 0 &&
+          vm.addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.httpHeaders === null &&
+          vm.addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.path === '' &&
           vm.addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.scheme === ''
         ) {
           vm.addComponentForm.deploySpecStatic.lifecycle.postStart.exec = "cat /etc/hosts";
@@ -11415,9 +12453,9 @@ export default {
         }
       } else if (e === "deployResources") {
         if (
-          vm.addComponentForm.deploySpecStatic.deployResources.cpuLimit === '' && 
-          vm.addComponentForm.deploySpecStatic.deployResources.cpuRequest === '' && 
-          vm.addComponentForm.deploySpecStatic.deployResources.memoryLimit === '' && 
+          vm.addComponentForm.deploySpecStatic.deployResources.cpuLimit === '' &&
+          vm.addComponentForm.deploySpecStatic.deployResources.cpuRequest === '' &&
+          vm.addComponentForm.deploySpecStatic.deployResources.memoryLimit === '' &&
           vm.addComponentForm.deploySpecStatic.deployResources.memoryRequest === '' &&
           vm.addComponentForm.deploySpecStatic.deployResources.extraRequest === null &&
           vm.addComponentForm.deploySpecStatic.deployResources.extraLimit === null
@@ -11431,7 +12469,7 @@ export default {
         }
       } else if(e === 'deployPorts') {
         if (
-            vm.addComponentForm.deploySpecStatic.deployNodePorts === null && 
+            vm.addComponentForm.deploySpecStatic.deployNodePorts === null &&
             vm.addComponentForm.deploySpecStatic.deployLocalPorts === null
           ) {
           vm.addComponentForm.deploySpecStatic.deployNodePorts = []
@@ -11442,7 +12480,9 @@ export default {
             e === "deployVolumes" ||
             e === "dependServices" ||
             e === "hostAliases" ||
-            e === "deployConfigSettings"
+            e === "deployConfigSettings" ||
+            e === "deployConfigMaps" ||
+            e === "deploySecrets"
           ) {
             vm.addComponentForm.deploySpecStatic[e] = [];
           } else {
@@ -11453,6 +12493,20 @@ export default {
       vm.timer = setTimeout(() => {
         document.querySelector("#" + e + '-' + vm.targetIndex).scrollIntoView(true);
       }, 500);
+    },
+    chooseDeployType(e) {
+      const vm = this
+      if (e === 'job') {
+        vm.chooseParams('job')
+        vm.clearParams('cronJob')
+      } else if (e === 'cronjob') {
+        vm.chooseParams('job')
+        vm.chooseParams('cronJob')
+      } else if (e === 'deployment' || e === 'statefulset') {
+        vm.clearParams('job')
+        vm.clearParams('cronJob')
+        vm.addComponentForm.deploySpecStatic.restartPolicy = ''
+      }
     },
     healthCheckChange(e) {
       const vm = this;
@@ -11503,7 +12557,7 @@ export default {
       } else if (vm.addComponentForm.deploySpecStatic.deployHealthCheck.httpGet.port !== 0) {
         return 'httpGet'
       }
-      return ''      
+      return ''
     },
     lifecyclePostStartChange(e) {
       const vm = this;
@@ -11540,7 +12594,7 @@ export default {
       } else if (vm.addComponentForm.deploySpecStatic.lifecycle.postStart.httpGet.port !== 0) {
         return 'httpGet'
       }
-      return ''      
+      return ''
     },
     lifecyclePreStopChange(e) {
       const vm = this;
@@ -11577,7 +12631,7 @@ export default {
       } else if (vm.addComponentForm.deploySpecStatic.lifecycle.preStop.httpGet.port !== 0) {
         return 'httpGet'
       }
-      return ''      
+      return ''
     },
     changePortSet(e) {
       const vm = this;
@@ -11885,16 +12939,70 @@ export default {
       );
       vm.addComponentForm.deploySpecStatic.deployConfigSettings.push(copyItem);
     },
+    deleteDeployConfigSettings(i) {
+      const vm = this;
+      vm.addComponentForm.deploySpecStatic.deployConfigSettings.splice(i, 1);
+    },
+    addDeployConfigMaps() {
+      const vm = this;
+      let addItem = {
+        name: '',
+        fromFileType: '',
+        paths: null,
+      };
+      if (vm.addComponentForm.deploySpecStatic.deployConfigMaps === null) {
+        vm.addComponentForm.deploySpecStatic.deployConfigMaps = [];
+        vm.addComponentForm.deploySpecStatic.deployConfigMaps.push(addItem);
+      } else {
+        vm.addComponentForm.deploySpecStatic.deployConfigMaps.push(addItem);
+      }
+    },
+    copyDeployConfigMaps(i) {
+      const vm = this;
+      let copyItem = JSON.parse(
+        JSON.stringify(vm.addComponentForm.deploySpecStatic.deployConfigMaps[i])
+      );
+      vm.addComponentForm.deploySpecStatic.deployConfigMaps.push(copyItem);
+    },
+    deleteDeployConfigMaps(i) {
+      const vm = this;
+      vm.addComponentForm.deploySpecStatic.deployConfigMaps.splice(i, 1);
+    },
+    addDeploySecrets() {
+      const vm = this;
+      let addItem = {
+        name: '',
+        secretType: '',
+        fromFileType: '',
+        paths: null,
+        dockerConfig: '',
+        cert: '',
+        key: ''
+      };
+      if (vm.addComponentForm.deploySpecStatic.deploySecrets === null) {
+        vm.addComponentForm.deploySpecStatic.deploySecrets = [];
+        vm.addComponentForm.deploySpecStatic.deploySecrets.push(addItem);
+      } else {
+        vm.addComponentForm.deploySpecStatic.deploySecrets.push(addItem);
+      }
+    },
+    copyDeploySecrets(i) {
+      const vm = this;
+      let copyItem = JSON.parse(
+        JSON.stringify(vm.addComponentForm.deploySpecStatic.deploySecrets[i])
+      );
+      vm.addComponentForm.deploySpecStatic.deploySecrets.push(copyItem);
+    },
+    deleteDeploySecrets(i) {
+      const vm = this;
+      vm.addComponentForm.deploySpecStatic.deploySecrets.splice(i, 1);
+    },
     copyPatches(i) {
       const vm = this;
       let copyItem = JSON.parse(
         JSON.stringify(vm.addComponentForm.deploySpecStatic.patches[i])
       );
       vm.addComponentForm.deploySpecStatic.patches.push(copyItem);
-    },
-    deleteDeployConfigSettings(i) {
-      const vm = this;
-      vm.addComponentForm.deploySpecStatic.deployConfigSettings.splice(i, 1);
     },
     addComponent () {
       const vm = this
@@ -11922,10 +13030,10 @@ export default {
             }else if(copyData[item] instanceof Object){
               if (item === 'hpaConfig'){
                 if(
-                  copyData.hpaConfig.cpuAverageRequestPercent === 0 && 
-                  copyData.hpaConfig.maxReplicas === 0 && 
-                  copyData.hpaConfig.memoryAverageRequestPercent === 0 && 
-                  copyData.hpaConfig.cpuAverageValue === '' && 
+                  copyData.hpaConfig.cpuAverageRequestPercent === 0 &&
+                  copyData.hpaConfig.maxReplicas === 0 &&
+                  copyData.hpaConfig.memoryAverageRequestPercent === 0 &&
+                  copyData.hpaConfig.cpuAverageValue === '' &&
                   copyData.hpaConfig.memoryAverageValue === '' )
                 {
                   delete copyData.hpaConfig
@@ -11934,9 +13042,9 @@ export default {
                 }
               } else if(item === 'deployResources'){
                 if (
-                    copyData.deployResources.cpuLimit === '' && 
-                    copyData.deployResources.cpuRequest === '' && 
-                    copyData.deployResources.memoryLimit === '' && 
+                    copyData.deployResources.cpuLimit === '' &&
+                    copyData.deployResources.cpuRequest === '' &&
+                    copyData.deployResources.memoryLimit === '' &&
                     copyData.deployResources.memoryRequest === '' &&
                     copyData.deployResources.extraRequest === null &&
                     copyData.deployResources.extraLimit === null
@@ -11947,17 +13055,17 @@ export default {
                 }
               } else if (item === 'deployHealthCheck') {
                 if (
-                    copyData.deployHealthCheck.livenessDelaySeconds === 0 && 
-                    copyData.deployHealthCheck.livenessPeriodSeconds === 0 && 
-                    copyData.deployHealthCheck.readinessDelaySeconds === 0 && 
-                    copyData.deployHealthCheck.readinessPeriodSeconds === 0 && 
-                    copyData.deployHealthCheck.startupDelaySeconds === 0 && 
-                    copyData.deployHealthCheck.startupPeriodSeconds === 0 && 
-                    copyData.deployHealthCheck.checkPort === 0 && 
-                    copyData.deployHealthCheck.exec === '' && 
-                    copyData.deployHealthCheck.httpGet.port === 0 && 
-                    copyData.deployHealthCheck.httpGet.httpHeaders === null && 
-                    copyData.deployHealthCheck.httpGet.path === '' && 
+                    copyData.deployHealthCheck.livenessDelaySeconds === 0 &&
+                    copyData.deployHealthCheck.livenessPeriodSeconds === 0 &&
+                    copyData.deployHealthCheck.readinessDelaySeconds === 0 &&
+                    copyData.deployHealthCheck.readinessPeriodSeconds === 0 &&
+                    copyData.deployHealthCheck.startupDelaySeconds === 0 &&
+                    copyData.deployHealthCheck.startupPeriodSeconds === 0 &&
+                    copyData.deployHealthCheck.checkPort === 0 &&
+                    copyData.deployHealthCheck.exec === '' &&
+                    copyData.deployHealthCheck.httpGet.port === 0 &&
+                    copyData.deployHealthCheck.httpGet.httpHeaders === null &&
+                    copyData.deployHealthCheck.httpGet.path === '' &&
                     copyData.deployHealthCheck.httpGet.scheme === ''
                   ) {
                   delete copyData.deployHealthCheck
@@ -11967,15 +13075,15 @@ export default {
                 }
               } else if (item === 'lifecycle') {
                 if (
-                    copyData.lifecycle.postStart.exec === '' && 
-                    copyData.lifecycle.postStart.httpGet.port === 0 && 
-                    copyData.lifecycle.postStart.httpGet.httpHeaders === null && 
-                    copyData.lifecycle.postStart.httpGet.path === '' && 
+                    copyData.lifecycle.postStart.exec === '' &&
+                    copyData.lifecycle.postStart.httpGet.port === 0 &&
+                    copyData.lifecycle.postStart.httpGet.httpHeaders === null &&
+                    copyData.lifecycle.postStart.httpGet.path === '' &&
                     copyData.lifecycle.postStart.httpGet.scheme === '' &&
-                    copyData.lifecycle.preStop.exec === '' && 
-                    copyData.lifecycle.preStop.httpGet.port === 0 && 
-                    copyData.lifecycle.preStop.httpGet.httpHeaders === null && 
-                    copyData.lifecycle.preStop.httpGet.path === '' && 
+                    copyData.lifecycle.preStop.exec === '' &&
+                    copyData.lifecycle.preStop.httpGet.port === 0 &&
+                    copyData.lifecycle.preStop.httpGet.httpHeaders === null &&
+                    copyData.lifecycle.preStop.httpGet.path === '' &&
                     copyData.lifecycle.preStop.httpGet.scheme === ''
                   ) {
                   delete copyData.lifecycle
@@ -11987,7 +13095,7 @@ export default {
                 }
               } else if (item === 'securityContext') {
                 if (
-                    copyData.securityContext.runAsGroup === 0 && 
+                    copyData.securityContext.runAsGroup === 0 &&
                     copyData.securityContext.runAsUser === 0
                   ) {
                   delete copyData.securityContext
@@ -11996,8 +13104,8 @@ export default {
                 }
               } else if (item === 'deployVolumes') {
                 if (
-                    copyData.deployVolumes && 
-                    copyData.deployVolumes !== null && 
+                    copyData.deployVolumes &&
+                    copyData.deployVolumes !== null &&
                     copyData.deployVolumes.length > 0
                   ) {
                   copyData.deployVolumes.forEach(row => {
@@ -12006,8 +13114,8 @@ export default {
                 }
               } else if (item === 'deployLocalPorts') {
                 if (
-                    copyData.deployLocalPorts && 
-                    copyData.deployLocalPorts !== null && 
+                    copyData.deployLocalPorts &&
+                    copyData.deployLocalPorts !== null &&
                     copyData.deployLocalPorts.length > 0
                   ) {
                   copyData.deployLocalPorts.forEach(row => {
@@ -12016,8 +13124,8 @@ export default {
                 }
               } else if (item === 'deployNodePorts') {
                 if (
-                    copyData.deployNodePorts && 
-                    copyData.deployNodePorts !== null && 
+                    copyData.deployNodePorts &&
+                    copyData.deployNodePorts !== null &&
                     copyData.deployNodePorts.length > 0
                   ) {
                   copyData.deployNodePorts.forEach(row => {
@@ -12100,6 +13208,8 @@ export default {
 
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources'), value: 'deployResources' })
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_other'), value: 'deployOther' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_job'), value: 'job' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_cron_job'), value: 'cronJob' })
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_meta'), value: 'deployMeta' })
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_ports'), value: 'deployPorts' })
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_volumes'), value: 'deployVolumes' })
@@ -12119,7 +13229,8 @@ export default {
             vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_patches'), value: 'patches' })
           }
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_settings'), value: 'deployConfigSettings' })
-          
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps'), value: 'deployConfigMaps' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets'), value: 'deploySecrets' })
           vm.nodeNames = item.nodeNames;
           vm.nodeLabels = item.nodeLabels;
           vm.pvs = item.pvs
@@ -12204,6 +13315,8 @@ export default {
 
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_resources'), value: 'deployResources' })
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_other'), value: 'deployOther' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_job'), value: 'job' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_cron_job'), value: 'cronJob' })
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_meta'), value: 'deployMeta' })
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_ports'), value: 'deployPorts' })
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_volumes'), value: 'deployVolumes' })
@@ -12223,7 +13336,8 @@ export default {
             vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_patches'), value: 'patches' })
           }
           vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_settings'), value: 'deployConfigSettings' })
-          
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_config_maps'), value: 'deployConfigMaps' })
+          vm.componentOpts.push({ text: vuetify.preset.lang.t('$vuetify.lang_form_deploy_container_def_deploy_secrets'), value: 'deploySecrets' })
           vm.nodeNames = item.nodeNames;
           vm.nodeLabels = item.nodeLabels;
           vm.pvs = item.pvs

@@ -5687,7 +5687,6 @@ export default {
       demoDefType: '',
       cardLoading: true,
       tableLoading: true,
-      targetProjectName: "",
       targetEnvName: "",
       buildDefForm: [],
       pipelineDefForm: {
@@ -5850,7 +5849,6 @@ export default {
   },
   created() {
     const vm = this;
-    vm.targetProjectName = vm.projectName;
     request.get('/public/about').then(response => {
       vm.community = response.data.community
     }).catch(error => {
@@ -5861,7 +5859,7 @@ export default {
     }).catch(error => {
       vm.errorTip(true, error.response.data.msg);
     })
-    request.get(`/cicd/projectDef/${vm.targetProjectName}`).then((response) => {
+    request.get(`/cicd/projectDef/${vm.projectName}`).then((response) => {
       vm.project = response.data.project;
       vm.cardLoading = false;
       vm.project.pipelines.map((item, index) => {
@@ -5873,7 +5871,7 @@ export default {
       vm.cardLoading = false;
       vm.errorTip(true, error.response.data.msg);
     });
-    request.get(`/cicd/projectDef/${vm.targetProjectName}/demo`).then((response) => {
+    request.get(`/cicd/projectDef/${vm.projectName}/demo`).then((response) => {
       vm.projectDefDemo = response.data;
     }).catch((error) => {
       vm.errorTip(true, error.response.data.msg);
@@ -6310,7 +6308,7 @@ export default {
       if(vm.$refs.opsDefRef.validate()){
         let copyData = JSON.parse(JSON.stringify(vm.opsDefForm))
         let customOpsDefsYaml = YAML.stringify(copyData, 4)
-        request.post(`/cicd/projectDef/${vm.targetProjectName}/customOpsDefs`,{
+        request.post(`/cicd/projectDef/${vm.projectName}/customOpsDefs`,{
           customOpsDefsYaml: customOpsDefsYaml,
           comment: vm.comment,
         }).then(response => {
@@ -6367,7 +6365,7 @@ export default {
       if(vm.$refs.opsBatchDefRef.validate()){
         let copyData = JSON.parse(JSON.stringify(vm.opsBatchDefForm))
         let opsBatchDefsYaml = YAML.stringify(copyData, 4)
-        request.post(`/cicd/projectDef/${vm.targetProjectName}/opsBatchDefs`,{
+        request.post(`/cicd/projectDef/${vm.projectName}/opsBatchDefs`,{
           opsBatchDefsYaml: opsBatchDefsYaml,
           comment: vm.comment,
         }).then(response => {
@@ -6530,7 +6528,7 @@ export default {
           })
         }
         var customStepDefYaml = YAML.stringify(copyData, 4)
-        request.post(`/cicd/projectDef/${vm.targetProjectName}/customStepDef`, {
+        request.post(`/cicd/projectDef/${vm.projectName}/customStepDef`, {
           customStepName: vm.customStepDefForm.customStepName,
           customStepDefYaml: customStepDefYaml,
           comment: vm.comment,
@@ -6703,7 +6701,7 @@ export default {
           })
         }
         var customStepDefYaml = YAML.stringify(copyData, 4)
-        request.post(`/cicd/projectDef/${vm.targetProjectName}/customStepDef/env`, {
+        request.post(`/cicd/projectDef/${vm.projectName}/customStepDef/env`, {
           customStepName: vm.customStepEnvDefForm.customStepName,
           envName: vm.targetEnvName,
           customStepDefYaml: customStepDefYaml,
@@ -6779,7 +6777,7 @@ export default {
         }
         copyData.customStepModuleDefs = vm.copyCustomStepModuleDefsForm
         var customStepDefYaml = YAML.stringify(copyData, 4)
-        request.put(`/cicd/projectDef/${vm.targetProjectName}/customStepDef/env`, {
+        request.put(`/cicd/projectDef/${vm.projectName}/customStepDef/env`, {
           customStepName: vm.customStepEnvDefForm.customStepName,
           customStepDefYaml: customStepDefYaml,
           envNames: vm.envNames,
@@ -6815,7 +6813,7 @@ export default {
     },
     refresh() {
       const vm = this;
-      request.get(`/cicd/projectDef/${vm.targetProjectName}`).then((response) => {
+      request.get(`/cicd/projectDef/${vm.projectName}`).then((response) => {
         vm.project = response.data.project;
         vm.cardLoading = false;
         this.$emit("projectDef", vm.project);
@@ -6828,7 +6826,7 @@ export default {
       const vm = this;
       vm.buildDefDialog = true;
       vm.dialogLoading = true;
-      request.get(`/cicd/projectDef/${vm.targetProjectName}`).then((response) => {
+      request.get(`/cicd/projectDef/${vm.projectName}`).then((response) => {
         vm.buildDefForm = response.data.project.projectDef.buildDefs;
         vm.buildDefForm.map((item) => {
           item.buildCmds = vm.formateText(item.buildCmds);
@@ -6877,7 +6875,7 @@ export default {
       var buildDefsYaml = YAML.stringify(vm.buildDefForm, 4);
       if (vm.$refs.buildDefRef.validate()) {
         request
-          .post(`/cicd/projectDef/${vm.targetProjectName}/buildDefs`, {
+          .post(`/cicd/projectDef/${vm.projectName}/buildDefs`, {
             buildDefsYaml: buildDefsYaml,
             comment: vm.comment,
           })
@@ -6905,7 +6903,7 @@ export default {
       const vm = this;
       vm.packageDefDialog = true;
       vm.dialogLoading = true;
-      request.get(`/cicd/projectDef/${vm.targetProjectName}`).then((response) => {
+      request.get(`/cicd/projectDef/${vm.projectName}`).then((response) => {
         vm.errMsgPackageDefs = response.data.project.projectDef.errMsgPackageDefs;
         vm.packageDefForm = response.data.project.projectDef.packageDefs;
         vm.packageDefForm.map((item) => {
@@ -6977,7 +6975,7 @@ export default {
       if (vm.$refs.packageDefRef.validate()) {
         var packageDefsYaml = YAML.stringify(vm.packageDefForm, 4);
         request
-          .post(`/cicd/projectDef/${vm.targetProjectName}/packageDefs`, {
+          .post(`/cicd/projectDef/${vm.projectName}/packageDefs`, {
             packageDefsYaml: packageDefsYaml,
             comment: vm.comment,
           })
@@ -6999,7 +6997,7 @@ export default {
       const vm = this;
       vm.artifactDefDialog = true;
       vm.dialogLoading = true;
-      request.get(`/cicd/projectDef/${vm.targetProjectName}`).then((response) => {
+      request.get(`/cicd/projectDef/${vm.projectName}`).then((response) => {
         vm.errMsgArtifactDefs = response.data.project.projectDef.errMsgArtifactDefs;
         vm.artifactDefForm = response.data.project.projectDef.artifactDefs;
         vm.artifactDefForm.map((item) => {
@@ -7068,7 +7066,7 @@ export default {
           });
         });
         var artifactDefsYaml = YAML.stringify(vm.artifactDefForm, 4);
-        request.post(`/cicd/projectDef/${vm.targetProjectName}/artifactDefs`, {
+        request.post(`/cicd/projectDef/${vm.projectName}/artifactDefs`, {
           artifactDefsYaml: artifactDefsYaml,
           comment: vm.comment,
         }).then((response) => {
@@ -7094,7 +7092,7 @@ export default {
       const vm = this;
       vm.dockerIgnoreDefDialog = true;
       vm.dialogLoading = true;
-      request.get(`/cicd/projectDef/${vm.targetProjectName}`).then((response) => {
+      request.get(`/cicd/projectDef/${vm.projectName}`).then((response) => {
         vm.dockerIgnoreDefForm =  response.data.project.projectDef.dockerIgnoreDefs;
         vm.dockerIgnoreDefForm = vm.formateText(vm.dockerIgnoreDefForm);
         vm.dialogLoading = false;
@@ -7117,7 +7115,7 @@ export default {
       copyData = vm.formateText(copyData);
       var dockerIgnoreDefsYaml = YAML.stringify(copyData, 4);
       request
-        .post(`/cicd/projectDef/${vm.targetProjectName}/dockerIgnoreDefs`, {
+        .post(`/cicd/projectDef/${vm.projectName}/dockerIgnoreDefs`, {
           dockerIgnoreDefsYaml: dockerIgnoreDefsYaml,
           comment: vm.comment,
         })
@@ -7430,7 +7428,7 @@ export default {
     openPipelineDef(projectName, branchName) {
       const vm = this;
       if (projectName === "") {
-        projectName = vm.targetProjectName;
+        projectName = vm.projectName;
       }
       vm.targetBranchName = branchName;
       vm.copyInsertDefNames = JSON.parse(JSON.stringify(vm.InsertDefNames))
@@ -7454,7 +7452,7 @@ export default {
       const vm = this;
       let copyData = JSON.parse(JSON.stringify(vm.pipelineDefForm))
       var YAMLstring = YAML.stringify(copyData, 4);
-      request.post(`/cicd/projectDef/${vm.targetProjectName}/pipelineDef`, {
+      request.post(`/cicd/projectDef/${vm.projectName}/pipelineDef`, {
         pipelineDefYaml: YAMLstring,
         branchName: vm.targetBranchName,
         comment: vm.comment,
@@ -7483,7 +7481,7 @@ export default {
         let copyData = JSON.parse(JSON.stringify(vm.pipelineDefForm))
         var pipelineDefYaml = YAML.stringify(copyData,4)
         request
-          .put(`/cicd/projectDef/${vm.targetProjectName}/pipelineDef`, {
+          .put(`/cicd/projectDef/${vm.projectName}/pipelineDef`, {
             pipelineDefYaml: pipelineDefYaml,
             branchNames: vm.branchNames,
             comment: vm.comment,
@@ -7508,7 +7506,7 @@ export default {
       vm.istioGatewayDefDialog = true;
       vm.dialogLoading = true;
       vm.targetEnvName = envName;
-      request.get(`/cicd/projectDef/${vm.targetProjectName}`).then((response) => {
+      request.get(`/cicd/projectDef/${vm.projectName}`).then((response) => {
         response.data.project.projectAvailableEnvs.map((item) => {
           if (item.envName === envName) {
             delete item.istioGatewayDef.weightDefault
@@ -7538,7 +7536,7 @@ export default {
       if (vm.$refs.istioGatewayDefRef.validate()) {
         var istioGatewayDefYaml = YAML.stringify(vm.istioGatewayDefForm, 4);
         request
-          .post(`/cicd/projectDef/${vm.targetProjectName}/istioGatewayDef`, {
+          .post(`/cicd/projectDef/${vm.projectName}/istioGatewayDef`, {
             istioGatewayDefYaml: istioGatewayDefYaml,
             envName: vm.targetEnvName,
             comment: vm.comment,
@@ -7573,7 +7571,7 @@ export default {
       vm.dialogLoading = true;
       vm.targetEnvName = envName;
       vm.copyDeployContainerDefForm = [];
-      request.get(`/cicd/projectDef/${vm.targetProjectName}`).then((response) => {
+      request.get(`/cicd/projectDef/${vm.projectName}`).then((response) => {
         vm.nodePorts = []
         response.data.project.projectNodePorts.map((item) => {
           if (item.envName === envName) {
@@ -8378,7 +8376,7 @@ export default {
       if (vm.$refs.deployContainerDefRef.validate()) {
         var copyData = vm.parseDeployContainerDef()
         var deployContainerDefsYaml = YAML.stringify(copyData, 4);
-        request.post(`/cicd/projectDef/${vm.targetProjectName}/deployContainerDefs`,
+        request.post(`/cicd/projectDef/${vm.projectName}/deployContainerDefs`,
           {
             deployContainerDefsYaml: deployContainerDefsYaml,
             envName: vm.targetEnvName,
@@ -8406,7 +8404,7 @@ export default {
         vm.deployContainerDefYamlDialog = true
         vm.deployContainerDefModules = []
         vm.deployContainerDefModuleName = ''
-        request.post(`/cicd/projectDef/${vm.targetProjectName}/deployContainerDefs/view`,
+        request.post(`/cicd/projectDef/${vm.projectName}/deployContainerDefs/view`,
           {
             deployContainerDefsYaml: deployContainerDefsYaml,
             envName: vm.targetEnvName,
@@ -8519,7 +8517,7 @@ export default {
           4
         );
         request
-          .put(`/cicd/projectDef/${vm.targetProjectName}/deployContainerDefs`, {
+          .put(`/cicd/projectDef/${vm.projectName}/deployContainerDefs`, {
             deployContainerDefsYaml: deployContainerDefsYaml,
             envNames: vm.envNames,
             comment: vm.comment,
@@ -8553,7 +8551,7 @@ export default {
       vm.deployArtifactDefDialog = true;
       vm.dialogLoading = true;
       vm.targetEnvName = envName;
-      request.get(`/cicd/projectDef/${vm.targetProjectName}`).then((response) => {
+      request.get(`/cicd/projectDef/${vm.projectName}`).then((response) => {
         response.data.project.projectAvailableEnvs.map((item) => {
           if (item.envName === envName) {
             vm.deployArtifactDefForm = item.deployArtifactDefs;
@@ -8646,7 +8644,7 @@ export default {
           }
         })
         var deployArtifactDefsYaml = YAML.stringify(copyData, 4);
-        request.post(`/cicd/projectDef/${vm.targetProjectName}/deployArtifactDefs`, {
+        request.post(`/cicd/projectDef/${vm.projectName}/deployArtifactDefs`, {
           deployArtifactDefsYaml: deployArtifactDefsYaml,
           envName: vm.targetEnvName,
           comment: vm.comment,
@@ -8712,7 +8710,7 @@ export default {
           4
         );
         request
-          .put(`/cicd/projectDef/${vm.targetProjectName}/deployArtifactDefs`, {
+          .put(`/cicd/projectDef/${vm.projectName}/deployArtifactDefs`, {
             deployArtifactDefsYaml: deployArtifactDefsYaml,
             envNames: vm.envNames,
             comment: vm.comment,
@@ -8748,7 +8746,7 @@ export default {
       vm.istioDefDialog = true;
       vm.dialogLoading = true;
       vm.targetEnvName = envName;
-      request.get(`/cicd/projectDef/${vm.targetProjectName}`).then((response) => {
+      request.get(`/cicd/projectDef/${vm.projectName}`).then((response) => {
         response.data.project.projectAvailableEnvs.map((item) => {
           if (item.envName === envName) {
             vm.istioDefDefForm = item.istioDefs;
@@ -8967,7 +8965,7 @@ export default {
           }
         });
         var istioDefsYaml = YAML.stringify(copyData,4);
-        request.post(`/cicd/projectDef/${vm.targetProjectName}/istioDefs`, {
+        request.post(`/cicd/projectDef/${vm.projectName}/istioDefs`, {
           istioDefsYaml: istioDefsYaml,
           envName: vm.targetEnvName,
           comment: vm.comment,
@@ -9037,7 +9035,7 @@ export default {
         });
         var istioDefsYaml = YAML.stringify(vm.copyIstioDefDefForm, 4);
         request
-          .put(`/cicd/projectDef/${vm.targetProjectName}/istioDefs`, {
+          .put(`/cicd/projectDef/${vm.projectName}/istioDefs`, {
             istioDefsYaml: istioDefsYaml,
             envNames: vm.envNames,
             comment: vm.comment,
@@ -9948,7 +9946,7 @@ export default {
       const vm = this
       if(vm.modified !== ''){
         if(vm.targetDefName === 'customOpsDefs'){
-          request.post(`/cicd/projectDef/${vm.targetProjectName}/customOpsDefs`,{
+          request.post(`/cicd/projectDef/${vm.projectName}/customOpsDefs`,{
             customOpsDefsYaml: vm.modified
           }).then(response => {
             vm.historyDialog = false
@@ -9960,7 +9958,7 @@ export default {
           })
         }
         if(vm.targetDefName === 'buildDefs'){
-          request.post(`/cicd/projectDef/${vm.targetProjectName}/buildDefs`,{
+          request.post(`/cicd/projectDef/${vm.projectName}/buildDefs`,{
             buildDefsYaml: vm.modified
           }).then(response => {
             vm.historyDialog = false
@@ -9972,7 +9970,7 @@ export default {
           })
         }
         if(vm.targetDefName === 'packageDefs'){
-          request.post(`/cicd/projectDef/${vm.targetProjectName}/packageDefs`,{
+          request.post(`/cicd/projectDef/${vm.projectName}/packageDefs`,{
             packageDefsYaml: vm.modified
           }).then(response => {
             vm.historyDialog = false
@@ -9984,7 +9982,7 @@ export default {
           })
         }
         if(vm.targetDefName === 'artifactDefs'){
-          request.post(`/cicd/projectDef/${vm.targetProjectName}/artifactDefs`,{
+          request.post(`/cicd/projectDef/${vm.projectName}/artifactDefs`,{
             artifactDefsYaml: vm.modified
           }).then(response => {
             vm.historyDialog = false
@@ -9996,7 +9994,7 @@ export default {
           })
         }
         if(vm.targetDefName === 'dockerIgnoreDefs'){
-          request.post(`/cicd/projectDef/${vm.targetProjectName}/dockerIgnoreDefs`,{
+          request.post(`/cicd/projectDef/${vm.projectName}/dockerIgnoreDefs`,{
             dockerIgnoreDefsYaml: vm.modified
           }).then(response => {
             vm.historyDialog = false
@@ -10009,7 +10007,7 @@ export default {
         }
         if(vm.targetDefName === 'customStepDefs'){
           if(vm.historyForm.envName === ''){
-            request.post(`/cicd/projectDef/${vm.targetProjectName}/customStepDef`,{
+            request.post(`/cicd/projectDef/${vm.projectName}/customStepDef`,{
               customStepName: vm.targetCustomStepName,
               customStepDefYaml: vm.modified
             }).then(response => {
@@ -10021,7 +10019,7 @@ export default {
               vm.errorTip(true, error.response.data.msg);
             })
           }else{
-            request.post(`/cicd/projectDef/${vm.targetProjectName}/customStepDef/env`,{
+            request.post(`/cicd/projectDef/${vm.projectName}/customStepDef/env`,{
               customStepName: vm.targetCustomStepName,
               envName: vm.targetEnvName,
               customStepDefYaml: vm.modified
@@ -10036,7 +10034,7 @@ export default {
           }
         }
         if(vm.targetDefName === 'deployContainerDefs'){
-          request.post(`/cicd/projectDef/${vm.targetProjectName}/deployContainerDefs`,{
+          request.post(`/cicd/projectDef/${vm.projectName}/deployContainerDefs`,{
             deployContainerDefsYaml: vm.modified,
             envName: vm.targetEnvName
           }).then(response => {
@@ -10049,7 +10047,7 @@ export default {
           })
         }
         if(vm.targetDefName === 'deployArtifactDefs'){
-          request.post(`/cicd/projectDef/${vm.targetProjectName}/deployArtifactDefs`,{
+          request.post(`/cicd/projectDef/${vm.projectName}/deployArtifactDefs`,{
             deployArtifactDefsYaml: vm.modified,
             envName: vm.targetEnvName
           }).then(response => {
@@ -10062,7 +10060,7 @@ export default {
           })
         }
         if(vm.targetDefName === 'istioDefs'){
-          request.post(`/cicd/projectDef/${vm.targetProjectName}/istioDefs`,{
+          request.post(`/cicd/projectDef/${vm.projectName}/istioDefs`,{
             istioDefsYaml: vm.modified,
             envName: vm.targetEnvName
           }).then(response => {
@@ -10075,7 +10073,7 @@ export default {
           })
         }
         if(vm.targetDefName === 'istioGatewayDef'){
-          request.post(`/cicd/projectDef/${vm.targetProjectName}/istioGatewayDef`,{
+          request.post(`/cicd/projectDef/${vm.projectName}/istioGatewayDef`,{
             istioGatewayDefYaml: vm.modified,
             envName: vm.targetEnvName
           }).then(response => {
@@ -10088,7 +10086,7 @@ export default {
           })
         }
         if(vm.targetDefName === 'pipelineDef'){
-          request.post(`/cicd/projectDef/${vm.targetProjectName}/pipelineDef`,{
+          request.post(`/cicd/projectDef/${vm.projectName}/pipelineDef`,{
             pipelineDefYaml: vm.modified,
             branchName: vm.targetBranchName
           }).then(response => {
@@ -10120,7 +10118,7 @@ export default {
       vm.historyForm.createTimeRange.startDate = dates[0]
       vm.historyForm.createTimeRange.endDate = dates[1]
       vm.menu2 = false
-      request.post(`/cicd/projectDef/${vm.targetProjectName}/history`, vm.historyForm).then(response => {
+      request.post(`/cicd/projectDef/${vm.projectName}/history`, vm.historyForm).then(response => {
         vm.commitHashList = response.data.logs
         if(vm.commitHashList.length > 0){
           vm.getOriginal()
@@ -10146,7 +10144,7 @@ export default {
         vm.commitHashList[0].disabled = true
       }
       vm.dialogLoading = true
-      request.post(`/cicd/projectDef/${vm.targetProjectName}/content`, vm.contentForm).then(response => {
+      request.post(`/cicd/projectDef/${vm.projectName}/content`, vm.contentForm).then(response => {
         vm.original = response.data.content
         vm.dialogLoading = false
         vm.$refs.monacoDiff.originalModel.setValue(vm.original)
@@ -10164,7 +10162,7 @@ export default {
         vm.contentForm.commitHash = vm.commitHashList[1].commitHash
       }
       vm.dialogLoading = true
-      request.post(`/cicd/projectDef/${vm.targetProjectName}/content`, vm.contentForm).then(response => {
+      request.post(`/cicd/projectDef/${vm.projectName}/content`, vm.contentForm).then(response => {
         vm.modified = response.data.content
         vm.dialogLoading = false
         vm.$refs.monacoDiff.modifiedModel.setValue(vm.modified)
@@ -10179,7 +10177,7 @@ export default {
       vm.contentForm.envName = vm.historyForm.envName
       vm.contentForm.customStepName = vm.historyForm.customStepName
       vm.dialogLoading = true
-      request.post(`/cicd/projectDef/${vm.targetProjectName}/content`, vm.contentForm).then(response => {
+      request.post(`/cicd/projectDef/${vm.projectName}/content`, vm.contentForm).then(response => {
         vm.modified = response.data.content
         vm.dialogLoading = false
         vm.$refs.monacoDiff.originalModel.setValue(vm.original)

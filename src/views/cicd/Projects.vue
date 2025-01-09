@@ -20,16 +20,20 @@ export default {
     return {
       queryPage$: new BehaviorSubject(''),
       projectNamesChange$: new Subject(),
-      projectNamesBlur$: new Subject()
+      projectNamesBlur$: new Subject(),
+      projectDescsChange$: new Subject(),
+      projectDescsBlur$: new Subject()
     }
   },
   data () {
     return {
       searchForm: {
         projectNames: [],
+        projectDescs: [],
         projectTeam: ''
       },
       projectNames: [],
+      projectDescs: [],
       pageData: {
         loading: false,
         total: 0,
@@ -37,8 +41,8 @@ export default {
         currentPage: 1,
         rows: [],
         displayRows: [],
-        expanded: []
       },
+      expandItems: [],
     }
   },
   computed: {
@@ -72,22 +76,39 @@ export default {
       vm.pageData.loading = false
       vm.pageData.rows = response.data.projects
       vm.pageData.displayRows = vm.pageData.rows.map((row, index) => {
+        row.index = index
         return Object.assign({}, row, {
           pipelinesInfoCard: rtnPipelinesInfoCard(row, index)
         })
       })
-      vm.pageData.expanded = [vm.pageData.displayRows[0]]
       vm.pageData.total = response.data.totalCount
+      vm.expandItems = []
+      if (vm.pageData.displayRows.length > 0) {
+        vm.expandItems.push(vm.pageData.displayRows[0])
+      }
     })
     // vm.$observables.queryPage$.next('init')
-    PROJECTS_API.getProjectName().then(response => {
+    PROJECTS_API.getProjectNames().then(response => {
       vm.projectNames = response.data.projectNames
+    }).catch((_) => {
+      vm.errorTip(true, _.response.data.msg)
+    })
+    PROJECTS_API.getProjectDescs().then(response => {
+      vm.projectDescs = response.data.projectDescs
     }).catch((_) => {
       vm.errorTip(true, _.response.data.msg)
     })
     vm.$observables.projectNamesChange$.pipe(
       debounce(next => {
         return vm.$observables.projectNamesBlur$
+      })
+    ).subscribe(next => {
+      vm.pageData.currentPage = 1
+      vm.$observables.queryPage$.next('')
+    })
+    vm.$observables.projectDescsChange$.pipe(
+      debounce(next => {
+        return vm.$observables.projectDescsBlur$
       })
     ).subscribe(next => {
       vm.pageData.currentPage = 1
@@ -154,7 +175,7 @@ export default {
           { value: 'handle', text: vuetify.preset.lang.t('$vuetify.lang_view_operations'), sortable: false }
         ]}
         items={vm.pageData.displayRows}
-        itemKey='projectInfo.projectName'
+        itemKey='index'
         footerProps={{
           showCurrentPage: true
         }}
@@ -266,16 +287,13 @@ export default {
           }
         }}
         showExpand
-        expanded={vm.pageData.expanded}
+        expanded={vm.expandItems}
         serverItemsLength={vm.pageData.total}
         options={{
           page: vm.pageData.currentPage,
           itemsPerPage: vm.pageData.pageSize
         }}
         on={{
-          'update:expanded': (value) => {
-            vm.pageData.expanded = value
-          },
           'update:options': (value) => {
             vm.pageData.currentPage = value.page
             vm.pageData.pageSize = value.itemsPerPage
@@ -298,12 +316,28 @@ export default {
               vOn:change={(value) => {
                 vm.pageData.currentPage = 1
                 vm.$observables.queryPage$.next('projectNamesChange')
-                // vm.$observables.projectNamesChange$.next('')
               }}
               vOn:blur={(value) => {
-                // vm.pageData.currentPage = 1
-                // vm.$observables.queryPage$.next('projectNamesChange')
-                // vm.$observables.projectNamesBlur$.next('')
+              }}
+              on={{
+                'click:clear': (value) => {}
+              }}
+            >
+            </VAutocomplete>,
+            <VAutocomplete
+              v-model={vm.searchForm.projectDescs}
+              items={vm.projectDescs}
+              menu-props="{ maxHeight: '400' }"
+              label={vuetify.preset.lang.t('$vuetify.lang_form_project_desc')}
+              multiple
+              dense
+              small-chips
+              clearable
+              vOn:change={(value) => {
+                vm.pageData.currentPage = 1
+                vm.$observables.queryPage$.next('projectDescsChange')
+              }}
+              vOn:blur={(value) => {
               }}
               on={{
                 'click:clear': (value) => {}
